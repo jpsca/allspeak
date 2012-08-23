@@ -20,7 +20,7 @@ def read_from(filepath):
 
 
 def get_version():
-    data = read_from((PACKAGE + '.py'))
+    data = read_from(get_path(PACKAGE, '__init__.py'))
     version = re.search(r"__version__\s*=\s*'([^']+)'", data).group(1)
     return version.encode('utf-8')
 
@@ -54,6 +54,12 @@ def get_requirements():
     data = read_from(get_path('requirements.txt'))
     lines = map(lambda s: s.strip(), data.splitlines())
     return [l for l in lines if l and not l.startswith('#')]
+
+
+def run_tests():
+    import sys, subprocess
+    errno = subprocess.call([sys.executable, 'runtests.py', 'tests'])
+    raise SystemExit(errno)
 
 
 setup(
