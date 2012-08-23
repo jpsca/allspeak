@@ -3,11 +3,12 @@
     AllSpeak
     --------------------------
 
-    Pythonic* i18n/l10n solution for WSGI-based web applications
-    (* yet ironically inspired by Rails).  It's flexible, easy to use and
+    Pythonic (yet ironically inspired by Rails) i18n/l10n solution for humans
+    doing WSGI-based web applications.  It's flexible, easy to use and
     —unlike gettext— independent of any external compilation tool.
 
     Powered by the awesome Babel and pytz libraries for the l10n part.
+
 
 """
 from __future__ import absolute_import
