@@ -127,6 +127,15 @@ def test_translate():
     assert i18n.translate('bla', locale=locale) == Markup(u'<missing:bla>')
 
 
+def test_lazy_translate():
+    i18n = I18n(locales_dir, default_locale='es-PE')
+    locale = Locale('es')
+
+    lazy = i18n.lazy_translate('mytest.greeting', locale=locale)
+    assert lazy != u'Hola'
+    assert repr(lazy) == u'Hola'
+
+
 def test_pluralize():
     i18n = I18n()
     d = {
