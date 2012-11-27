@@ -17,7 +17,6 @@ import os
 # Workaround for a OSX bug
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
-
 import datetime as d
 from decimal import Decimal
 import io
@@ -27,14 +26,18 @@ import re
 
 from babel import dates, numbers, Locale
 try:
-    from jinja2 import Markup
+    from markupsafe import Markup
 except ImportError:
-    Markup = lambda x: x
+    try:
+        from jinja2 import Markup
+    except ImportError:
+        Markup = lambda x: x
 from pytz import timezone, UTC
 import yaml
 
 
-__version__ = '0.1'
+
+__version__ = '0.2'
 
 
 LOCALES_DIR = 'locales'
@@ -344,6 +347,21 @@ class I18n(object):
                 return self.markup(value)
 
         return value
+
+
+    @property
+    def lazy_translate(self):
+
+        class LazyWrapper(object):
+
+            def __init__(self_, *args, **kwargs):
+                self_.args = args
+                self_.kwargs = kwargs
+
+            def __repr__(self_):
+                return self.translate(*self_.args, **self_.kwargs)
+
+        return LazyWrapper
 
 
     def pluralize(self, d, count):
@@ -710,4 +728,5 @@ def get_django_ua_language(request):
     if match is not None:
         return match.group(1) or match.group(2)
     return None
+
 
