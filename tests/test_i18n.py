@@ -7,7 +7,7 @@ from babel import Locale
 from babel.dates import format_date, format_datetime, format_time
 from babel.numbers import (format_currency, format_decimal, format_number,
     format_percent, format_scientific)
-from jinja2 import Markup
+from markupsafe import Markup
 import pytest
 from pytz import timezone, UTC
 try:

@@ -1,5 +1,5 @@
 
-# AllSpeak (beta)
+# AllSpeak
 
 AllSpeak is a pythonic (yet ironically inspired by Rails) i18n/l10n solution for humans doing Python web applications.  It's flexible, easy to use and —unlike gettext— independent of any external compilation tool.
 

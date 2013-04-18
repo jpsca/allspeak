@@ -9,20 +9,17 @@
 
     Powered by the awesome Babel and pytz libraries for the l10n part.
 
-
 """
 from __future__ import absolute_import
 import os
-
 # Workaround for a OSX bug
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
-import datetime as d
+
+import datetime as dt
 from decimal import Decimal
-import io
 from os.path import (join, dirname, realpath, abspath, normpath, isdir, isfile,
     splitext)
-import re
 
 from babel import dates, numbers, Locale
 try:
@@ -31,22 +28,26 @@ except ImportError:
     try:
         from jinja2 import Markup
     except ImportError:
-        Markup = lambda x: x
+        try:
+            from mako.filters import markupsafe
+            Markup = markupsafe.Markup
+        except ImportError:
+            Markup = lambda x: x
 from pytz import timezone, UTC
-import yaml
+
+from .reader import get_data
+from .utils import (normalize_locale,
+    get_werkzeug_preferred_languages,
+    get_webob_preferred_languages,
+    get_django_preferred_languages,
+    get_werkzeug_ua_language, get_django_ua_language)
 
 
-
-__version__ = '0.2'
+__version__ = '0.5'
 
 
 LOCALES_DIR = 'locales'
 
-# For parsing raw 'User-Agent' headers
-_language_re = re.compile(
-    r'(?:;\s*|\s+)(\b\w{2}\b(?:-\b\w{2}\b)?)\s*;|'
-    r'(?:\(|\[|;)\s*(\b\w{2}\b(?:-\b\w{2}\b)?)\s*(?:\]|\)|;)'
-)
 
 
 class I18n(object):
@@ -90,7 +91,7 @@ class I18n(object):
         :   overwrite the defaults date formats.
         markup
         :   overwrite the function used by `translate` to flags HTML code
-            as 'safe'. `jinja2.Markup` is used by default.
+            as 'safe'. `markupsafe.Markup` is used by default.
 
         """
         self.get_request = get_request
@@ -119,15 +120,9 @@ class I18n(object):
         `Babel.Locale` and the default timezone as a `pytz.timezone` object.
 
         """
-        default_locale = default_locale or 'en'
-        if isinstance(default_locale, tuple):
-            self.default_locale = Locale(*default_locale)
-        else:
-            default_locale = default_locale.replace('_', '-')
-            self.default_locale = Locale.parse(default_locale, sep='-')
-
-        default_timezone = default_timezone or 'utc'
-        self.default_timezone = timezone(default_timezone)
+        default_locale = normalize_locale(default_locale) or Locale('en')
+        self.default_locale = default_locale
+        self.default_timezone = timezone(default_timezone or 'utc')
 
 
     def list_available_languages(self):
@@ -254,12 +249,11 @@ class I18n(object):
         else:
             return
         try:
-            with io.open(filename) as f:
-                data = yaml.load(f)
-            self.translations[cache_key] = data
-            return data
+            data = get_data(filename)
         except (IOError, AttributeError):
             return
+        self.translations[cache_key] = data
+        return data
 
 
     def find_keypath(self, key):
@@ -332,7 +326,7 @@ class I18n(object):
 
         """
         key = str(key)
-        locale = locale or self.get_locale()
+        locale = normalize_locale(locale) or self.get_locale()
         value = self.key_lookup(key, locale)
         if not value:
             return self.markup('<missing:%s>' % (key, ))
@@ -364,26 +358,26 @@ class I18n(object):
         return LazyWrapper
 
 
-    def pluralize(self, d, count):
+    def pluralize(self, dic, count):
         """Takes a dictionary and a number and return the value whose key in
         the dictionary is that number.  If that key doesn't exist, a `'n'` key
         is tried instead.  If that doesn't exits either, an empty string is
         returned.  Examples:
 
             >>> i18n = I18n()
-            >>> d = {
+            >>> dic = {
                 0: u'No apples',
                 1: u'One apple',
                 3: u'Few apples',
                 'n': u'%(count)s apples',
                 }
-            >>> i18n.pluralize(d, 0)
+            >>> i18n.pluralize(dic, 0)
             'No apples'
-            >>> i18n.pluralize(d, 1)
+            >>> i18n.pluralize(dic, 1)
             'One apple'
-            >>> i18n.pluralize(d, 3)
+            >>> i18n.pluralize(dic, 3)
             'Few apples'
-            >>> i18n.pluralize(d, 10)
+            >>> i18n.pluralize(dic, 10)
             '%(count)s apples'
             >>> i18n.pluralize({0: 'off', 'n': 'on'}, 3)
             'on'
@@ -396,7 +390,7 @@ class I18n(object):
         if count is None:
             count = 0
         scount = str(count)
-        return d.get(count, d.get(scount, d.get('n', u'')))
+        return dic.get(count, dic.get(scount, dic.get('n', u'')))
     
 
     def to_user_timezone(self, datetime, tzinfo=None):
@@ -443,7 +437,7 @@ class I18n(object):
         """Internal helper that formats the date.
 
         """
-        locale = locale or self.get_locale()
+        locale = normalize_locale(locale) or self.get_locale()
         extra = {}
         if formatter is not dates.format_date and rebase:
             extra['tzinfo'] = tzinfo or self.get_timezone()
@@ -459,8 +453,8 @@ class I18n(object):
         locale = kwargs.pop('locale', None)
         tzinfo = kwargs.pop('tzinfo', None)
 
-        if isinstance(value, d.date):
-            if isinstance(value, d.datetime):
+        if isinstance(value, dt.date):
+            if isinstance(value, dt.datetime):
                 return self.format_datetime(value, locale=locale,
                     tzinfo=tzinfo, *args, **kwargs)
             else:
@@ -472,10 +466,10 @@ class I18n(object):
         if isinstance(value, (float, Decimal)):
             return self.format_decimal(value, locale=locale, *args, **kwargs)
 
-        if isinstance(value, d.time):
+        if isinstance(value, dt.time):
             return self.format_time(value, locale=locale, tzinfo=tzinfo,
                 *args, **kwargs)
-        if isinstance(value, d.timedelta):
+        if isinstance(value, dt.timedelta):
             return self.format_timedelta(value, locale=locale, *args, **kwargs)
 
         return value
@@ -522,7 +516,7 @@ class I18n(object):
         named `dateformat`.
 
         """
-        if rebase and isinstance(date, d.datetime):
+        if rebase and isinstance(date, dt.datetime):
             date = self.to_user_timezone(date, tzinfo=tzinfo)
         format = self._get_format('date', format)
         return self._date_format(dates.format_date, date, format, rebase,
@@ -561,9 +555,9 @@ class I18n(object):
         named `timedeltaformat`.
 
         """
-        locale = locale or self.get_locale()
-        if isinstance(datetime_or_timedelta, d.datetime):
-            datetime_or_timedelta = d.datetime.utcnow() - datetime_or_timedelta
+        locale = normalize_locale(locale) or self.get_locale()
+        if isinstance(datetime_or_timedelta, dt.datetime):
+            datetime_or_timedelta = dt.datetime.utcnow() - datetime_or_timedelta
         return dates.format_timedelta(datetime_or_timedelta, granularity,
             locale=locale)
 
@@ -582,7 +576,7 @@ class I18n(object):
         named `numberformat`.
         
         """
-        locale = locale or self.get_locale()
+        locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_number(number, locale=locale)
 
 
@@ -602,7 +596,7 @@ class I18n(object):
         named `decimalformat`.
         
         """
-        locale = locale or self.get_locale()
+        locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_decimal(number, format=format, locale=locale)
 
 
@@ -624,7 +618,7 @@ class I18n(object):
         named `currencyformat`.
         
         """
-        locale = locale or self.get_locale()
+        locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_currency(
             number, currency, format=format, locale=locale
         )
@@ -646,7 +640,7 @@ class I18n(object):
         named `percentformat`.
 
         """
-        locale = locale or self.get_locale()
+        locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_percent(number, format=format, locale=locale)
 
 
@@ -666,67 +660,7 @@ class I18n(object):
         named `scientificformat`.
 
         """
-        locale = locale or self.get_locale()
+        locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_scientific(number, format=format, locale=locale)
-
-
-
-def get_werkzeug_preferred_languages(request):
-    """Return a list of preferred languages from a `werkzeug.wrappers.Request`
-    instance.
-
-    """
-    languages = getattr(request, 'accept_languages', None)
-    return languages.values() if languages else None
-
-
-def get_webob_preferred_languages(request):
-    """Return a list of preferred languages from a `webob.Request` instance.
-
-    """
-    languages = getattr(request, 'accept_language', None)
-    return list(languages) if languages else None
-    
-
-def get_django_preferred_languages(request):
-    """Take a `django.HttpRequest` instance and return a list of preferred
-    languages from the headers.
-
-    """
-    meta = getattr(request, 'META', None)
-    if not meta:
-        return None
-    header = request.META.get('HTTP_ACCEPT_LANGUAGE')
-    if not header:
-        return None
-    languages = [l.split(';')[0].strip() for l in header.split(',')]
-
-
-def get_werkzeug_ua_language(request):
-    """Return the language from the Werkzeug/Webob processed 'User-Agent'
-    header.
-
-    """
-    ua = getattr(request, 'user_agent', None)
-    if not ua:
-        return None
-    return getattr(request.user_agent, 'language', None)
-                
-
-def get_django_ua_language(request):
-    """Take a `django.HttpRequest` instance and try to extract the language
-    from the 'User-Agent' header.
-
-    """
-    meta = getattr(request, 'META', None)
-    if not meta:
-        return None
-    header = request.META.get('HTTP_USER_AGENT')
-    if not header:
-        return None
-    match = _language_re.search(header)
-    if match is not None:
-        return match.group(1) or match.group(2)
-    return None
 
 
