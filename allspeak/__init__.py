@@ -18,8 +18,8 @@ if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
 
 import datetime as dt
 from decimal import Decimal
-from os.path import (join, dirname, realpath, abspath, normpath, isdir, isfile,
-    splitext)
+from os.path import (join, dirname, realpath, abspath, normpath, isdir,
+                     isfile, splitext)
 
 from babel import dates, numbers, Locale
 try:
@@ -36,21 +36,23 @@ except ImportError:
 from pytz import timezone, UTC
 
 from .reader import get_data
-from .utils import (normalize_locale,
+from .utils import (
+    normalize_locale,
     get_werkzeug_preferred_languages,
     get_webob_preferred_languages,
     get_django_preferred_languages,
-    get_werkzeug_ua_language, get_django_ua_language)
+    get_werkzeug_ua_language,
+    get_django_ua_language)
 
 
-__version__ = '0.5'
+__version__ = '0.6'
 
 
 LOCALES_DIR = 'locales'
 
 
-
 class I18n(object):
+
     """Main class
 
     """
@@ -72,11 +74,10 @@ class I18n(object):
         'datetime.full': None,
         'datetime.long': None,
     }
-    
 
     def __init__(self, locales_dirs=None, get_request=None,
-            default_locale=None, default_timezone=None, date_formats=None,
-            markup=Markup):
+                 default_locale=None, default_timezone=None, date_formats=None,
+                 markup=Markup):
         """
         locales_dirs
         :   list of paths that will be searched, in order,
@@ -114,7 +115,6 @@ class I18n(object):
         self.list_available_languages()
         self.translations = {}
 
-
     def set_defaults(self, default_locale, default_timezone):
         """Set the default locale from the configuration as an instance of
         `Babel.Locale` and the default timezone as a `pytz.timezone` object.
@@ -123,7 +123,6 @@ class I18n(object):
         default_locale = normalize_locale(default_locale) or Locale('en')
         self.default_locale = default_locale
         self.default_timezone = timezone(default_timezone or 'utc')
-
 
     def list_available_languages(self):
         """Make a list of all available languages in the locales dir to use it
@@ -141,7 +140,6 @@ class I18n(object):
 
         self.available_languages = languages
 
-
     def get_request_timezone(self, request, default=UTC):
         """Returns the timezone that should be used for this request as a
         `DstTzInfo` instance.
@@ -153,15 +151,15 @@ class I18n(object):
 
         """
         tzinfo = (
-                getattr(request, 'tzinfo', None) or
-                getattr(request, 'args', getattr(request, 'GET', {})).get('tzinfo')
-            ) or default
+            getattr(request, 'tzinfo', None) or
+            getattr(request, 'args', getattr(
+                    request, 'GET', {})).get('tzinfo')
+        ) or default
 
         if isinstance(tzinfo, basestring):
             tzinfo = timezone(tzinfo)
         request.tzinfo = tzinfo
         return request.tzinfo
-
 
     def get_request_locale(self, request, default='en'):
         """Returns the locale that should be used for this request as a
@@ -184,15 +182,18 @@ class I18n(object):
                 get_webob_preferred_languages(request) or
                 get_django_preferred_languages(request)
             )
-            # To ensure a consistent matching, Babel algorithm is used.
-            locale = Locale.negotiate(preferred, self.available_languages, sep='-')
+            if preferred:
+                # To ensure a consistent matching, Babel algorithm is used.
+                locale = Locale.negotiate(preferred,
+                                          self.available_languages,
+                                          sep='-')
 
         if not locale:
             locale = (
                 get_werkzeug_ua_language(request) or
                 get_django_ua_language(request)
             )
-        
+
         locale = locale or default
 
         if isinstance(locale, basestring):
@@ -200,7 +201,6 @@ class I18n(object):
             locale = Locale.parse(locale, sep='-')
         request.locale = locale
         return request.locale
-
 
     def get_locale(self):
         """Returns the locale that should be used for this request as
@@ -213,7 +213,6 @@ class I18n(object):
             return self.default_locale
         return self.get_request_locale(request, self.default_locale)
 
-
     def get_timezone(self):
         """Returns the timezone that should be used for this request as
         `pytz.timezone` object.  This returns the default timezone if used
@@ -224,7 +223,6 @@ class I18n(object):
         if not request:
             return self.default_timezone
         return self.get_request_timezone(request, self.default_timezone)
-
 
     def load_language(self, path, locale):
         """From the given `path`, load the language file for the current or
@@ -255,7 +253,6 @@ class I18n(object):
         self.translations[cache_key] = data
         return data
 
-
     def find_keypath(self, key):
         """Based on the `key`, teturn the path of the language file and the
         subkey inside that file.
@@ -279,7 +276,6 @@ class I18n(object):
             return None, None
         return path, subkey
 
-
     def key_lookup(self, key, locale):
         """
         """
@@ -299,7 +295,6 @@ class I18n(object):
             return value
         except (IndexError, ValueError):
             return None
-
 
     def translate(self, key, count=None, locale=None, **kwargs):
         """Load the translation for the given key using the current locale.
@@ -330,7 +325,7 @@ class I18n(object):
         value = self.key_lookup(key, locale)
         if not value:
             return self.markup('<missing:%s>' % (key, ))
-        
+
         if isinstance(value, dict):
             value = self.pluralize(value, count)
 
@@ -341,7 +336,6 @@ class I18n(object):
                 return self.markup(value)
 
         return value
-
 
     @property
     def lazy_translate(self):
@@ -356,7 +350,6 @@ class I18n(object):
                 return self.translate(*self_.args, **self_.kwargs)
 
         return LazyWrapper
-
 
     def pluralize(self, dic, count):
         """Takes a dictionary and a number and return the value whose key in
@@ -391,7 +384,6 @@ class I18n(object):
             count = 0
         scount = str(count)
         return dic.get(count, dic.get(scount, dic.get('n', u'')))
-    
 
     def to_user_timezone(self, datetime, tzinfo=None):
         """Convert a datetime object to the user's timezone.  This
@@ -406,7 +398,6 @@ class I18n(object):
         tzinfo = tzinfo or self.get_timezone()
         return tzinfo.normalize(datetime.astimezone(tzinfo))
 
-
     def to_utc(self, datetime, tzinfo=None):
         """Convert a datetime object to UTC and drop tzinfo.  This is the
         opposite operation to `to_user_timezone`.
@@ -416,7 +407,6 @@ class I18n(object):
             tzinfo = tzinfo or self.get_timezone()
             datetime = tzinfo.localize(datetime)
         return datetime.astimezone(UTC).replace(tzinfo=None)
-
 
     def _get_format(self, key, format):
         """A small helper for the datetime formatting functions.  Looks up
@@ -431,9 +421,8 @@ class I18n(object):
                 format = rv
         return format
 
-
     def _date_format(self, formatter, obj, format, rebase,
-            locale=None, tzinfo=None, **extra):
+                     locale=None, tzinfo=None, **extra):
         """Internal helper that formats the date.
 
         """
@@ -443,12 +432,11 @@ class I18n(object):
             extra['tzinfo'] = tzinfo or self.get_timezone()
         return formatter(obj, format, locale=locale, **extra)
 
-
     def format(self, value, *args, **kwargs):
         """Return a formatted `value` according to the detected type and
         given parameters.  It doesn't know anything about currency, percent or
         scientific formats, so use the other methods for those cases.
-        
+
         """
         locale = kwargs.pop('locale', None)
         tzinfo = kwargs.pop('tzinfo', None)
@@ -456,10 +444,10 @@ class I18n(object):
         if isinstance(value, dt.date):
             if isinstance(value, dt.datetime):
                 return self.format_datetime(value, locale=locale,
-                    tzinfo=tzinfo, *args, **kwargs)
+                                            tzinfo=tzinfo, *args, **kwargs)
             else:
-                return self.format_date(value, locale=locale, tzinfo=tzinfo, 
-                    *args, **kwargs)
+                return self.format_date(value, locale=locale, tzinfo=tzinfo,
+                                        *args, **kwargs)
 
         if isinstance(value, int):
             return self.format_number(value, locale=locale, *args, **kwargs)
@@ -468,15 +456,14 @@ class I18n(object):
 
         if isinstance(value, dt.time):
             return self.format_time(value, locale=locale, tzinfo=tzinfo,
-                *args, **kwargs)
+                                    *args, **kwargs)
         if isinstance(value, dt.timedelta):
             return self.format_timedelta(value, locale=locale, *args, **kwargs)
 
         return value
 
-
     def format_datetime(self, datetime=None, format=None, rebase=True,
-            locale=None, tzinfo=None):
+                        locale=None, tzinfo=None):
         """Return a date formatted according to the given pattern.  If no
         `datetime.datetime` object is passed, the current time is
         assumed.  By default rebasing happens which causes the object to
@@ -495,11 +482,10 @@ class I18n(object):
         """
         format = self._get_format('datetime', format)
         return self._date_format(dates.format_datetime, datetime, format,
-            rebase, locale=locale, tzinfo=tzinfo)
-
+                                 rebase, locale=locale, tzinfo=tzinfo)
 
     def format_date(self, date=None, format=None, rebase=True,
-            locale=None, tzinfo=None):
+                    locale=None, tzinfo=None):
         """Return a date formatted according to the given pattern.  If no
         `datetime.datetime` or `datetime.date` object is passed,
         the current time is assumed.  By default rebasing happens which causes
@@ -520,11 +506,10 @@ class I18n(object):
             date = self.to_user_timezone(date, tzinfo=tzinfo)
         format = self._get_format('date', format)
         return self._date_format(dates.format_date, date, format, rebase,
-            locale=locale, tzinfo=tzinfo)
-
+                                 locale=locale, tzinfo=tzinfo)
 
     def format_time(self, time=None, format=None, rebase=True,
-            locale=None, tzinfo=None):
+                    locale=None, tzinfo=None):
         """Return a time formatted according to the given pattern.  If no
         `datetime.datetime` object is passed, the current time is
         assumed.  By default rebasing happens which causes the object to
@@ -543,11 +528,10 @@ class I18n(object):
         """
         format = self._get_format('time', format)
         return self._date_format(dates.format_time, time, format, rebase,
-            locale=locale, tzinfo=tzinfo)
-
+                                 locale=locale, tzinfo=tzinfo)
 
     def format_timedelta(self, datetime_or_timedelta, granularity='second',
-            locale=None):
+                         locale=None):
         """Format the elapsed time from the given date to now or the given
         timedelta.
 
@@ -557,28 +541,27 @@ class I18n(object):
         """
         locale = normalize_locale(locale) or self.get_locale()
         if isinstance(datetime_or_timedelta, dt.datetime):
-            datetime_or_timedelta = dt.datetime.utcnow() - datetime_or_timedelta
+            datetime_or_timedelta = dt.datetime.utcnow(
+            ) - datetime_or_timedelta
         return dates.format_timedelta(datetime_or_timedelta, granularity,
-            locale=locale)
-
+                                      locale=locale)
 
     def format_number(self, number, locale=None):
         """Return the given number formatted for the locale in the
         current request.
-        
+
         number
         :   the number to format
-        
+
         return (unicode)
         :   the formatted number
 
         This function is also available in the template context as filter
         named `numberformat`.
-        
+
         """
         locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_number(number, locale=locale)
-
 
     def format_decimal(self, number, format=None, locale=None):
         """Return the given decimal number formatted for the locale in the
@@ -588,17 +571,16 @@ class I18n(object):
         :   the number to format
         format
         :   the format to use
-        
+
         return (unicode)
         :   the formatted number
 
         This function is also available in the template context as filter
         named `decimalformat`.
-        
+
         """
         locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_decimal(number, format=format, locale=locale)
-
 
     def format_currency(self, number, currency, format=None, locale=None):
         """Return the given number formatted for the locale in the
@@ -610,19 +592,18 @@ class I18n(object):
         :   the currency code
         format
         :   the format to use
-        
+
         return (unicode)
         :   the formatted number
 
         This function is also available in the template context as filter
         named `currencyformat`.
-        
+
         """
         locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_currency(
             number, currency, format=format, locale=locale
         )
-
 
     def format_percent(self, number, format=None, locale=None):
         """Return a percent value formatted for the locale in the
@@ -632,17 +613,16 @@ class I18n(object):
         :   the number to format
         format
         :   the format to use
-        
+
         return (unicode)
         :   the formatted percent number
-        
+
         This function is also available in the template context as filter
         named `percentformat`.
 
         """
         locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_percent(number, format=format, locale=locale)
-
 
     def format_scientific(self, number, format=None, locale=None):
         """Return value formatted in scientific notation for the locale in
@@ -652,15 +632,13 @@ class I18n(object):
         :   the number to format
         format
         :   the format to use
-        
+
         return (unicode)
         :   the formatted percent number
-        
+
         This function is also available in the template context as filter
         named `scientificformat`.
 
         """
         locale = normalize_locale(locale) or self.get_locale()
         return numbers.format_scientific(number, format=format, locale=locale)
-
-

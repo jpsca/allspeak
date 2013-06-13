@@ -81,6 +81,14 @@ def test_content_negotiation():
     assert Locale('es', 'PE') == i18n.get_locale()
 
 
+def test_no_preffered_language():
+    request = get_test_request(headers=[])
+    get_request = lambda: request
+    i18n = I18n(locales_dir, get_request, default_locale='es')
+    print i18n.available_languages
+    assert Locale('es') == i18n.get_locale()
+
+
 def test_load_language():
     i18n = I18n(default_locale='fr')
     locale = Locale('es')
