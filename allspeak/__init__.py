@@ -45,7 +45,7 @@ from .utils import (
     get_django_ua_language)
 
 
-__version__ = '0.6'
+__version__ = '0.5.1'
 
 
 LOCALES_DIR = 'locales'
