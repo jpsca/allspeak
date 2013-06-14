@@ -197,7 +197,7 @@ def test_format():
     test_cases = [
         (456, format_number),
         (3.14159, format_decimal),
-        (Decimal(3.14159), format_decimal),
+        (Decimal('3.14159'), format_decimal),
     ]
     for value, bf in test_cases:
         assert i18n.format(value, locale=locale) == bf(value, locale=locale)
