@@ -1,26 +1,18 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import datetime as d
 from decimal import Decimal
 from os.path import join, dirname
 
 from babel import Locale
 from babel.dates import format_date, format_datetime, format_time
-from babel.numbers import (format_currency, format_decimal, format_number,
+from babel.numbers import (
+    format_currency, format_decimal, format_number,
     format_percent, format_scientific)
 from markupsafe import Markup
-import pytest
 from pytz import timezone, UTC
-try:
-    from django.http import HttpRequest as DjangoRequest
-except ImportError:
-    pass
-try:
-    from webob import Request as WebobRequest
-except ImportError:
-    pass
-from werkzeug.local import Local
 from werkzeug.test import EnvironBuilder
-from werkzeug.wrappers import Request
 
 from allspeak import I18n
 
@@ -29,6 +21,16 @@ USE_WEBOB = False
 USE_DJANGO = False
 
 locales_dir = join(dirname(__file__), 'locales')
+
+
+def get_test_env(path, **kwargs):
+    builder = EnvironBuilder(path=path, **kwargs)
+    return builder.get_environ()
+
+
+def get_test_request(make_req, path='/', **kwargs):
+    env = get_test_env(path, **kwargs)
+    return make_req(env, path)
 
 
 def test_search_paths():
@@ -43,55 +45,52 @@ def test_app_defaults():
     assert timezone('America/Lima') == i18n.get_timezone()
 
 
-def test_request_settings():
-    request = get_test_request()
+def test_request_settings(make_req):
+    request = get_test_request(make_req)
     request.locale = 'en'
     request.tzinfo = 'US/Eastern'
     get_request = lambda: request
 
     i18n = I18n(get_request=get_request, default_locale='es-PE',
-        default_timezone='America/Lima')
+                default_timezone='America/Lima')
 
     assert Locale.parse('en') == i18n.get_locale()
     assert timezone('US/Eastern') == i18n.get_timezone()
 
 
-def test_content_negotiation():
+def test_content_negotiation(make_req):
     headers = [('Accept-Language', 'fr; q=1.0, es; q=0.5, pt; q=0.5')]
-    request = get_test_request(headers=headers)
-    get_request = lambda: request
+    get_request = lambda: get_test_request(make_req, headers=headers)
     i18n = I18n(locales_dir, get_request)
-    print i18n.available_languages
+    print(i18n.available_languages)
 
     assert Locale('es') == i18n.get_locale()
 
     headers = [('Accept-Language', 'fr; q=1.0, en-US; q=0.5, pt; q=0.5')]
-    request = get_test_request(headers=headers)
-    print request.headers
-    get_request = lambda: request
+    get_request = lambda: get_test_request(make_req, headers=headers)
     i18n = I18n(locales_dir, get_request)
+    print(i18n.available_languages)
 
     assert Locale('en') == i18n.get_locale()
 
     headers = [('Accept-Language', 'fr; q=1.0, es-PE; q=0.5, pt; q=0.5')]
-    request = get_test_request(headers=headers)
-    get_request = lambda: request
+    get_request = lambda: get_test_request(make_req, headers=headers)
     i18n = I18n(locales_dir, get_request)
+    print(i18n.available_languages)
 
     assert Locale('es', 'PE') == i18n.get_locale()
 
 
-def test_no_preffered_language():
-    request = get_test_request(headers=[])
+def test_no_preffered_language(make_req):
+    request = get_test_request(make_req, headers=[])
     get_request = lambda: request
     i18n = I18n(locales_dir, get_request, default_locale='es')
-    print i18n.available_languages
+    print(i18n.available_languages)
     assert Locale('es') == i18n.get_locale()
 
 
 def test_load_language():
     i18n = I18n(default_locale='fr')
-    locale = Locale('es')
 
     data = i18n.load_language(locales_dir, Locale('es'))
     assert data['mytest']['greeting'] == u'Hola'
@@ -120,7 +119,7 @@ def test_key_lookup():
     locale = Locale('es')
 
     assert i18n.key_lookup('mytest.greeting', locale) == u'Hola'
-    assert i18n.key_lookup('mytest.bla', locale) == None
+    assert i18n.key_lookup('mytest.bla', locale) is None
     assert i18n.key_lookup('sub:mytest.greeting', locale) == u'Hola mundo'
 
 
@@ -225,27 +224,7 @@ def test_more_formatters():
     result = i18n.format_percent(v, locale=locale)
     expected = format_percent(v, locale=locale)
     assert result == expected
-    
+
     result = i18n.format_scientific(v, locale=locale)
     expected = format_scientific(v, locale=locale)
     assert result == expected
-
-
-# -----------------------------------------------------------------------------
-
-
-def get_test_env(path, **kwargs):
-    builder = EnvironBuilder(path=path, **kwargs)
-    return builder.get_environ()
-
-
-def get_test_request(path='/', **kwargs):
-    env = get_test_env(path, **kwargs)
-    if USE_WEBOB:
-        return WebobRequest(dict(env))
-    elif USE_DJANGO:
-        request = DjangoRequest()
-        request.path = path
-        request.META = dict(env)
-    return Request(env)
-
