@@ -47,3 +47,21 @@ def get_django_preferred_languages(request):
         languages = [l.strip().split(';')[::-1] for l in header.split(',')]
         languages = sorted(languages)[::-1]
         return [l[1].strip() for l in languages]
+
+
+def negotiate_locale(request, available_locales):
+    """From the available locales, negotiate the most adequate for the
+    client, based on the "accept language" header.
+    """
+    preferred = (
+        get_werkzeug_preferred_languages(request) or
+        get_webob_preferred_languages(request) or
+        get_django_preferred_languages(request)
+    )
+    if preferred:
+        available_locales = map(
+            lambda l: l.replace('_', '-'),
+            available_locales
+        )
+        # To ensure a consistent matching, Babel algorithm is used.
+        return Locale.negotiate(preferred, available_locales, sep='-')

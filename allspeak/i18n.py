@@ -11,52 +11,42 @@ from pytz import timezone, UTC
 
 from allspeak._compat import string_types
 from allspeak.reader import get_data
-from allspeak.utils import (
-    normalize_locale,
-    get_werkzeug_preferred_languages,
-    get_webob_preferred_languages,
-    get_django_preferred_languages,
-)
+from allspeak.utils import normalize_locale
 
 
 LOCALES_DIR = 'locales'
 
+DEFAULT_DATE_FORMATS = {
+    'time': 'medium',
+    'date': 'medium',
+    'datetime': 'medium',
+}
+
+DEFAULT_LOCALE = 'en'
+
 
 class I18n(object):
 
-    default_date_formats = {
-        'time': 'medium',
-        'date': 'medium',
-        'datetime': 'medium',
-        'time.short': None,
-        'time.medium': None,
-        'time.full': None,
-        'time.long': None,
-        'date.short': None,
-        'date.medium': None,
-        'date.full': None,
-        'date.long': None,
-        'datetime.short': None,
-        'datetime.medium': None,
-        'datetime.full': None,
-        'datetime.long': None,
-    }
-
     def __init__(self, locales_dirs=None, get_request=None,
-                 default_locale=None, default_timezone=None, date_formats=None,
-                 markup=Markup):
+                 default_locale=DEFAULT_LOCALE, default_timezone=None,
+                 date_formats=None, markup=Markup):
         """
         locales_dirs:
             list of paths that will be searched, in order,
             for the locales.
+
         get_request:
             a callable that returns the current request.
+
         default_locale:
             default locale (as a string or as a Babel.Locale instance).
+
         default_timezone:
             default timezone.
+
         date_formats:
             overwrite the defaults date formats.
+
         markup:
             overwrite the function used by `translate` to flags HTML code
             as 'safe'. `markupsafe.Markup` is used by default.
@@ -74,12 +64,11 @@ class I18n(object):
                 p = dirname(p)
             search_paths.append(p)
         self.search_paths = search_paths
-
         self.set_defaults(default_locale, default_timezone)
-        self.date_formats = self.default_date_formats.copy()
+        self.date_formats = DEFAULT_DATE_FORMATS.copy()
+        if date_formats:
+            self.date_formats.update(date_formats)
         self.markup = markup
-
-        self.list_available_languages()
         self.translations = {}
 
     def set_defaults(self, default_locale, default_timezone):
@@ -87,25 +76,9 @@ class I18n(object):
         `Babel.Locale` and the default timezone as a `pytz.timezone` object.
 
         """
-        default_locale = normalize_locale(default_locale) or Locale('en')
+        default_locale = normalize_locale(default_locale) or Locale(DEFAULT_LOCALE)
         self.default_locale = default_locale
         self.default_timezone = timezone(default_timezone or 'utc')
-
-    def list_available_languages(self):
-        """Make a list of all available languages in the locales dir to use it
-        later for content negotiation.
-
-        """
-        languages = []
-        for root in self.search_paths:
-            for dirname, dirnames, filenames in os.walk(root):
-                for fn in filenames:
-                    fn, ext = splitext(fn)
-                    fn = fn.lower().replace('_', '-')
-                    if ext == '.yml' and fn and fn not in languages:
-                        languages.append(fn)
-
-        self.available_languages = languages
 
     def get_request_timezone(self, request, default=UTC):
         """Returns the timezone that should be used for this request as a
@@ -128,32 +101,18 @@ class I18n(object):
         request.tzinfo = tzinfo
         return request.tzinfo
 
-    def get_request_locale(self, request, default='en'):
+    def get_request_locale(self, request, default):
         """Returns the locale that should be used for this request as a
         `babel.Locale` instance.
 
         Tries the following in order:
-        - an attribute called `'locale'`
+        - an request attribute called `'locale'`
         - a GET argument called `'locale'`
-        - the best guess from the 'Accept-Languages' header
-        - the language of the 'User-Agent' header
-        - the provided default language
+        - the default locale
 
         """
         locale = getattr(request, 'locale', None) or \
             getattr(request, 'args', getattr(request, 'GET', {})).get('locale')
-
-        if not locale:
-            preferred = (
-                get_werkzeug_preferred_languages(request) or
-                get_webob_preferred_languages(request) or
-                get_django_preferred_languages(request)
-            )
-            if preferred:
-                # To ensure a consistent matching, Babel algorithm is used.
-                locale = Locale.negotiate(
-                    preferred, self.available_languages, sep='-')
-
         locale = locale or default
 
         if isinstance(locale, string_types):
@@ -376,7 +335,7 @@ class I18n(object):
         if format is None:
             format = self.date_formats.get(key)
         if format in ('short', 'medium', 'full', 'long'):
-            rv = self.date_formats['%s.%s' % (key, format)]
+            rv = self.date_formats.get('%s.%s' % (key, format))
             if rv is not None:
                 format = rv
         return format

@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 from allspeak import utils
+from babel import Locale
 from werkzeug.test import EnvironBuilder
 
 from .conftest import make_werkzeug_request, make_webob_request, make_django_request 
@@ -15,6 +16,26 @@ def get_test_env(path, **kwargs):
 def get_test_request(make_req, path='/', **kwargs):
     env = get_test_env(path, **kwargs)
     return make_req(env, path)
+
+
+def test_content_negotiation(make_req):
+    available_locales = ['en', 'es', 'es-PE']
+
+    headers = [('Accept-Language', 'fr; q=1.0, es; q=0.5, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.negotiate_locale(req, available_locales) == Locale('es')
+
+    headers = [('Accept-Language', 'fr; q=1.0, en-US; q=0.5, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.negotiate_locale(req, available_locales) == Locale('en')
+
+    headers = [('Accept-Language', 'fr; q=1.0, es-PE; q=0.5, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.negotiate_locale(req, available_locales) == Locale('es', 'PE')
+
+    headers = [('Accept-Language', 'fr; q=1.0, es-PE; q=0.5, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.negotiate_locale(req, ['ru']) is None
 
 
 def test_normalize_locale():

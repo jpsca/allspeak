@@ -40,9 +40,14 @@ def test_search_paths():
 
 def test_app_defaults():
     i18n = I18n(default_locale='es-PE', default_timezone='America/Lima')
-
+    assert True
     assert Locale('es', 'PE') == i18n.get_locale()
     assert timezone('America/Lima') == i18n.get_timezone()
+
+
+def test_overwrite_date_formats():
+    i18n = I18n(date_formats={'date': 'fizzbuzz'})
+    assert i18n.date_formats['date'] == 'fizzbuzz'
 
 
 def test_request_settings(make_req):
@@ -58,34 +63,10 @@ def test_request_settings(make_req):
     assert timezone('US/Eastern') == i18n.get_timezone()
 
 
-def test_content_negotiation(make_req):
-    headers = [('Accept-Language', 'fr; q=1.0, es; q=0.5, pt; q=0.5')]
-    get_request = lambda: get_test_request(make_req, headers=headers)
-    i18n = I18n(locales_dir, get_request)
-    print(i18n.available_languages)
-
-    assert Locale('es') == i18n.get_locale()
-
-    headers = [('Accept-Language', 'fr; q=1.0, en-US; q=0.5, pt; q=0.5')]
-    get_request = lambda: get_test_request(make_req, headers=headers)
-    i18n = I18n(locales_dir, get_request)
-    print(i18n.available_languages)
-
-    assert Locale('en') == i18n.get_locale()
-
-    headers = [('Accept-Language', 'fr; q=1.0, es-PE; q=0.5, pt; q=0.5')]
-    get_request = lambda: get_test_request(make_req, headers=headers)
-    i18n = I18n(locales_dir, get_request)
-    print(i18n.available_languages)
-
-    assert Locale('es', 'PE') == i18n.get_locale()
-
-
 def test_no_preffered_language(make_req):
     request = get_test_request(make_req, headers=[])
     get_request = lambda: request
     i18n = I18n(locales_dir, get_request, default_locale='es')
-    print(i18n.available_languages)
     assert Locale('es') == i18n.get_locale()
 
 
