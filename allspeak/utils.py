@@ -15,7 +15,7 @@ def normalize_locale(locale):
     return
 
 
-def get_werkzeug_preferred_languages(request):
+def get_werkzeug_preferred_locales(request):
     """Return a list of preferred languages from a `werkzeug.wrappers.Request`
     instance.
 
@@ -25,7 +25,7 @@ def get_werkzeug_preferred_languages(request):
         return list(languages.values())
 
 
-def get_webob_preferred_languages(request):
+def get_webob_preferred_locales(request):
     """Return a list of preferred languages from a `webob.Request` instance.
 
     """
@@ -34,7 +34,7 @@ def get_webob_preferred_languages(request):
         return list(languages)
 
 
-def get_django_preferred_languages(request):
+def get_django_preferred_locales(request):
     """Take a `django.HttpRequest` instance and return a list of preferred
     languages from the headers.
 
@@ -49,15 +49,17 @@ def get_django_preferred_languages(request):
         return [l[1].strip() for l in languages]
 
 
+def get_preferred_locales(request):
+    return (get_werkzeug_preferred_locales(request) or
+            get_webob_preferred_locales(request) or
+            get_django_preferred_locales(request))
+
+
 def negotiate_locale(request, available_locales):
     """From the available locales, negotiate the most adequate for the
     client, based on the "accept language" header.
     """
-    preferred = (
-        get_werkzeug_preferred_languages(request) or
-        get_webob_preferred_languages(request) or
-        get_django_preferred_languages(request)
-    )
+    preferred = get_preferred_locales(request)
     if preferred:
         available_locales = map(
             lambda l: l.replace('_', '-'),
