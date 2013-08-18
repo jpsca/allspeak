@@ -124,34 +124,6 @@ def test_lazy_translate():
     assert repr(lazy) == u'Hola'
 
 
-def test_pluralize():
-    i18n = I18n()
-    d = {
-        0: u'No apples',
-        1: u'One apple',
-        3: u'Few apples',
-        'n': u'%(count)s apples',
-    }
-    assert i18n.pluralize(d, 0) == u'No apples'
-    assert i18n.pluralize(d, 1) == u'One apple'
-    assert i18n.pluralize(d, 3) == u'Few apples'
-    assert i18n.pluralize(d, 10) == u'%(count)s apples'
-
-    d = {
-        0: u'off',
-        'n': u'on'
-    }
-    assert i18n.pluralize(d, 3) == u'on'
-
-    d = {
-        0: u'off',
-        'n': u'on'
-    }
-    assert i18n.pluralize(d, 0) == u'off'
-
-    assert i18n.pluralize({}, 3) == u''
-
-
 def test_to_user_timezone():
     i18n = I18n()
     tzinfo = timezone('US/Eastern')

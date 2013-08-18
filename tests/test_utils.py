@@ -68,3 +68,29 @@ def test_get_django_preferred_locales():
     req = get_test_request(make_django_request, headers=headers)
     langs = utils.get_django_preferred_locales(req)
     assert langs == ['fr', 'pt', 'es']
+
+
+def test_pluralize():
+    d = {
+        0: u'No apples',
+        1: u'One apple',
+        3: u'Few apples',
+        'n': u'%(count)s apples',
+    }
+    assert utils.pluralize(d, 0) == u'No apples'
+    assert utils.pluralize(d, 1) == u'One apple'
+    assert utils.pluralize(d, 3) == u'Few apples'
+    assert utils.pluralize(d, 10) == u'%(count)s apples'
+
+    d = {
+        0: u'off',
+        'n': u'on'
+    }
+    assert utils.pluralize(d, 3) == u'on'
+
+    d = {
+        0: u'off',
+        'n': u'on'
+    }
+    assert utils.pluralize(d, 0) == u'off'
+    assert utils.pluralize({}, 3) == u''
