@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from babel import Locale
+from babel import Locale, UnknownLocaleError
 from pytz import timezone, UTC
 
 from allspeak._compat import string_types
@@ -8,12 +8,14 @@ from allspeak._compat import string_types
 def normalize_locale(locale):
     if isinstance(locale, Locale):
         return locale
-    if isinstance(locale, string_types):
-        locale = locale.replace('_', '-')
-        return Locale.parse(locale, sep='-')
-    if isinstance(locale, tuple):
-        return Locale(*locale)
-    return
+    try:
+        if isinstance(locale, string_types):
+            locale = locale.replace('_', '-')
+            return Locale.parse(locale, sep='-')
+        if isinstance(locale, tuple):
+            return Locale(*locale)
+    except UnknownLocaleError:
+        return
 
 
 def get_werkzeug_preferred_locales(request):
@@ -102,14 +104,11 @@ def get_request_locale(request, default):
     - the default locale
 
     """
-    locale = getattr(request, 'locale', None) or \
+    locale = (
+        getattr(request, 'locale', None) or
         getattr(request, 'args', getattr(request, 'GET', {})).get('locale')
-    locale = locale or default
-
-    if isinstance(locale, string_types):
-        locale = locale.replace('_', '-')
-        locale = Locale.parse(locale, sep='-')
-    request.locale = locale
+    )
+    request.locale = normalize_locale(locale) or default
     return request.locale
 
 

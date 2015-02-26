@@ -4,6 +4,7 @@
 -r requirements.txt
 pytest
 django
+flake
 jinja2
 webob
 werkzeug

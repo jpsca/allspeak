@@ -2,8 +2,7 @@
 import datetime as dt
 import os
 from decimal import Decimal
-from os.path import (
-    join, dirname, realpath, abspath, normpath, isdir, isfile, splitext)
+from os.path import join, dirname, realpath, abspath, normpath, isdir, isfile
 
 from babel import dates, numbers, Locale
 from markupsafe import Markup

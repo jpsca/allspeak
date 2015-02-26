@@ -10,6 +10,8 @@
 *.log
 *.pot
 *.py[co]
+*.sublime-*
+.idea
 
 ## Packages
 env

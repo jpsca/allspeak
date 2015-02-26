@@ -5,7 +5,7 @@ from allspeak import utils
 from babel import Locale
 from werkzeug.test import EnvironBuilder
 
-from .conftest import make_werkzeug_request, make_webob_request, make_django_request 
+from .conftest import make_werkzeug_request, make_webob_request, make_django_request
 
 
 def get_test_env(path, **kwargs):
@@ -37,6 +37,10 @@ def test_content_negotiation(make_req):
     req = get_test_request(make_req, headers=headers)
     assert utils.negotiate_locale(req, ['ru']) is None
 
+    headers = [('Accept-Language', 'martian; q=1.0, venus; q=0.5, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.negotiate_locale(req, ['klingon']) is None
+
 
 def test_normalize_locale():
     from babel import Locale
@@ -47,6 +51,7 @@ def test_normalize_locale():
     assert utils.normalize_locale('es') == Locale('es')
     assert utils.normalize_locale(('en', 'US')) == Locale('en', 'US')
     assert utils.normalize_locale(('es', )) == Locale('es')
+    assert utils.normalize_locale('klingon') == None
 
 
 def test_get_werkzeug_preferred_locales():
