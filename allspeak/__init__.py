@@ -24,4 +24,4 @@ if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
 from allspeak.i18n import I18n, LOCALES_DIR  # noqa
 from allspeak.utils import negotiate_locale, get_preferred_locales  # noqa
 
-__version__ = '0.5.5'
+__version__ = '0.5.7'
