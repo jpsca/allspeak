@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from babel import Locale
+from babel import Locale, UnknownLocaleError
 from pytz import timezone, UTC
 
 from allspeak._compat import string_types
@@ -108,7 +108,10 @@ def get_request_locale(request, default):
 
     if isinstance(locale, string_types):
         locale = locale.replace('_', '-')
-        locale = Locale.parse(locale, sep='-')
+        try:
+            locale = Locale.parse(locale, sep='-')
+        except UnknownLocaleError:
+            locale = default
     request.locale = locale
     return request.locale
 

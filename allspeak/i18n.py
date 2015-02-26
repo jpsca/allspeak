@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime as dt
-import os
 from decimal import Decimal
-from os.path import (
-    join, dirname, realpath, abspath, normpath, isdir, isfile, splitext)
+from os.path import dirname, realpath, abspath, normpath, isdir
 
 from babel import dates, numbers, Locale
 from markupsafe import Markup
@@ -11,7 +9,7 @@ from pytz import timezone, UTC
 
 from allspeak import utils
 from allspeak._compat import string_types
-from allspeak.reader import get_data
+from allspeak.reader import load_locales_data
 
 
 LOCALES_DIR = 'locales'
@@ -27,13 +25,12 @@ DEFAULT_LOCALE = 'en'
 
 class I18n(object):
 
-    def __init__(self, locales_dirs=None, get_request=None,
+    def __init__(self, locales=LOCALES_DIR, get_request=None,
                  default_locale=DEFAULT_LOCALE, default_timezone=None,
                  date_formats=None, markup=Markup):
         """
-        locales_dirs:
-            list of paths that will be searched, in order,
-            for the locales.
+        locales:
+            path that will be searched for the locales.
 
         get_request:
             a callable that returns the current request.
@@ -54,22 +51,18 @@ class I18n(object):
         """
         self.get_request = get_request
 
-        if isinstance(locales_dirs, string_types):
-            locales_dirs = [locales_dirs]
-        locales_dirs = locales_dirs or [LOCALES_DIR]
-        search_paths = []
-        for p in locales_dirs:
-            p = normpath(abspath(realpath(p)))
-            if not isdir(p):
-                p = dirname(p)
-            search_paths.append(p)
-        self.search_paths = search_paths
+        locales = locales or LOCALES_DIR
+        locales = normpath(abspath(realpath(locales)))
+        if not isdir(locales):
+            locales = dirname(locales)
+        self.locales_path = locales
+        self.locales_data = {}
+
         self.set_defaults(default_locale, default_timezone)
         self.date_formats = DEFAULT_DATE_FORMATS.copy()
         if date_formats:
             self.date_formats.update(date_formats)
         self.markup = markup
-        self.translations = {}
 
     def set_defaults(self, default_locale, default_timezone):
         """Set the default locale from the configuration as an instance of
@@ -102,72 +95,30 @@ class I18n(object):
             return self.default_timezone
         return utils.get_request_timezone(request, self.default_timezone)
 
-    def load_language(self, path, locale):
-        """From the given `path`, load the language file for the current or
-        given locale.  If the locale has a territory attribute (eg: 'US') the
+    def get_translations(self, locale):
+        """Return the translations for the given locale.
+        If the locale has a territory attribute (eg: 'US') the
         the specific 'en-US' version will be tried first.
 
         """
+        if not self.locales_data:
+            self.locales_data = load_locales_data(self.locales_path)
+
+        translations = {}
         if locale.territory:
-            filenames = [str(locale).replace('_', '-'), locale.language]
-        else:
-            filenames = [locale.language]
-        filenames.append(str(self.default_locale).replace('_', '-'))
-
-        for filename in filenames:
-            cache_key = join(path, filename)
-            cached = self.translations.get(cache_key)
-            if cached:
-                return cached
-            filename = cache_key + '.yml'
-            if isfile(filename):
-                break
-        else:
-            return
-        try:
-            data = get_data(filename)
-        except (IOError, AttributeError):
-            return
-        self.translations[cache_key] = data
-        return data
-
-    def find_keypath(self, key):
-        """Based on the `key`, teturn the path of the language file and the
-        subkey inside that file.
-
-        """
-        if ':' not in key:
-            return self.search_paths[0], key
-
-        path, subkey = key.split(':', 1)
-        lpath = path.split('.')
-
-        for root in self.search_paths:
-            dirname, dirnames, filenames = next(os.walk(root))
-            if lpath[0] in dirnames:
-                break
-        else:
-            return None, None
-
-        path = join(root, *lpath)
-        if not isdir(path):
-            return None, None
-        return path, subkey
+            translations = self.locales_data.get(locale.language)
+        if not translations:
+            key = str(locale).replace('_', '-')
+            translations = self.locales_data.get(key)
+        return translations or {}
 
     def key_lookup(self, key, locale):
-        """
-        """
-        path, subkey = self.find_keypath(key)
-        if not (path and subkey):
+        translations = self.get_translations(locale)
+        if not translations:
             return None
-
-        value = self.load_language(path, locale)
-        if value is None:
-            return None
-
         try:
-            for k in subkey.split('.'):
-                value = value.get(k)
+            for k in key.split('.'):
+                value = translations.get(k)
                 if value is None:
                     return None
             return value

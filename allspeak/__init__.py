@@ -21,7 +21,8 @@ import os
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
 
-from allspeak.i18n import I18n
-from allspeak.utils import negotiate_locale, get_preferred_locales
+from allspeak.i18n import I18n  # noqa
+from allspeak.utils import negotiate_locale, get_preferred_locales  # noqa
 
-__version__ = '0.5.2'
+
+__version__ = '0.5.4'

@@ -1,0 +1,1433 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tra",
+				"translations"
+			],
+			[
+				"locales_",
+				"locales_path"
+			],
+			[
+				"loca",
+				"locales"
+			],
+			[
+				"transla",
+				"translations	statement"
+			],
+			[
+				"avail",
+				"available_locales"
+			],
+			[
+				"av",
+				"available_locales"
+			],
+			[
+				"da",
+				"date_formats	param"
+			],
+			[
+				"date",
+				"date_formats"
+			],
+			[
+				"m",
+				"make_werkzeug_request	function"
+			],
+			[
+				"str",
+				"string_types	statement"
+			],
+			[
+				"_",
+				"_compat	import"
+			],
+			[
+				"image",
+				"imageSel"
+			],
+			[
+				"st",
+				"stopPropagation"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"prev",
+				"preventDefault()	jquery-1.6.4.js"
+			],
+			[
+				"c",
+				"clonable"
+			],
+			[
+				"fir",
+				"first_load"
+			],
+			[
+				"js",
+				"json_data"
+			],
+			[
+				"f",
+				"font-weight"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"margn",
+				"margin-top"
+			],
+			[
+				"ba",
+				"background-color"
+			],
+			[
+				"margin",
+				"margin-right"
+			],
+			[
+				"Im",
+				"ImgForm"
+			],
+			[
+				"send",
+				"send_messages"
+			],
+			[
+				"User",
+				"UserMixin"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"fon",
+				"font-family"
+			],
+			[
+				"te",
+				"text-transform"
+			],
+			[
+				"sign",
+				"sign_in_redirect"
+			],
+			[
+				"ha",
+				"hasher"
+			],
+			[
+				"hash",
+				"hash_password"
+			],
+			[
+				"hah",
+				"hashed"
+			],
+			[
+				"re",
+				"request"
+			],
+			[
+				"se",
+				"session"
+			],
+			[
+				"has",
+				"hasattr"
+			],
+			[
+				"aut",
+				"authorizer"
+			],
+			[
+				"def",
+				"defrounds"
+			],
+			[
+				"T",
+				"TestScm"
+			],
+			[
+				"r",
+				"repository"
+			],
+			[
+				"lucuma",
+				"lucumalabs"
+			],
+			[
+				"mak",
+				"make_symlink"
+			],
+			[
+				"ini",
+				"init_app"
+			],
+			[
+				"ini_",
+				"test_init_app"
+			],
+			[
+				"inf",
+				"inflector"
+			],
+			[
+				"source",
+				"source_dir"
+			],
+			[
+				"con",
+				"content_type"
+			],
+			[
+				"pa",
+				"parse_geometry"
+			],
+			[
+				"pr",
+				"progressive"
+			],
+			[
+				"spa",
+				"white-space"
+			],
+			[
+				"curr",
+				"current_port"
+			],
+			[
+				"err",
+				"errno"
+			],
+			[
+				"set",
+				"setup_module"
+			],
+			[
+				"ext",
+				"ext_markdown"
+			],
+			[
+				"EX",
+				"EXT_IN"
+			],
+			[
+				"get",
+				"get_build_path"
+			],
+			[
+				"remo",
+				"remove_file"
+			],
+			[
+				"loa",
+				"load_settings_from_file"
+			],
+			[
+				"HT",
+				"HTML_PAGE"
+			],
+			[
+				"wi",
+				"window_height"
+			],
+			[
+				"buil",
+				"build_dir"
+			],
+			[
+				"defaul",
+				"default_locale"
+			],
+			[
+				"nor",
+				"normalize_locale"
+			],
+			[
+				"lo",
+				"locale"
+			],
+			[
+				"so",
+				"source_dir"
+			],
+			[
+				"b",
+				"build_dir"
+			],
+			[
+				"sour",
+				"sourcepath"
+			],
+			[
+				"cur",
+				"curr_values"
+			],
+			[
+				"is",
+				"is_valid"
+			],
+			[
+				"sess",
+				"session_interface"
+			],
+			[
+				"secret",
+				"secret_key"
+			],
+			[
+				"dateti",
+				"datetime"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"cl",
+				"clear"
+			],
+			[
+				"o",
+				"overflow"
+			],
+			[
+				"font-s",
+				"font-style"
+			],
+			[
+				"text",
+				"text-transform"
+			],
+			[
+				"border-c",
+				"border-color"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"bor",
+				"border-radius"
+			],
+			[
+				"tex",
+				"text-decoration"
+			],
+			[
+				"default",
+				"default_timezone"
+			],
+			[
+				"locale",
+				"locales_dirs"
+			],
+			[
+				"form",
+				"format_number"
+			],
+			[
+				"utf",
+				"utf-8"
+			],
+			[
+				"en",
+				"encode"
+			],
+			[
+				"to",
+				"to_bytestring"
+			],
+			[
+				"server",
+				"server_name"
+			],
+			[
+				"PO",
+				"SERVER_PORT"
+			],
+			[
+				"D",
+				"DEFAULT_SUBDOMAIN"
+			],
+			[
+				"response",
+				"response_class"
+			],
+			[
+				"chn",
+				"change_password_view"
+			],
+			[
+				"sign_o",
+				"sign_out_view"
+			],
+			[
+				"sin",
+				"sign_in_view"
+			],
+			[
+				"star",
+				"startswith"
+			],
+			[
+				"trans",
+				"translate"
+			],
+			[
+				"loc",
+				"locales_dir"
+			],
+			[
+				"bas",
+				"basestring"
+			],
+			[
+				"roo",
+				"root_path"
+			],
+			[
+				"de",
+				"default"
+			],
+			[
+				"view",
+				"views_path"
+			],
+			[
+				"No",
+				"NotFound"
+			],
+			[
+				"respons",
+				"response_class"
+			],
+			[
+				"envir",
+				"environment"
+			],
+			[
+				"call",
+				"callable"
+			],
+			[
+				"resp",
+				"resp_class"
+			],
+			[
+				"exc",
+				"exceptions"
+			],
+			[
+				"han",
+				"handle_http_exception"
+			],
+			[
+				"res",
+				"response_class"
+			],
+			[
+				"new",
+				"new_width"
+			],
+			[
+				"python",
+				"python_value"
+			],
+			[
+				"Contact",
+				"ContactForm"
+			],
+			[
+				"ins",
+				"inspect"
+			],
+			[
+				"Form",
+				"FormSet"
+			],
+			[
+				"clea",
+				"cleaned_data"
+			],
+			[
+				"Ex",
+				"Exception"
+			],
+			[
+				"do",
+				"doesn"
+			],
+			[
+				"After",
+				"AfterNow"
+			],
+			[
+				"ex",
+				"except"
+			],
+			[
+				"relp",
+				"relpath_out"
+			],
+			[
+				"no",
+				"no-repeat"
+			],
+			[
+				"moz-b",
+				"moz-box-shadow"
+			],
+			[
+				"list",
+				"list	list-style-type: asian"
+			],
+			[
+				"lis",
+				"list	list-style-type: asian"
+			],
+			[
+				"sign_out",
+				"sign_out_redirect"
+			],
+			[
+				"font-",
+				"font-weight"
+			],
+			[
+				"class",
+				"classes"
+			],
+			[
+				"sourc",
+				"source_dir"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/JSLint/JSLint.sublime-build",
+	"command_palette":
+	{
+		"height": 313.0,
+		"selected_items":
+		[
+			[
+				"prett",
+				"Pretty JSON: Reformat (Pretty Print) JSON"
+			],
+			[
+				"jsp",
+				"Pretty JSON: Reformat (Pretty Print) JSON"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"so",
+				"Sort Lines"
+			],
+			[
+				"u",
+				"Convert Case: Upper Case"
+			],
+			[
+				"pep",
+				"PEP8: Format Code"
+			],
+			[
+				"js",
+				"JSLint: Run JSLint"
+			],
+			[
+				"jsl",
+				"JSLint: Run JSLint"
+			],
+			[
+				"upp",
+				"Convert Case: Upper Case"
+			],
+			[
+				"lo",
+				"Convert Case: Lower Case"
+			],
+			[
+				"jinj",
+				"Set Syntax: Jinja Templates"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"up",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"upg",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"upgr",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"pak",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"POST",
+				"Markdown Preview: open Markdown Cheat sheet"
+			],
+			[
+				"low",
+				"Convert Case: Lower Case"
+			],
+			[
+				"python",
+				"Set Syntax: Python"
+			],
+			[
+				"lorem",
+				"LoremIpsum: (200) stick shake"
+			],
+			[
+				"sor",
+				"Sort Lines"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"jas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"coverage",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"pac",
+				"Package Control: List Packages"
+			],
+			[
+				"pyth",
+				"Set Syntax: Python"
+			],
+			[
+				"l",
+				"Convert Case: Lower Case"
+			],
+			[
+				"lowe",
+				"Convert Case: Lower Case"
+			],
+			[
+				"pip",
+				"Package Control: List Packages"
+			],
+			[
+				"spa",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"space",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"UP",
+				"Convert Case: Upper Case"
+			],
+			[
+				"U",
+				"Convert Case: Upper Case"
+			],
+			[
+				"UPP",
+				"Convert Case: Upper Case"
+			],
+			[
+				"pyt",
+				"Set Syntax: Python"
+			],
+			[
+				"lower",
+				"Convert Case: Lower Case"
+			],
+			[
+				"ruby",
+				"Set Syntax: Ruby"
+			],
+			[
+				"mark",
+				"Set Syntax: Markdown"
+			],
+			[
+				"uppe",
+				"Convert Case: Upper Case"
+			],
+			[
+				"pyl",
+				"Preferences: Key Bindings - Default"
+			],
+			[
+				"pa",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"upper",
+				"Convert Case: Upper Case"
+			],
+			[
+				"gist",
+				"Github: Private Gist from Selection"
+			],
+			[
+				"gis",
+				"Github: Private Gist from Selection"
+			]
+		],
+		"width": 516.0
+	},
+	"console":
+	{
+		"height": 150.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": true,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Volumes/data/Projects/AllSpeak/Makefile",
+		"/Volumes/data/Projects/AllSpeak/allspeak/i18n.py",
+		"/Volumes/data/Projects/AllSpeak/allspeak/__init__.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/tests/test_i18n.py",
+		"/Volumes/data/Projects/conf/allspeak.sublime-project",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/allspeak/__init__.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/tests/test_utils.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/allspeak/utils.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/allspeak/reader.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/allspeak/i18n.py",
+		"/Users/jps/Desktop/test.html",
+		"/etc/hosts",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/allspeak/_compat.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/.gitignore",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/.git/COMMIT_EDITMSG",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/tox.ini",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/tests/conftest.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/.travis.yml",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/setup.py",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/Makefile",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/README.md",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/requirements.txt",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/README.rst",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/doc/source/index.md",
+		"/Volumes/data/Projects/Lucuma/AllSpeak/requirements-tests.txt",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/error.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/index.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/not_found.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/private_presentation.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/show.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit/authors_dialog.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_imagesel.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit/image_selector.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/controllers/files.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/urls.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/helpers.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/controllers/presentations.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/models/files.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_controller.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/css/prezentit_edit.css",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_authors.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_nodes.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_pstsel.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_canvas.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit/toolbar.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_main.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/controllers/users.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/css/prezentit_touch.css",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/settings/skoletube.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit/share_dialog.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/settings/development.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit/pst_selector.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/models/presentations.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/strings/dk.yml",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/settings/common.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_selector.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_presentation.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/jquery-ui-1.8.17.custom.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/jquery-ui-1.8.17.custom.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/env/lib/python2.7/site-packages/werkzeug/debug/shared/debugger.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/admin_images_cats.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/prezentit_slider.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/tools/javascript.py",
+		"/Users/jps/Library/Application Support/Sublime Text 2/Packages/sublime-jslint/sublime-jslint.sublime-settings",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_transitionsel.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/admin_base.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/admin.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/jquery-1.8.2.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/jquery-1.9.1.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_color.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_minis.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome_share.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/prezentit_edit.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/prezentit_slider.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/base.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/pz_chrome.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit/color_picker.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/admin_images.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/edit/fonts_selects.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/modernizr2.custom.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/manage.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/prezentit.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/extra.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/settings/__init__.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/settings/production.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/libs/shake_auth/auth.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/libs/shake_auth/perms.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/libs/shake_auth/__init__.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/run_prezenit_standalone.sh",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/models/slides.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/models/nodes.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/thumb_maker.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/extra.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/env/lib/python2.7/site-packages/py/_error.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/css/prezentit_slider.css",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/__init__.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/fcgi.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/tests/test_presentations.py",
+		"/Users/jps/.gitconfig",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/controllers/main.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/models/users.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/models/users_db.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/models/users_skoletube.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/auth/auth_reset_password.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/css/admin.css",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/templates/auth/auth_change_password.html",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/images/glyphicons-halflings.png",
+		"/Volumes/data/Projects/Lucuma/prezentit2/tests/test_slides.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/tests/__init__.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/crontab.txt",
+		"/Volumes/data/Projects/Lucuma/prezentit2/requirements.txt",
+		"/Volumes/data/Projects/Lucuma/grumpy-redirector/.git/config",
+		"/Volumes/data/Projects/Lucuma/prezentit2/.gitignore",
+		"/Volumes/data/Projects/Lucuma/prezentit2/scripts/run_prezenit_standalone.sh",
+		"/Volumes/data/Projects/Lucuma/prezentit2/wsgi.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/requirements-prod.txt",
+		"/Volumes/data/Projects/Lucuma/prezentit2/libs/shake/__init__.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/strings/es.yml",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/forms/files.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/requirements-dev.txt",
+		"/Users/jps/Downloads/bootstrap/css/bootstrap.css",
+		"/Users/jps/Downloads/bootstrap/js/bootstrap.min.js",
+		"/Volumes/data/Projects/Lucuma/prezentit2/libs/shake_files/__init__.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/libs/shake/routes.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/app/libs/slugify.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/libs/shake/views.py",
+		"/Volumes/data/Projects/Lucuma/prezentit2/static/js/jquery-1.6.4.min.js"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"*.py,-.tox/*",
+			"*.py",
+			"*.html",
+			"",
+			"*.html,*.js",
+			"*.html",
+			"",
+			"/Volumes/data/Projects/Lucuma/prezentit2/static/js",
+			"*.js,-*.min.js,/Volumes/data/Projects/Lucuma/prezentit2/static/js",
+			"*.js,-*.min.js",
+			"*.js,-.min.js",
+			"*.js",
+			"",
+			"/Volumes/data/Projects/Lucuma/prezentit2/,*.py",
+			"/Volumes/data/Projects/Lucuma/prezentit2/",
+			"/Volumes/data/Projects/Lucuma/prezentit2/,*.js",
+			"/Volumes/data/Projects/Lucuma/prezentit2/",
+			"/Volumes/data/Projects/Lucuma/prezentit2/app",
+			"/Volumes/data/Projects/Lucuma/prezentit2/",
+			"/Volumes/data/Projects/Lucuma/prezentit2/app",
+			"/Volumes/data/Projects/Lucuma/prezentit2",
+			"/Volumes/data/Projects/Lucuma/prezentit2/app",
+			"/Volumes/data/Projects/Lucuma/prezentit2,-env/*",
+			"/Volumes/data/Projects/Lucuma/prezentit2,-env",
+			"",
+			"/Volumes/data/Projects/Lucuma/shake/Authcode/authcode",
+			"/Volumes/data/Projects/Lucuma/shake/Solution/solution",
+			"/Volumes/data/Projects/Lucuma/shake/Solution/docs",
+			"/Volumes/data/Projects/Lucuma/shake/Solution",
+			"/Volumes/data/Projects/Lucuma/shake/AuthCode",
+			"/Volumes/data/Projects/Lucuma/shake/Authorizer",
+			"/Volumes/data/Projects/Lucuma/shake/Authorizer/authorizer,*.py",
+			"/Volumes/data/Projects/Lucuma/shake/Authorizer,*.py",
+			"/Volumes/data/Projects/Lucuma/shake/Authorizer",
+			"/Volumes/data/Projects/Lucuma/shake/AuthCode",
+			"",
+			"*.py",
+			"",
+			"*.py,-*/migrations/*",
+			"/Volumes/data/Projects/Lucuma/clientes/rcp/MVM/code/code/apps",
+			"*.py",
+			"*.html",
+			"",
+			"*.py",
+			"/Volumes/data/Projects,*.sublime-workspace,*.sublime-project",
+			"/Volumes/data/Projects,*.sublime-workspace",
+			"/Volumes/data/Projects,*.sublime-project",
+			"*.sublime-project,/Volumes/data/Projects",
+			"*.sublime-project",
+			"*.sublime-workspace",
+			"*.sublime-project",
+			"/Users/jps/Projects/Lucuma/shake/",
+			"/Users/jps/Projects/Lucuma/shake/clay/tests",
+			"/Users/jps/Projects/Lucuma/shake/moar",
+			"*.py,/Users/jps/Projects/Lucuma/shake/AuthCode/authcode",
+			"*.py",
+			"",
+			"/Users/jps/Projects/Lucuma/shake/clay/",
+			"/Users/jps/Projects/Lucuma/shake/newmoar/",
+			"/Users/jps/Projects/Lucuma/shake/newmoar/moar",
+			"/Users/jps/Projects/Lucuma/shake/moar/doc/source",
+			"",
+			"*.py",
+			"/Users/jps/Projects/Lucuma/shake/newclay/tests,*.py",
+			"/Users/jps/Projects/Lucuma/shake/mailshake,*.py",
+			"/Users/jps/Projects/Lucuma/shake/shake-auth,*.py",
+			"/Users/jps/Projects/Lucuma/shake/,*.py",
+			"/Users/jps/Projects/Lucuma/shake/clay",
+			"/Users/jps/Projects/Lucuma/shake/Shake/tests",
+			"/Users/jps/Projects/Lucuma/shake/Shake/",
+			"/Users/jps/Projects/Lucuma/shake/Shake/tests",
+			"/Users/jps/Projects/Lucuma/shake/moar/doc",
+			"/Users/jps/Projects/Lucuma/shake/Clay/clay,*.py",
+			"",
+			"/Users/jps/temp/go_files",
+			"",
+			"/Users/jps/Projects/Lucuma/shake/Moar",
+			"/Users/jps/Projects/Lucuma/shake/Shake/shake",
+			"/Users/jps/Projects/Lucuma/shake/Solution/solution",
+			"/Users/jps/Projects/Lucuma/shake/Clay",
+			"/Users/jps/Projects/Lucuma/shake/Shake-Auth",
+			"/Users/jps/Projects/Lucuma/shake/Shake/tests",
+			"/Users/jps/Projects/Lucuma/shake/Shake/",
+			"/Users/jps/Projects/Lucuma/shake/Shake/tests",
+			"/Users/jps/Projects/Lucuma/shake/Shake",
+			"/Users/jps/Projects/Lucuma/shake/",
+			"/Users/jps/Projects/Lucuma/shake/Shake/",
+			"/Users/jps/Projects/Lucuma/shake/",
+			"/Users/jps/Projects/Lucuma/shake/Shake/shake/skeletons/project",
+			"/Users/jps/Projects/Lucuma/shake/skeletons/project",
+			"/Users/jps/Projects/Lucuma/shake/",
+			"/Users/jps/Projects/Lucuma/shake/Moar/moar",
+			"/Users/jps/Projects/Lucuma/shake/Moar",
+			"/Users/jps/Projects/Lucuma/shake/Shake-Auth",
+			"/Users/jps/Projects/Lucuma/shake/Shake",
+			"/Users/jps/Projects/Lucuma/shake/Shake-Files/",
+			"/Users/jps/Projects/Lucuma/shake/Moar/",
+			"/Users/jps/Projects/Lucuma/shake/Moar/,env/*",
+			"/Users/jps/Projects/Lucuma/shake/Moar/",
+			"/Users/jps/Projects/Lucuma/shake/Solution/",
+			"/Users/jps/Projects/Lucuma/shake/Solution/solution/",
+			"/Users/jps/Projects/Lucuma/shake/shake/",
+			"/Users/jps/Projects/Lucuma/shake/Solution/tests",
+			"/Users/jps/Downloads/source_code/wand",
+			"/Users/jps/Projects/Lucuma/shake/Moar/tests",
+			"/Users/jps/Projects/Lucuma/shake/Moar",
+			"",
+			"/Users/jps/Projects/Lucuma/shake/Shake/shake/",
+			"/Users/jps/Projects/Lucuma/shake/Clay/",
+			"/Users/jps/Projects/Lucuma/shake/Clay/tests",
+			"/Users/jps/Projects/Lucuma/shake/Clay/clay",
+			"/Users/jps/Projects/Lucuma/shake/Shake/docs/shake",
+			"/Users/jps/Projects/Lucuma/shake/Moar/tests, *.py",
+			"/Users/jps/Projects/Lucuma/shake/Moar/moar/tests, *.py",
+			"/Users/jps/Projects/Lucuma/shake/Moar/moar/tests, *.md",
+			"/Users/jps/Projects/Lucuma/shake/Moar/tests, *.md",
+			"/Users/jps/Projects/Lucuma/shake/Moar/, *.md",
+			"/Users/jps/Projects/Lucuma/shake/Moar/, *.py",
+			"/Users/jps/Projects/Lucuma/shake/Moar/moar/,*.py",
+			"/Users/jps/Projects/Lucuma/shake/Moar/moar/filters,*.py",
+			"/Users/jps/Projects/Lucuma/shake/Moar/moar,*.py",
+			"/Users/jps/Projects/Lucuma/shake/clay,*.py",
+			"/Users/jps/Projects/Lucuma/shake/Shake/shake/cli,*.py",
+			"/Users/jps/Projects/Lucuma/shake/Shake/shake,*.py",
+			"/Users/jps/Projects/Lucuma/shake/Shake/shake"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"[",
+			": {",
+			"}",
+			"find_keypath",
+			"search_paths",
+			"find_keypath",
+			"key_lookup",
+			"locale_data",
+			"locales",
+			"load_locale_data",
+			"get_data",
+			"translations",
+			"get_locale",
+			"translations",
+			".yml",
+			"timezone",
+			"UTC",
+			"get_request_locale",
+			"pluralize",
+			"i18n.",
+			"pluralize",
+			"get_request_locale",
+			"normalize_locale",
+			"pluralize",
+			"i18n.",
+			"pluralize",
+			"get_request_locale",
+			"get_request_timezone",
+			"get_django_preferred_languages",
+			"get_webob_preferred_languages",
+			"get_werkzeug_preferred_languages",
+			"to_unicode",
+			"    print(i18n.available_languages)",
+			"default_locale",
+			"negotiate_locale",
+			"' == ",
+			"i18n.ne",
+			"locales_dir",
+			", get_request",
+			"get_locale",
+			"request, ",
+			"request",
+			"get_request = lambda:",
+			"get_request",
+			"    print(i18n.available_languages)",
+			"Locale",
+			"available_languages",
+			"os_walk",
+			"os_wa",
+			"scandir",
+			"os.walk",
+			"os.wal",
+			"list_a",
+			"list",
+			" +",
+			"\\s+",
+			"date_formats",
+			"default_date_formats",
+			"date_formats",
+			"default_date_formats",
+			"re.",
+			"re",
+			"get_werkzeug_ua_language",
+			"\ndef test_",
+			"get_",
+			"get_django_preferred_languages",
+			"get_request_locale",
+			"available_languages",
+			"path, env",
+			"get_test_request",
+			"request",
+			"Request",
+			"get_test_request",
+			"get_test_env",
+			"USE_WEBOB",
+			"unicode",
+			"next(",
+			"basestring",
+			".pdf",
+			"FG3",
+			" - ",
+			"get_werkzeug_preferred_languages",
+			"\n        :   ",
+			"Decimal",
+			"os.",
+			"#",
+			"authcode",
+			"get_request_timezone",
+			"negoti",
+			"negotiate",
+			"{{ s.",
+			"{{ s",
+			"s",
+			"#",
+			"<",
+			"image-selector_galleries",
+			"cat_id",
+			"IMAGES_URL",
+			"loadCatImages",
+			"loadImages",
+			"where",
+			"loadImages",
+			"imageSel._imgMarkup",
+			"loadImages",
+			"?v=3",
+			"edit",
+			"keyCode",
+			"13",
+			"domNew",
+			"authors-dialog-new",
+			"12px 6px 6px 12px",
+			"6px",
+			"spacer.gif",
+			"ie-spacer",
+			"$domTabs",
+			"tabs",
+			"domDocToolbar",
+			"$domDocToolbar",
+			"_SEL_DOC_TOOLBAR",
+			"domDocToolbar",
+			"document-toolbar",
+			"File",
+			"cancelUpload",
+			"{{ settings.BASE_URL }}",
+			"BASE_URL",
+			"/static",
+			"BASE_URL",
+			"z-index: 8"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"get_django_preferred_locales",
+			"get_webob_preferred_locales",
+			"get_werkzeug_preferred_locales",
+			"\\t",
+			"{{ _.",
+			"",
+			" href=\"#\"",
+			"save-message",
+			"click",
+			"click touchstart",
+			"click tap",
+			"click touch",
+			"UPDATE_PST",
+			" == False",
+			"/var/www/prezentit/env",
+			"python2.6",
+			"</option>\\n<option",
+			"from solution",
+			"\">",
+			"",
+			"    <p id=\"ghwatch\">\n    <iframe src=\"http://markdotto.github.com/github-buttons/github-btn.html?user=lucuma&amp;repo=solution&amp;type=watch&amp;count=true&amp;size=large\"\n      allowtransparency=\"true\" frameborder=\"0\" scrolling=\"0\" width=\"150px\" height=\"35px\"></iframe>\n    </p>",
+			"",
+			"<li><a href=\"index.html\"\">Introducción</a></li>\n<li><a href=\"quickstart.html\"\">Guia rápida</a></li>",
+			"href=\"",
+			"styles/",
+			"User = auth.User",
+			"extend_role_model",
+			"extend_user_model",
+			"Role",
+			"User",
+			"get_role_model",
+			"get_user_model",
+			"Role(auth.Role)",
+			"User(auth.User)",
+			"User(db.Model, auth.UserMixin)",
+			"auth.UserMixin",
+			"get_role_mixin",
+			"get_role_model",
+			"get_role_mixin",
+			"get_user_mixin",
+			"Role",
+			"get_csrf_token",
+			"AuthCode",
+			"authcode",
+			"get_from_params",
+			"get_full_path",
+			"make_full_url",
+			"get_site_name",
+			"get_full_path",
+			"template_reset",
+			"secret",
+			"Authorizer",
+			"authorizer",
+			"Objetos de la memoria",
+			"Objetos de la Memoria",
+			"rooms_list.html",
+			"museums_list.html",
+			"assets_list.html",
+			"  ",
+			"/Volumes/data/Lucuma/clientes",
+			"",
+			"/Volumes/OSX/",
+			"/Volumes/OSX/Projects/",
+			"SQLAlchemy(URI1)",
+			"source.path",
+			"source.url",
+			"template: html/",
+			"Copied almost verbatim",
+			"\\t",
+			"m.[[ class_name ]].by_id(",
+			"GOOGLE_ANALYTICS_CODE",
+			"GITHUB_URL",
+			"LAYOUTS",
+			"museo_slab500",
+			"#links",
+			"project_owner",
+			"project_name",
+			"futura_std_bookbold",
+			".highlight",
+			"futura_std",
+			"  ",
+			"server_error",
+			"tzinfo",
+			"c.",
+			"u.",
+			"redirect_to",
+			"tmpl.html",
+			"tmpl.txt",
+			"TemplateNotFound",
+			"Shake(__file__)",
+			"Shake(__file__, s",
+			"Shake(__file__)",
+			"_template",
+			"template",
+			"`",
+			"",
+			"strings",
+			"",
+			"\\n",
+			"",
+			".jpg",
+			"parameter",
+			"CSFR",
+			"DEFAULT_COST",
+			"DEFAULT_ITERATIONS",
+			"DEFAULT_NUM_ITERATIONS",
+			"self.__dict__['default_value']",
+			"self.__dict__['case_insensitive']:",
+			"case_insensitive",
+			"}\\n",
+			"None",
+			"validate=validate",
+			", validate=None",
+			"python_value = \\1",
+			"<option>",
+			"</option>",
+			"parent",
+			"fail",
+			"f._",
+			"f.",
+			"*validate",
+			"validate",
+			"",
+			"self._items",
+			"_items",
+			"An list of validators",
+			"def __call__",
+			"')\\n    assert not validator("
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 39.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 152.0
+	},
+	"output.find_results":
+	{
+		"height": 144.0
+	},
+	"output.jslint_result_view":
+	{
+		"height": 138.0
+	},
+	"output.sftp":
+	{
+		"height": 152.0
+	},
+	"replace":
+	{
+		"height": 70.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"ma",
+				"Makefile"
+			],
+			[
+				"css",
+				"prezentit2/static/css/prezentit_edit.css"
+			],
+			[
+				"skol",
+				"prezentit2/app/settings/skoletube.py"
+			],
+			[
+				"models/fi",
+				"app/models/files.py"
+			],
+			[
+				"models/fil",
+				"app/models/files.py"
+			],
+			[
+				"auth.",
+				"shake/Authcode/authcode/auth.py"
+			],
+			[
+				"model",
+				"shake/Authcode/authcode/models.py"
+			],
+			[
+				"auth",
+				"Authorizer/authorizer/auth.py"
+			],
+			[
+				"admin",
+				"code/code/templates/mvm/admin/admin_museum.html"
+			],
+			[
+				"ctra",
+				"/Volumes/data/Projects/ctravel.sublime-workspace"
+			],
+			[
+				"pre",
+				"js/prezentit.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"au",
+				"/Volumes/data/Projects/conf/authcode.sublime-project"
+			],
+			[
+				"",
+				"/Volumes/data/Projects/conf/mailshake.sublime-project"
+			],
+			[
+				"inf",
+				"/Users/jps/Projects/infobae.sublime-project"
+			],
+			[
+				"ipa",
+				"/Users/jps/Projects/ipae.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 229.0,
+	"status_bar_visible": true
+}

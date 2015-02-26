@@ -9,3 +9,6 @@ def get_data(filename):
         data = yaml.safe_load(f)
     return data
 
+
+def load_locales_data(path):
+    pass

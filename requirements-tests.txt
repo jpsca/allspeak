@@ -2,8 +2,10 @@
 # to test this project.
 
 -r requirements.txt
-pytest
 django
+flake
 jinja2
+pytest-cov
+tox
 webob
 werkzeug

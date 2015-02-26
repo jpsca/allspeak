@@ -33,9 +33,9 @@ def get_test_request(make_req, path='/', **kwargs):
     return make_req(env, path)
 
 
-def test_search_paths():
+def test_locales_path():
     i18n = I18n(locales_dir)
-    assert i18n.search_paths == [locales_dir]
+    assert i18n.locales_path == locales_dir
 
 
 def test_app_defaults():
@@ -54,10 +54,12 @@ def test_request_settings(make_req):
     request = get_test_request(make_req)
     request.locale = 'en'
     request.tzinfo = 'US/Eastern'
-    get_request = lambda: request
 
-    i18n = I18n(get_request=get_request, default_locale='es-PE',
-                default_timezone='America/Lima')
+    i18n = I18n(
+        get_request=lambda: request,
+        default_locale='es-PE',
+        default_timezone='America/Lima'
+    )
 
     assert Locale.parse('en') == i18n.get_locale()
     assert timezone('US/Eastern') == i18n.get_timezone()
@@ -65,34 +67,24 @@ def test_request_settings(make_req):
 
 def test_no_preffered_language(make_req):
     request = get_test_request(make_req, headers=[])
-    get_request = lambda: request
-    i18n = I18n(locales_dir, get_request, default_locale='es')
+    i18n = I18n(
+        locales_dir,
+        get_request=lambda: request,
+        default_locale='es'
+    )
     assert Locale('es') == i18n.get_locale()
 
 
-def test_load_language():
-    i18n = I18n(default_locale='fr')
+# def test_find_keypath():
+#     i18n = I18n(locales_dir)
 
-    data = i18n.load_language(locales_dir, Locale('es'))
-    assert data['mytest']['greeting'] == u'Hola'
-    data = i18n.load_language(locales_dir, Locale('es', 'PE'))
-    assert data['mytest']['greeting'] == u'Habla'
-    data = i18n.load_language(locales_dir, Locale('es', 'CO'))
-    assert data['mytest']['greeting'] == u'Hola'
-    data = i18n.load_language(locales_dir, Locale('pt'))
-    assert data is None
+#     path, subkey = i18n.find_keypath('mytest.greeting')
+#     assert path == locales_dir
+#     assert subkey == 'mytest.greeting'
 
-
-def test_find_keypath():
-    i18n = I18n(locales_dir)
-
-    path, subkey = i18n.find_keypath('mytest.greeting')
-    assert path == locales_dir
-    assert subkey == 'mytest.greeting'
-
-    path, subkey = i18n.find_keypath('sub:mytest.greeting')
-    assert path == join(locales_dir, 'sub')
-    assert subkey == 'mytest.greeting'
+#     path, subkey = i18n.find_keypath('sub:mytest.greeting')
+#     assert path == join(locales_dir, 'sub')
+#     assert subkey == 'mytest.greeting'
 
 
 def test_key_lookup():
