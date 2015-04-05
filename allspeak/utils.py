@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 from babel import Locale, UnknownLocaleError
 from pytz import timezone, UTC
 

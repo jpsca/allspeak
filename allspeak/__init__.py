@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 """
 ========================
 AllSpeak
@@ -10,10 +10,11 @@ doing WSGI-based web applications.  It's flexible, easy to use and
 
 Powered by the awesome Babel and pytz libraries for the l10n part.
 
-The library is MIT Licensed and compatible with Werkzeug, Webob and Django
+The library is compatible with Werkzeug, Webob and Django
 request objects, so you can use it with pretty much any WSGI-based framework.
 
-See the documentation online at http://lucuma.github.com/allspeak
+:copyright: `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
+:license: MIT, see LICENSE for more details.
 
 """
 import os

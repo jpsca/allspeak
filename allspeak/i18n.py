@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 import datetime as dt
 import os
 from decimal import Decimal

@@ -1,7 +1,11 @@
+===========================
+AllSpeak
+===========================
 
-# AllSpeak
+.. image:: https://travis-ci.org/lucuma/allspeak.svg?branch=master
+   :target: https://travis-ci.org/lucuma/Allspeak
+   :alt: Build Status
 
-[![Build Status](https://travis-ci.org/lucuma/allspeak.png)](https://travis-ci.org/lucuma/allspeak)
 
 AllSpeak is a pythonic (yet ironically inspired by Rails) i18n/l10n solution for humans
 doing WSGI-based web applications.  It's flexible, easy to use and
@@ -11,10 +15,7 @@ Powered by the awesome Babel and pytz libraries for the l10n part.
 
 The library is compatible with Werkzeug, Webob and Django request objects, so you can use it with pretty much any WSGI-based framework.
 
-See the documentation online at http://lucuma.github.com/allspeak
+______
 
----------------------------------------
-
-[MIT License](http://www.opensource.org/licenses/mit-license.php).
-
-© 2012 [Lúcuma labs](http://lucumalabs.com).
+:copyright: `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
+:license: MIT, see LICENSE for more details.

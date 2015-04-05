@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 import io
 import os
 import re
@@ -41,7 +41,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     url='http://github.com/lucuma/allspeak',
-    license='MIT license (http://www.opensource.org/licenses/mit-license.php)',
+    license='MIT license (see LICENSE',
     description='Pythonic i18n/l10n system for WSGI-based web applications',
     long_description=get_description('allspeak'),
     install_requires=get_requirements(),
