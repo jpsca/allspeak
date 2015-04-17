@@ -15,10 +15,13 @@ clean-pyc:
 	find . -name '*,cover' -delete
 
 test:
-	py.test --cov-config .coveragerc --cov allspeak tests/ 
+	py.test -x tests/
+
+testcov:
+	py.test --cov-config .coveragerc --cov allspeak tests/
 
 test-report:
-	py.test --cov-config .coveragerc --cov-report html --cov allspeak tests/ 
+	py.test --cov-config .coveragerc --cov-report html --cov allspeak tests/
 
 publish: clean
 	python setup.py sdist upload

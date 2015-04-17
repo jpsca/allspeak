@@ -4,6 +4,7 @@ import pytest
 from django.http import HttpRequest as DjangoRequest
 from webob import Request as WebobRequest
 from werkzeug.wrappers import Request
+from werkzeug.test import EnvironBuilder
 
 
 def make_werkzeug_request(env, path):
@@ -19,6 +20,31 @@ def make_django_request(env, path):
     r.path = path
     r.META = dict(env)
     return r
+
+
+def get_test_env(path, **kwargs):
+    builder = EnvironBuilder(path=path, **kwargs)
+    return builder.get_environ()
+
+
+def get_test_request(make_req, path='/', **kwargs):
+    env = get_test_env(path, **kwargs)
+    return make_req(env, path)
+
+
+def make_get_request(locale='es-PE', tzinfo='America/Lima'):
+    """Returns a fake request generator for testing
+    """
+    _locale = locale
+    _tzinfo = tzinfo
+
+    def get_request():
+        req = get_test_request(make_werkzeug_request)
+        req.locale = _locale
+        req.tzinfo = _tzinfo
+        return req
+
+    return get_request
 
 
 @pytest.fixture(params=['werkzeug', 'webob', 'django'])

@@ -3,8 +3,9 @@
 
 -r requirements.txt
 pytest
-django
+pytest-cov
 flake
 jinja2
+django
 webob
 werkzeug

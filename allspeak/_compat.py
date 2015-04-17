@@ -6,9 +6,4 @@ import sys
 
 
 PY2 = sys.version_info[0] == 2
-
-
-if PY2:
-    string_types = (basestring, )
-else:
-    string_types = (str, )
+string_types = (basestring, ) if PY2 else (str, )

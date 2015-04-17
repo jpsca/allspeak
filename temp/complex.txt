@@ -1,0 +1,23 @@
+Organize large I18n dictionary files in Rails
+
+If you're suffering from a huge de.yml or similiar file, cry no more. Rails lets you freely organize your dictionary files in config/locales.
+
+My organization works like this:
+
+
+config/locales/rails.de.yml # modified Rails boilerplate from https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale
+
+config/locales/faker.de.yml # modified Faker boilerplate from https://github.com/stympy/faker/tree/master/lib/locales
+
+config/locales/models.de.yml # model names, attribute names, assignable_value labels
+
+config/locales/views.de.yml # text in the GUI
+
+config/locales/de.yml # various one liners that don't really fit anywhere else yet.
+
+
+extract lines to separate files as you see clusters of translations emerging.
+
+--------
+Note that Rails really doesn't care if the name of the locale (e.g. de or en) appears in the file. Since the root node of each YAML tree is the locale code, it can just merge all files together.
+--------

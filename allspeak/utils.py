@@ -1,20 +1,54 @@
 # coding=utf-8
+import datetime
 from babel import Locale, UnknownLocaleError
-from pytz import timezone, UTC
+from babel.dates import get_timezone, UTC
 
-from allspeak._compat import string_types
+from ._compat import string_types
+
+
+__all__ = [
+    'LOCALES_FOLDER', 'DEFAULT_LOCALE', 'DEFAULT_TIMEZONE',
+    'DEFAULT_DATE_FORMATS', 'normalize_locale', 'normalize_timezone',
+    'get_werkzeug_preferred_locales', 'get_webob_preferred_locales',
+    'get_django_preferred_locales', 'get_preferred_locales', 'negotiate_locale',
+    'get_request_timezone', 'get_request_locale', 'pluralize',
+]
+
+LOCALES_FOLDER = 'locales'
+
+DEFAULT_LOCALE = 'en'
+DEFAULT_TIMEZONE = UTC
+
+DEFAULT_DATE_FORMATS = {
+    'time': 'medium',
+    'date': 'medium',
+    'datetime': 'medium',
+}
 
 
 def normalize_locale(locale):
+    if not locale:
+        return
     if isinstance(locale, Locale):
         return locale
     try:
         if isinstance(locale, string_types):
-            locale = locale.replace('_', '-')
+            locale = locale.replace('_', '-').lower()
             return Locale.parse(locale, sep='-')
         if isinstance(locale, tuple):
             return Locale(*locale)
     except UnknownLocaleError:
+        return
+
+
+def normalize_timezone(tzinfo):
+    if not tzinfo:
+        return
+    if isinstance(tzinfo, datetime.tzinfo):
+        return tzinfo
+    try:
+        return get_timezone(tzinfo)
+    except LookupError:
         return
 
 
@@ -43,7 +77,7 @@ def get_django_preferred_locales(request):
 
     """
     meta = getattr(request, 'META', None)
-    if not meta:
+    if not meta:  # pragma: no cover
         return None
     header = request.META.get('HTTP_ACCEPT_LANGUAGE')
     if header:
@@ -72,9 +106,9 @@ def negotiate_locale(request, available_locales):
         return Locale.negotiate(preferred, available_locales, sep='-')
 
 
-def get_request_timezone(request, default=UTC):
+def get_request_timezone(request, default=None):
     """Returns the timezone that should be used for this request as a
-    `DstTzInfo` instance.
+    `datetime.tzinfo` instance.
 
     Tries the following in order:
     - an attribute called `'tzinfo'`
@@ -86,15 +120,12 @@ def get_request_timezone(request, default=UTC):
         getattr(request, 'tzinfo', None) or
         getattr(request, 'args', getattr(
                 request, 'GET', {})).get('tzinfo')
-    ) or default
-
-    if isinstance(tzinfo, string_types):
-        tzinfo = timezone(tzinfo)
-    request.tzinfo = tzinfo
+    )
+    request.tzinfo = normalize_timezone(tzinfo) or default
     return request.tzinfo
 
 
-def get_request_locale(request, default):
+def get_request_locale(request, default=None):
     """Returns the locale that should be used for this request as a
     `babel.Locale` instance.
 

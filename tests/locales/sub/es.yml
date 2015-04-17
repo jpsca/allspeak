@@ -1,2 +1,3 @@
-mytest:
+es:
   greeting: Hola mundo
+  foo: bares

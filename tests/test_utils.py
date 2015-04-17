@@ -3,19 +3,12 @@ from __future__ import print_function
 
 from allspeak import utils
 from babel import Locale
-from werkzeug.test import EnvironBuilder
+from pytz import timezone
 
-from .conftest import make_werkzeug_request, make_webob_request, make_django_request
-
-
-def get_test_env(path, **kwargs):
-    builder = EnvironBuilder(path=path, **kwargs)
-    return builder.get_environ()
-
-
-def get_test_request(make_req, path='/', **kwargs):
-    env = get_test_env(path, **kwargs)
-    return make_req(env, path)
+from .conftest import (
+    make_werkzeug_request, make_webob_request, make_django_request,
+    get_test_request,
+)
 
 
 def test_content_negotiation(make_req):
@@ -43,15 +36,20 @@ def test_content_negotiation(make_req):
 
 
 def test_normalize_locale():
-    from babel import Locale
-
-    assert utils.normalize_locale(Locale('en', 'US')) == Locale('en', 'US')
+    assert utils.normalize_locale('es') == Locale('es')
     assert utils.normalize_locale('en-US') == Locale('en', 'US')
     assert utils.normalize_locale('en_US') == Locale('en', 'US')
-    assert utils.normalize_locale('es') == Locale('es')
-    assert utils.normalize_locale(('en', 'US')) == Locale('en', 'US')
+    assert utils.normalize_locale(Locale('en', 'US')) == Locale('en', 'US')
     assert utils.normalize_locale(('es', )) == Locale('es')
+    assert utils.normalize_locale(('en', 'US')) == Locale('en', 'US')
+    assert utils.normalize_locale('En-Us') == Locale('en', 'US')
     assert utils.normalize_locale('klingon') == None
+
+
+def test_normalize_timezone():
+    assert utils.normalize_timezone(timezone('America/Lima')) == timezone('America/Lima')
+    assert utils.normalize_timezone('America/Lima') == timezone('America/Lima')
+    assert utils.normalize_timezone('Mars') == None
 
 
 def test_get_werkzeug_preferred_locales():
@@ -73,6 +71,71 @@ def test_get_django_preferred_locales():
     req = get_test_request(make_django_request, headers=headers)
     langs = utils.get_django_preferred_locales(req)
     assert langs == ['fr', 'pt', 'es']
+
+
+def test_get_request_timezone():
+    class FakeRequest(object):
+        pass
+
+    request = FakeRequest()
+
+    request.tzinfo = 'America/Lima'
+    assert utils.get_request_timezone(request) == timezone('America/Lima')
+
+    request.tzinfo = timezone('America/Lima')
+    assert utils.get_request_timezone(request) == timezone('America/Lima')
+
+    request.tzinfo = None
+    assert utils.get_request_timezone(request) == None
+
+    request.tzinfo = 'Mars'
+    assert utils.get_request_timezone(request) == None
+
+    request.tzinfo = 'Mars'
+    assert (
+        utils.get_request_timezone(request, default=utils.DEFAULT_TIMEZONE) ==
+        utils.DEFAULT_TIMEZONE
+    )
+
+
+def test_get_request_locale():
+    class FakeRequest(object):
+        pass
+
+    request = FakeRequest()
+
+    request.locale = 'es'
+    assert utils.get_request_locale(request) == Locale('es')
+
+    request.locale = 'en-US'
+    assert utils.get_request_locale(request) == Locale('en', 'US')
+
+    request.locale = 'en_US'
+    assert utils.get_request_locale(request) == Locale('en', 'US')
+
+    request.locale = Locale('en', 'US')
+    assert utils.get_request_locale(request) == Locale('en', 'US')
+
+    request.locale = ('es', )
+    assert utils.get_request_locale(request) == Locale('es')
+
+    request.locale = ('en', 'US')
+    assert utils.get_request_locale(request) == Locale('en', 'US')
+
+    request.locale = 'En-Us'
+    assert utils.get_request_locale(request) == Locale('en', 'US')
+
+    request.locale = None
+    assert utils.get_request_locale(request) == None
+
+    request.locale = 'klingon'
+    assert utils.get_request_locale(request) == None
+
+    request.locale = 'klingon'
+    assert (
+        utils.get_request_locale(request, default=utils.DEFAULT_LOCALE) ==
+        utils.DEFAULT_LOCALE
+    )
 
 
 def test_pluralize():
@@ -98,4 +161,5 @@ def test_pluralize():
         'n': u'on'
     }
     assert utils.pluralize(d, 0) == u'off'
+    assert utils.pluralize(d, None) == u'off'
     assert utils.pluralize({}, 3) == u''
