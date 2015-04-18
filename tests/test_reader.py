@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import print_function
+
 from os.path import join, dirname, abspath
 
 from allspeak import Reader
@@ -22,11 +24,11 @@ def test_default_loaders():
 def test_extract_locales():
     reader = Reader()
     data = {
-        'es_PE': {'foo-es': u'bar'},
+        'es-PE': {'foo-es': u'bar'},
         'en': {'foo-en': u'bar'},
     }
     expected = sorted([
-        ('es-pe', {'foo-es': u'bar'}),
+        ('es_PE', {'foo-es': u'bar'}),
         ('en', {'foo-en': u'bar'}),
     ])
     assert expected == sorted(reader.extract_locales(data))
@@ -45,6 +47,7 @@ def test_load_file_multilang():
     reader = Reader()
     filepath = join(LOCALES_TEST, 'multilang.yml')
     locales = reader.load_file(filepath)
+    locales = sorted(locales)
 
     locale, data = locales[0]
     assert locale == 'en'
@@ -58,7 +61,7 @@ def test_load_file_multilang():
 def test_load_translations():
     reader = Reader(LOCALES_TEST)
     data = reader.load_translations()
-    assert sorted(data.keys()) == ['en', 'es', 'es-pe']
+    assert sorted(data.keys()) == ['en', 'es', 'es_PE']
     assert data['en']['cat'] == 'miaow'
     assert data['en']['foo'] == 'bar'
     assert data['es']['foo'] == 'bares'
@@ -67,7 +70,7 @@ def test_load_translations():
 def test_load_translations_from_other_folder():
     reader = Reader('.')
     data = reader.load_translations(folderpath=LOCALES_TEST)
-    assert sorted(data.keys()) == ['en', 'es', 'es-pe']
+    assert sorted(data.keys()) == ['en', 'es', 'es_PE']
     assert data['en']['cat'] == u'miaow'
     assert data['en']['foo'] == u'bar'
     assert data['es']['foo'] == u'bares'

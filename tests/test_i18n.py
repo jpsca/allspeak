@@ -1,183 +1,136 @@
-# # coding=utf-8
-# from __future__ import print_function
+# coding=utf-8
+from __future__ import print_function
 
-# import datetime as d
-# from decimal import Decimal
-# from os.path import join, dirname
+from os.path import join, dirname, abspath
 
-# from babel import Locale
-# from babel.dates import format_date, format_datetime, format_time
-# from babel.numbers import (
-#     format_currency, format_decimal, format_number,
-#     format_percent, format_scientific)
-# from markupsafe import Markup
-# from pytz import timezone, UTC
-# from werkzeug.test import EnvironBuilder
+from babel import Locale
+from babel.dates import UTC
+from markupsafe import Markup
 
-# from allspeak import I18n
+from allspeak import I18n
 
 
-# USE_WEBOB = False
-# USE_DJANGO = False
-
-# locales_dir = join(dirname(__file__), 'locales')
+LOCALES_TEST = abspath(join(dirname(__file__), u'locales'))
 
 
-# def get_test_env(path, **kwargs):
-#     builder = EnvironBuilder(path=path, **kwargs)
-#     return builder.get_environ()
+def test_init_i18n():
+    i18n = I18n(LOCALES_TEST)
+    assert i18n.default_locale == Locale('en')
+    assert i18n.default_timezone == UTC
+    assert repr(i18n) == 'I18n()'
 
 
-# def get_test_request(make_req, path='/', **kwargs):
-#     env = get_test_env(path, **kwargs)
-#     return make_req(env, path)
+def test_init_i18n_default_locale():
+    i18n = I18n(LOCALES_TEST, default_locale='es-PE')
+    locale = Locale('es', 'PE')
+    assert i18n.default_locale == locale
+    assert i18n.get_locale() == locale
 
 
-# def test_search_paths():
-#     i18n = I18n(locales_dir)
-#     assert i18n.search_paths == [locales_dir]
+def test_init_i18n_locales():
+    i18n = I18n(LOCALES_TEST)
+    assert i18n.reader.trans_folders == [LOCALES_TEST]
+
+    folderpaths = [LOCALES_TEST, LOCALES_TEST]
+    i18n = I18n(folderpaths)
+    assert i18n.reader.trans_folders == folderpaths
 
 
-# def test_app_defaults():
-#     i18n = I18n(default_locale='es-PE', default_timezone='America/Lima')
-#     assert True
-#     assert Locale('es', 'PE') == i18n.get_locale()
-#     assert timezone('America/Lima') == i18n.get_timezone()
+def test_load_translations():
+    i18n = I18n(LOCALES_TEST)
+    i18n.load_translations()
+    trans = i18n.translations
+    print(trans)
+
+    assert trans['en']['greeting'] == u'Hello World!'
+    assert trans['es']['greeting'] == u'Hola mundo'
+    assert trans['es_PE']['greeting'] == u'Habla'
 
 
-# def test_overwrite_date_formats():
-#     i18n = I18n(date_formats={'date': 'fizzbuzz'})
-#     assert i18n.date_formats['date'] == 'fizzbuzz'
+def test_get_translations_from_locale():
+    i18n = I18n(LOCALES_TEST)
+
+    ltrans_es = i18n.get_translations_from_locale(Locale('es'))
+    assert len(ltrans_es) == 1
+    expected_es = 'foo cat greeting accented so'.split()
+    trans_es = ltrans_es[0]
+    assert sorted(trans_es.keys()) == sorted(expected_es)
+
+    ltrans_espe = i18n.get_translations_from_locale(Locale('es', 'PE'))
+    assert len(ltrans_espe) == 2
+    expected_es = 'foo cat greeting accented so'.split()
+    expected_espe = 'greeting'.split()
+    trans_espe = ltrans_espe[0]
+    trans_es = ltrans_espe[1]
+    assert sorted(trans_espe.keys()) == sorted(expected_espe)
+    assert sorted(trans_es.keys()) == sorted(expected_es)
+
+    ltrans_en = i18n.get_translations_from_locale(Locale('en'))
+    expected_en = 'foo cat greeting apple with_html'.split()
+    trans_en = ltrans_en[0]
+    assert sorted(trans_en.keys()) == sorted(expected_en)
 
 
-# def test_request_settings(make_req):
-#     request = get_test_request(make_req)
-#     request.locale = 'en'
-#     request.tzinfo = 'US/Eastern'
-#     get_request = lambda: request
+def test_key_lookup():
+    i18n = I18n(LOCALES_TEST)
 
-#     i18n = I18n(get_request=get_request, default_locale='es-PE',
-#                 default_timezone='America/Lima')
+    locale = Locale('es')
+    assert i18n.key_lookup(locale, 'greeting') == u'Hola mundo'
+    assert i18n.key_lookup(locale, 'so.much.such') == u'wow'
 
-#     assert Locale.parse('en') == i18n.get_locale()
-#     assert timezone('US/Eastern') == i18n.get_timezone()
+    locale = Locale('es', 'PE')
+    assert i18n.key_lookup(locale, 'greeting') == u'Habla'
 
+    locale = Locale('en')
+    expected = {
+        0: 'No apples',
+        1: 'One apple',
+        3: 'Few apples',
+        'n': '%(count)s apples',
+    }
+    assert i18n.key_lookup(locale, 'apple') == expected
 
-# def test_no_preffered_language(make_req):
-#     request = get_test_request(make_req, headers=[])
-#     get_request = lambda: request
-#     i18n = I18n(locales_dir, get_request, default_locale='es')
-#     assert Locale('es') == i18n.get_locale()
+    # Key not found
+    assert i18n.key_lookup(locale, 'this.is.wrong') == None
 
-
-# def test_load_language():
-#     i18n = I18n(default_locale='fr')
-
-#     data = i18n.load_language(locales_dir, Locale('es'))
-#     assert data['mytest']['greeting'] == u'Hola'
-#     data = i18n.load_language(locales_dir, Locale('es', 'PE'))
-#     assert data['mytest']['greeting'] == u'Habla'
-#     data = i18n.load_language(locales_dir, Locale('es', 'CO'))
-#     assert data['mytest']['greeting'] == u'Hola'
-#     data = i18n.load_language(locales_dir, Locale('pt'))
-#     assert data is None
+    # Language not found
+    assert i18n.key_lookup(Locale('fr'), 'greeting') == None
 
 
-# def test_find_keypath():
-#     i18n = I18n(locales_dir)
+def test_translate():
+    i18n = I18n(LOCALES_TEST, default_locale='es-PE')
 
-#     path, subkey = i18n.find_keypath('mytest.greeting')
-#     assert path == locales_dir
-#     assert subkey == 'mytest.greeting'
+    assert i18n.translate('greeting') == u'Habla'
 
-#     path, subkey = i18n.find_keypath('sub:mytest.greeting')
-#     assert path == join(locales_dir, 'sub')
-#     assert subkey == 'mytest.greeting'
+    locale = Locale('es')
+    assert i18n.translate('greeting', locale=locale) == u'Hola mundo'
 
+    locale = Locale('en')
+    assert i18n.translate('apple', 3, locale=locale) == u'Few apples'
+    assert i18n.translate('apple', 10, locale=locale) == u'10 apples'
 
-# def test_key_lookup():
-#     i18n = I18n(locales_dir, default_locale='en')
-#     locale = Locale('es')
+    assert i18n.translate('bla', locale=locale) == '<missing:bla>'
+    # assert i18n.translate('olé', locale=locale) == '<missing:olé>'
 
-#     assert i18n.key_lookup('mytest.greeting', locale) == u'Hola'
-#     assert i18n.key_lookup('mytest.bla', locale) is None
-#     assert i18n.key_lookup('sub:mytest.greeting', locale) == u'Hola mundo'
+    assert i18n.translate('with_html', locale=locale) == Markup(u'<b>Hello</b>')
 
 
-# def test_translate():
-#     i18n = I18n(locales_dir, default_locale='es-PE')
-#     locale = Locale('es')
+def test_lazy_translate():
+    i18n = I18n(LOCALES_TEST, default_locale='es_PE')
 
-#     assert i18n.translate('mytest.greeting', locale=locale) == u'Hola'
-#     assert i18n.translate('mytest.greeting') == u'Habla'
-#     assert i18n.translate('mytest.apple', 3, locale=locale) == u'Few apples'
-#     assert i18n.translate('mytest.apple', 10, locale=locale) == u'10 apples'
-#     assert i18n.translate('bla', locale=locale) == Markup(u'<missing:bla>')
+    lazy = i18n.lazy_translate('greeting')
+    assert lazy != u'Habla'
+    assert repr(lazy) == u'Habla'
 
+    lazy = i18n.lazy_translate('bla')
+    assert repr(lazy) == '<missing:bla>'
 
-# def test_lazy_translate():
-#     i18n = I18n(locales_dir, default_locale='es-PE')
-#     locale = Locale('es')
+    locale = Locale('en')
+    lazy = i18n.lazy_translate('greeting', locale=locale)
+    assert lazy != u'Hello World!'
+    assert repr(lazy) == u'Hello World!'
 
-#     lazy = i18n.lazy_translate('mytest.greeting', locale=locale)
-#     assert lazy != u'Hola'
-#     assert repr(lazy) == u'Hola'
-
-
-# def test_to_user_timezone():
-#     i18n = I18n()
-#     tzinfo = timezone('US/Eastern')
-#     now = d.datetime.utcnow()
-#     result = i18n.to_user_timezone(now, tzinfo=tzinfo)
-#     expected = tzinfo.fromutc(now)
-#     assert result == expected
-
-
-# def test_to_utc():
-#     i18n = I18n()
-#     tzinfo = timezone('US/Eastern')
-#     now = d.datetime.utcnow()
-#     tznow = tzinfo.fromutc(now)
-#     assert i18n.to_utc(tznow) == now
-
-
-# def test_format():
-#     i18n = I18n()
-#     locale = 'en_US'
-#     tzinfo = UTC
-
-#     test_cases = [
-#         (456, format_number),
-#         (3.14159, format_decimal),
-#         (Decimal('3.14159'), format_decimal),
-#     ]
-#     for value, bf in test_cases:
-#         assert i18n.format(value, locale=locale) == bf(value, locale=locale)
-
-#     test_cases = [
-#         (d.datetime(2012, 7, 28, 3, 4, 5), format_datetime),
-#         (d.date.today(), format_date),
-#         (d.time(3, 4, 5), format_time),
-#     ]
-#     for value, bf in test_cases:
-#         result = i18n.format(value, locale=locale, tzinfo=tzinfo)
-#         expected = bf(value, locale=locale)
-#         assert result == expected
-
-
-# def test_more_formatters():
-#     i18n = I18n()
-#     locale = 'en_US'
-#     v = 231.456
-
-#     result = i18n.format_currency(v, 'USD', locale=locale)
-#     expected = format_currency(v, 'USD', locale=locale)
-#     assert result == expected
-
-#     result = i18n.format_percent(v, locale=locale)
-#     expected = format_percent(v, locale=locale)
-#     assert result == expected
-
-#     result = i18n.format_scientific(v, locale=locale)
-#     expected = format_scientific(v, locale=locale)
-#     assert result == expected
+    locale = Locale('fr')
+    lazy = i18n.lazy_translate('greeting', locale=locale)
+    assert lazy != '<missing:greeting>'
+    assert repr(lazy) == '<missing:greeting>'

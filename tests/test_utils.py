@@ -34,22 +34,47 @@ def test_content_negotiation(make_req):
     req = get_test_request(make_req, headers=headers)
     assert utils.negotiate_locale(req, ['klingon']) is None
 
+    assert utils.negotiate_locale(req, []) is None
+
+
+def test_split_locale():
+    assert utils.split_locale('en-US') == ('en', 'US')
+    assert utils.split_locale('En_us') == ('en', 'US')
+    assert utils.split_locale(Locale('en', 'US')) == ('en', 'US')
+
 
 def test_normalize_locale():
     assert utils.normalize_locale('es') == Locale('es')
     assert utils.normalize_locale('en-US') == Locale('en', 'US')
+    assert utils.normalize_locale('en_us') == Locale('en', 'US')
+    assert utils.normalize_locale('en-us') == Locale('en', 'US')
     assert utils.normalize_locale('en_US') == Locale('en', 'US')
+    assert utils.normalize_locale('En-Us') == Locale('en', 'US')
+
     assert utils.normalize_locale(Locale('en', 'US')) == Locale('en', 'US')
+
     assert utils.normalize_locale(('es', )) == Locale('es')
     assert utils.normalize_locale(('en', 'US')) == Locale('en', 'US')
-    assert utils.normalize_locale('En-Us') == Locale('en', 'US')
-    assert utils.normalize_locale('klingon') == None
+    assert utils.normalize_locale(['en', 'US']) == Locale('en', 'US')
+    assert utils.normalize_locale(['EN', 'us']) == Locale('en', 'US')
+    assert utils.normalize_locale(['en', 'US', 'Texas']) == Locale('en', 'US')
+
+    assert utils.normalize_locale('klingon') is None
+    assert utils.normalize_locale(None) is None
+    assert utils.normalize_locale(1) is None
 
 
 def test_normalize_timezone():
     assert utils.normalize_timezone(timezone('America/Lima')) == timezone('America/Lima')
     assert utils.normalize_timezone('America/Lima') == timezone('America/Lima')
     assert utils.normalize_timezone('Mars') == None
+
+
+def test_locale_to_str():
+    assert utils.locale_to_str(Locale('en', 'US')) == 'en_US'
+    assert utils.locale_to_str(Locale('es')) == 'es'
+    assert utils.locale_to_str('en_US') == 'en_US'
+    assert utils.locale_to_str(Locale('en', 'us')) == 'en_US'
 
 
 def test_get_werkzeug_preferred_locales():

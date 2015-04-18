@@ -26,7 +26,7 @@ def test_get_locale_default():
 
 
 def test_get_locale_from_request():
-    locale = Locale('es_PE')
+    locale = Locale('es', 'PE')
     default = Locale('en')
     get_request = make_get_request(locale=locale)
     rm = RequestManager(get_request=get_request, default_locale=default)

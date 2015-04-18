@@ -1,6 +1,5 @@
 # coding=utf-8
 from datetime import date, datetime, time, timedelta
-from os.path import join, dirname, abspath
 
 from babel import Locale
 from babel.dates import UTC, get_timezone
@@ -8,9 +7,6 @@ from babel.dates import UTC, get_timezone
 from allspeak import L10n
 
 from .conftest import make_get_request
-
-
-LOCALES_TEST = abspath(join(dirname(__file__), u'locales'))
 
 
 def test_init_l10n():
@@ -118,7 +114,7 @@ def test_format_datetime():
 
 def test_format_datetime_tzinfo():
     l10n = L10n()
-    dt = datetime(2007, 04, 01, 15, 30, tzinfo=UTC)
+    dt = datetime(2007, 4, 1, 15, 30, tzinfo=UTC)
     eastern = get_timezone('US/Eastern')
 
     dformat = 'H:mm Z'
@@ -214,7 +210,7 @@ def test_format():
     expected = u'02007.April.01 AD 03:30 PM'
     assert l10n.format(dt, dformat, locale='en') == expected
 
-    dt = datetime(2007, 04, 01, 15, 30, tzinfo=UTC)
+    dt = datetime(2007, 4, 1, 15, 30, tzinfo=UTC)
     eastern = get_timezone('US/Eastern')
     dformat = 'H:mm Z'
     expected = u'11:30 -0400'

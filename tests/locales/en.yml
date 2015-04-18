@@ -5,3 +5,4 @@ en:
     1: One apple
     3: Few apples
     n: "%(count)s apples"
+  with_html: <b>Hello</b>

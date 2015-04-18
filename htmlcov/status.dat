@@ -153,7 +153,7 @@ I1
 sg19
 I0
 sg20
-I68
+I92
 sg21
 I0
 sg22
@@ -163,7 +163,7 @@ I1
 sg24
 I0
 sbssg25
-S"\x04\x8f.\xa2\xd4'\x98-C\xb7X\xbe\xd8\xe3\x01\xd1"
+S'\x7f\xc1\xab\xf6k\xbf\x89\xd5\x81\x19\x0e1\xd9\x85\xc1c'
 p59
 ssS'allspeak_reader'
 p60
@@ -200,7 +200,7 @@ I0
 sg24
 I0
 sbssg25
-S'%\xc5\xe0)*\xff\x89\xb0\xc2\x85\xc6\xc8\t\x17\xba '
+S".\x18=\x99!r\x9d \xcd_M'\xf7\xdf\x89\x17"
 p70
 ssS'allspeak_l10n'
 p71
@@ -264,17 +264,17 @@ I1
 sg19
 I0
 sg20
-I70
+I65
 sg21
 I0
 sg22
 I0
 sg23
-I54
+I0
 sg24
 I0
 sbssg25
-S'\x1e\xbd#bx\xcbvCf\x14\xe5\xc4 *4~'
+S'\xe8DP\x82\xe8X\x8a\xd6\xd5\xb2\x8f/9Hg8'
 p92
 ssS'allspeak_request_manager'
 p93

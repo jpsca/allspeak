@@ -1,6 +1,6 @@
 # coding=utf-8
 from .i18n import I18n
-from l10n import L10n
+from .l10n import L10n
 
 
 class Allspeak(I18n, L10n):

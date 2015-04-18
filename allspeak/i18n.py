@@ -5,6 +5,7 @@ from . import utils
 from ._compat import string_types
 from .reader import Reader
 from .request_manager import RequestManager
+from .utils import locale_to_str
 
 
 class I18n(RequestManager):
@@ -38,9 +39,8 @@ class I18n(RequestManager):
         super(I18n, self).__init__(**kwargs)
 
     def __repr__(self):
-        return '{cname}({folderpath})'.format(
+        return '{cname}()'.format(
             cname=self.__class__.__name__,
-            folderpath=self.reader.trans_folders
         )
 
     def load_translations(self, locale=None):
@@ -56,15 +56,15 @@ class I18n(RequestManager):
             self.load_translations(locale)
 
         objs = []
-        language = locale.language.replace('_', '-').lower()
-        trans = self.translations.get(language)
+        strlocale = locale_to_str(locale)
+        trans = self.translations.get(strlocale)
         if trans:
             objs.append(trans)
-        if '_' not in language:
+        if '_' not in strlocale:
             return objs
 
-        language = language.split('_')[0]
-        trans = self.translations.get(language)
+        strlocale = strlocale.split('_')[0]
+        trans = self.translations.get(strlocale)
         if trans:
             objs.append(trans)
         return objs
@@ -75,9 +75,6 @@ class I18n(RequestManager):
         translations (if the locale it's that specific) and then with those
         of the general language (eg. `en`).
 
-        The key could have a dot in the name so is not as straightforward as
-        it seem.
-
         :param locale: must be a `~Babel.Locale` instance
         :param key: a string, the ID of the looked up translation
         """
@@ -86,23 +83,12 @@ class I18n(RequestManager):
             # Language not found!
             return None
 
-        def find_top_value(obj, key):
-            # 'a.b.c.d' -> ['a.b.c.d', 'a.b.c', 'a.b', 'a']
-            subkeys = [
-                '.'.join(key.split('.')[:i])
-                for i in range(len(key.split('.')), 0, -1)
-            ]
-            for subkey in subkeys:
-                value = obj.get(subkey)
-                if value is not None:
-                    key = key.lstrip(subkey)
-                    if not key:
-                        return value
-                    return find_top_value(value, key)
-            return None
-
         for trans in translations:
-            value = find_top_value(trans, key)
+            for subkey in key.split('.'):
+                value = trans.get(subkey)
+                if value is None:
+                    break
+                trans = value
             if value is not None:
                 return value
         return None

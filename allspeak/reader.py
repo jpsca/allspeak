@@ -7,7 +7,7 @@ from os.path import join, dirname, realpath, abspath, normpath, isdir, splitext
 import yaml
 
 from ._compat import string_types
-from .utils import LOCALES_FOLDER
+from .utils import LOCALES_FOLDER, split_locale
 
 
 def get_yaml_data(filepath):
@@ -68,7 +68,10 @@ class Reader(object):
         keys with the locale and it's children (the translations).
         """
         return [
-            (locale.replace('_', '-').lower(), trans)
+            (
+                '_'.join(split_locale(locale)),
+                trans
+            )
             for locale, trans in data.items()
         ]
 
@@ -98,9 +101,10 @@ class Reader(object):
         because only them have a registered loader.
 
         :param folderpath: overwrite the stored locales folder
-        :param locale: does nothing, but coul be useful when subclassing
-                       this method
+        :param locale: does nothing, but might be useful to implement
+                       load-on-demand in your own subclass.
         """
+        # import ipdb;ipdb.set_trace()
         trans_folders = self.trans_folders
         if folderpath:
             trans_folders = self.process_folderpath(folderpath)

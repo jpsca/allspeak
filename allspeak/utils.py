@@ -26,19 +26,43 @@ DEFAULT_DATE_FORMATS = {
 }
 
 
+def split_locale(locale):
+    """Returns a tuple (language, TERRITORY) or just (language, )
+    from a a `~Babel.Locale` instance or a string like `en-US` or `en_US`.
+    """
+    if isinstance(locale, Locale):
+        tloc = [locale.language.lower()]
+        if locale.territory:
+            tloc.append(locale.territory.upper())
+        return tuple(tloc)
+
+    if isinstance(locale, string_types):
+        locale = locale.replace('-', '_').lower()
+        tloc = locale.split('_')
+        if len(tloc) > 1:
+            tloc[-1] = tloc[-1].upper()
+        return tuple(tloc)
+
+    return locale
+
+
 def normalize_locale(locale):
     if not locale:
         return
     if isinstance(locale, Locale):
         return locale
-    try:
-        if isinstance(locale, string_types):
-            locale = locale.replace('_', '-').lower()
-            return Locale.parse(locale, sep='-')
-        if isinstance(locale, tuple):
-            return Locale(*locale)
-    except UnknownLocaleError:
-        return
+
+    locale = split_locale(locale)
+
+    if isinstance(locale, (tuple, list)):
+        try:
+            if len(locale) == 1:
+                return Locale(locale[0].lower())
+            else:
+                return Locale(locale[0].lower(), locale[1].upper())
+        except UnknownLocaleError:
+            return None
+    return None
 
 
 def normalize_timezone(tzinfo):
@@ -50,6 +74,15 @@ def normalize_timezone(tzinfo):
         return get_timezone(tzinfo)
     except LookupError:
         return
+
+
+def locale_to_str(locale):
+    if not isinstance(locale, Locale):
+        return locale
+    strlocale = locale.language.lower()
+    if locale.territory:
+        strlocale += '_' + locale.territory.upper()
+    return strlocale
 
 
 def get_werkzeug_preferred_locales(request):
@@ -96,14 +129,20 @@ def negotiate_locale(request, available_locales):
     """From the available locales, negotiate the most adequate for the
     client, based on the "accept language" header.
     """
+    if not available_locales:
+        return None
     preferred = get_preferred_locales(request)
     if preferred:
+        preferred = map(
+            lambda l: l.replace('-', '_').lower(),
+            preferred
+        )
         available_locales = map(
-            lambda l: l.replace('_', '-'),
+            lambda l: l.replace('-', '_').lower(),
             available_locales
         )
         # To ensure a consistent matching, Babel algorithm is used.
-        return Locale.negotiate(preferred, available_locales, sep='-')
+        return Locale.negotiate(preferred, available_locales, sep='_')
 
 
 def get_request_timezone(request, default=None):
