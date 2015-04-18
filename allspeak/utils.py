@@ -92,7 +92,10 @@ def get_werkzeug_preferred_locales(request):
     """
     languages = getattr(request, 'accept_languages', None)
     if languages:
-        return list(languages.values())
+        return [
+            '_'.join(split_locale(l))
+            for l in languages.values()
+        ]
 
 
 def get_webob_preferred_locales(request):
@@ -101,7 +104,10 @@ def get_webob_preferred_locales(request):
     """
     languages = getattr(request, 'accept_language', None)
     if languages:
-        return list(languages)
+        return [
+            '_'.join(split_locale(l))
+            for l in languages
+        ]
 
 
 def get_django_preferred_locales(request):
@@ -110,19 +116,27 @@ def get_django_preferred_locales(request):
 
     """
     meta = getattr(request, 'META', None)
-    if not meta:  # pragma: no cover
+    if not meta:
         return None
     header = request.META.get('HTTP_ACCEPT_LANGUAGE')
     if header:
         languages = [l.strip().split(';')[::-1] for l in header.split(',')]
         languages = sorted(languages)[::-1]
-        return [l[1].strip() for l in languages]
+        return [
+            '_'.join(split_locale(l[1].strip()))
+            for l in languages
+        ]
 
 
 def get_preferred_locales(request):
-    return (get_werkzeug_preferred_locales(request) or
-            get_webob_preferred_locales(request) or
-            get_django_preferred_locales(request))
+    """Extract from the request a list of preferred strlocales.
+    """
+    return (
+        get_werkzeug_preferred_locales(request) or
+        get_webob_preferred_locales(request) or
+        get_django_preferred_locales(request) or
+        []
+    )
 
 
 def negotiate_locale(request, available_locales):

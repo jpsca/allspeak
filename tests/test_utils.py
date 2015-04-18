@@ -37,6 +37,31 @@ def test_content_negotiation(make_req):
     assert utils.negotiate_locale(req, []) is None
 
 
+def test_get_preferred_locales(make_req):
+    headers = [('Accept-Language', 'fr; q=1.0, es; q=0.6, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.get_preferred_locales(req) == ['fr', 'es', 'pt']
+
+    headers = [('Accept-Language', 'fr; q=1.0, en-US; q=0.6, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.get_preferred_locales(req) == ['fr', 'en_US', 'pt']
+
+    headers = [('Accept-Language', 'fr; q=1.0, es-PE; q=0.6, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.get_preferred_locales(req) == ['fr', 'es_PE', 'pt']
+
+    headers = [('Accept-Language', 'fr; q=1.0, es_pe; q=0.6, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.get_preferred_locales(req) == ['fr', 'es_PE', 'pt']
+
+    headers = [('Accept-Language', 'martian; q=1.0, venus; q=0.6, pt; q=0.5')]
+    req = get_test_request(make_req, headers=headers)
+    assert utils.get_preferred_locales(req) == ['martian', 'venus', 'pt']
+
+    req = get_test_request(make_req)
+    assert utils.get_preferred_locales(req) == []
+
+
 def test_split_locale():
     assert utils.split_locale('en-US') == ('en', 'US')
     assert utils.split_locale('En_us') == ('en', 'US')
