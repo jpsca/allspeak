@@ -6,7 +6,6 @@ from os.path import join, dirname, realpath, abspath, normpath, isdir, splitext
 
 import yaml
 
-from ._compat import string_types
 from .utils import LOCALES_FOLDER, split_locale
 
 
@@ -18,10 +17,13 @@ def get_yaml_data(filepath):
 
 
 class Reader(object):
-    """Functions related to loading and parsing translation files
+    """Functions related to loading and parsing translation files.
+
+    :param folderpath: path that will be searched for the translations.
+
     """
     def __init__(self, folderpath=LOCALES_FOLDER):
-        self.trans_folders = self.process_folderpath(folderpath)
+        self.folderpath = self.process_folderpath(folderpath)
         self._set_loaders()
 
     def __repr__(self):
@@ -35,15 +37,10 @@ class Reader(object):
         self.register_loader('yml', get_yaml_data)
 
     def process_folderpath(self, folderpath):
-        if isinstance(folderpath, string_types):
-            folderpath = [folderpath]
-        trans_folders = []
-        for path in folderpath:
-            path = normpath(abspath(realpath(path)))
-            if not isdir(path):
-                path = dirname(path)
-            trans_folders.append(path)
-        return trans_folders
+        folderpath = normpath(abspath(realpath(folderpath)))
+        if not isdir(folderpath):
+            folderpath = dirname(folderpath)
+        return folderpath
 
     def register_loader(self, ext, func):
         """Register a loader for a file extension.
@@ -90,30 +87,32 @@ class Reader(object):
         data = self.load_file(filepath)
         for locale, trans in data:
             translations.setdefault(locale, {})
+            print(trans)
             translations[locale].update(trans)
 
     def load_translations(self, folderpath=None, locale=None):
-        """Search for locale files on each of the ``~trans_folders``
+        """Search for locale files on `folderpath`,
         load and parse them to build a big dictionary with all the
         translations data.
 
-        Only the files with an extension listed in ``~loaders_ext`` are loaded
+        Only the files with an extension listed in ``loaders_ext`` are loaded
         because only them have a registered loader.
 
         :param folderpath: overwrite the stored locales folder
         :param locale: does nothing, but might be useful to implement
                        load-on-demand in your own subclass.
         """
-        # import ipdb;ipdb.set_trace()
-        trans_folders = self.trans_folders
         if folderpath:
-            trans_folders = self.process_folderpath(folderpath)
+            folderpath = self.process_folderpath(folderpath)
+        else:
+            folderpath = self.folderpath
+
         translations = {}
-        for folder in trans_folders:
-            for root, dirnames, filenames in os.walk(folder):
-                for ext in self.loaders_ext:
-                    pattern = u'*.{}'.format(ext)
-                    for filename in fnmatch.filter(filenames, pattern):
-                        filepath = join(root, filename)
-                        self.update_translations(translations, filepath)
+        for root, dirnames, filenames in os.walk(folderpath):
+            for ext in self.loaders_ext:
+                pattern = u'*.{}'.format(ext)
+                for filename in fnmatch.filter(filenames, pattern):
+                    filepath = join(root, filename)
+                    self.update_translations(translations, filepath)
+
         return translations

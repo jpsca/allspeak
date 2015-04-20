@@ -10,7 +10,18 @@ from .request_manager import RequestManager
 
 
 class L10n(RequestManager):
-    """Localization functions
+    """Localization functions.
+
+    :param get_request: a callable that returns the current request.
+
+    :param default_locale: default locale (as a string or as a
+        Babel.Locale instance).
+
+    :param default_timezone: default timezone (as a string or as a
+        `datetime.tzinfo` instance).
+
+    :param date_formats: update the defaults date formats.
+
     """
 
     def to_user_timezone(self, datetime, tzinfo=None):
@@ -90,147 +101,182 @@ class L10n(RequestManager):
         return value
 
     def format_datetime(self, datetime=None, format=None, rebase=True,
-                        locale=None, tzinfo=None):
-        """Return a date formatted according to the given pattern.  If no
-        `datetime.datetime` object is passed, the current time is
-        assumed.  By default rebasing happens which causes the object to
-        be converted to the users's timezone (as returned by
-        `to_user_timezone`).  This function formats both date and
-        time.
+                        locale=None, tzinfo=None, **kwargs):
+        """Return a datetime formatted according to the given pattern.
 
-        The format parameter can either be `'short'`, `'medium'`,
-        `'long'` or `'full'` (in which cause the language's default for
-        that setting is used, or the default from the `Babel.date_formats`
-        mapping is used) or a format string as documented by Babel.
+        :param datetime: A `datetime.datetime` object.
+            If no object is passed, the current datetime is assumed.
+
+        :param format: The format parameter can either be `'short'`, `'medium'`,
+            `'long'` or `'full'` (in which cause the language's default for
+            that setting is used) or a format string as
+            `documented by Babel <http://babel.pocoo.org/docs/dates/#date-fields>`_.
+
+        :param rebase: Convert the given `date` to the users's timezone (as returned by
+            :meth:`to_user_timezone`)
+            By default rebasing happens.
+
+        :param locale: Overwrite the global locale.
+        :param tzinfo: Overwrite the global timezone.
+
         """
         format = self._get_format('datetime', format)
         return self._date_format(
             dates.format_datetime, datetime, format, rebase,
-            locale=locale, tzinfo=tzinfo)
+            locale=locale, tzinfo=tzinfo, **kwargs
+        )
 
     def format_date(self, date=None, format=None, rebase=True,
-                    locale=None, tzinfo=None):
-        """Return a date formatted according to the given pattern.  If no
-        `datetime.datetime` or `datetime.date` object is passed,
-        the current time is assumed.  By default rebasing happens which causes
-        the object to be converted to the users's timezone (as returned by
-        `to_user_timezone`).  This function only formats the date part
-        of a `datetime.datetime` object.
+                    locale=None, tzinfo=None, **kwargs):
+        """Return a date formatted according to the given pattern.
 
-        The format parameter can either be `'short'`, `'medium'`,
-        `'long'` or `'full'` (in which cause the language's default for
-        that setting is used, or the default from the `Babel.date_formats`
-        mapping is used) or a format string as documented by Babel.
+        :param date: A `datetime.datetime` or `datetime.date` object.
+            If no object is passed, the current datetime is assumed.
+
+        :param format: The format parameter can either be `'short'`, `'medium'`,
+            `'long'` or `'full'` (in which cause the language's default for
+            that setting is used) or a format string as
+            `documented by Babel <http://babel.pocoo.org/docs/dates/#date-fields>`_.
+
+        :param rebase: Convert the given `date` to the users's timezone (as returned by
+            :meth:`to_user_timezone`)
+            By default rebasing happens.
+
+        :param locale: Overwrite the global locale.
+        :param tzinfo: Overwrite the global timezone.
+
         """
         if rebase and isinstance(date, dt.datetime):
             date = self.to_user_timezone(date, tzinfo=tzinfo)
         format = self._get_format('date', format)
         return self._date_format(
             dates.format_date, date, format, rebase,
-            locale=locale, tzinfo=tzinfo)
+            locale=locale, tzinfo=tzinfo, **kwargs
+        )
 
     def format_time(self, time=None, format=None, rebase=True,
-                    locale=None, tzinfo=None):
-        """Return a time formatted according to the given pattern.  If no
-        `datetime.datetime` object is passed, the current time is
-        assumed.  By default rebasing happens which causes the object to
-        be converted to the users's timezone (as returned by
-        `to_user_timezone`).  This function formats both date and
-        time.
+                    locale=None, tzinfo=None, **kwargs):
+        """Return a time formatted according to the given pattern.
 
-        The format parameter can either be `'short'`, `'medium'`,
-        `'long'` or `'full'` (in which cause the language's default for
-        that setting is used, or the default from the Babel.date_formats`
-        mapping is used) or a format string as documented by Babel.
+        :param time: A `time` or `datetime` object.
+            If no object is passed, the current time is assumed.
+
+        :param format: The format parameter can either be `'short'`, `'medium'`,
+            `'long'` or `'full'` (in which cause the language's default for
+            that setting is used) or a format string as
+            `documented by Babel <http://babel.pocoo.org/docs/dates/#time-fields>`_.
+
+        :param rebase: Convert the given `time` to the users's timezone (as returned by
+            :meth:`to_user_timezone`).
+            By default rebasing happens.
+
+        :param locale: Overwrite the global locale.
+        :param tzinfo: Overwrite the global timezone.
+
         """
         format = self._get_format('time', format)
         return self._date_format(
             dates.format_time, time, format, rebase,
-            locale=locale, tzinfo=tzinfo)
+            locale=locale, tzinfo=tzinfo, **kwargs
+        )
 
     def format_timedelta(self, datetime_or_timedelta, granularity='second',
-                         locale=None):
+                         threshold=0.85, add_direction=False, format='medium',
+                         locale=None, **kwargs):
         """Format the elapsed time from the given date to now or the given
-        timedelta.
+        timedelta as documented in :func:`babel.dates.format_timedelta`.
+
+        :param delta: a timedelta object representing the time difference to
+            format, or the delta in seconds as an int value.
+
+        :param granularity: determines the smallest unit that should be
+            displayed, the value can be one of “year”, “month”, “week”, “day”,
+            “hour”, “minute” or “second”.
+
+        :param threshold: factor that determines at which point the
+            presentation switches to the next higher unit.
+
+        :param add_direction: if this flag is set to True the
+            return value will include directional information. For instance a
+            positive timedelta will include the information about it being in
+            the future, a negative will be information about the value being in
+            the past.
+
+        :param format: the format (currently only “medium” and “short” are supported)
+        :param locale: Overwrite the global locale.
+
         """
         locale = utils.normalize_locale(locale) or self.get_locale()
         if isinstance(datetime_or_timedelta, dt.datetime):
             datetime_or_timedelta = dt.datetime.utcnow() - datetime_or_timedelta
         return dates.format_timedelta(
-            datetime_or_timedelta, granularity, locale=locale)
+            datetime_or_timedelta,
+            granularity=granularity, threshold=threshold,
+            add_direction=add_direction, locale=locale,
+            **kwargs
+        )
 
-    def format_number(self, number, locale=None):
+    def format_number(self, number, locale=None, **kwargs):
         """Return the given number formatted for the locale in the
         current request.
 
-        number:
-            the number to format
+        :param number: the number to format
+        :param locale: Overwrite the global locale.
 
-        return (unicode):
-            the formatted number
         """
         locale = utils.normalize_locale(locale) or self.get_locale()
-        return numbers.format_number(number, locale=locale)
+        return numbers.format_number(number, locale=locale, **kwargs)
 
-    def format_decimal(self, number, format=None, locale=None):
+    def format_decimal(self, number, format=None, locale=None, **kwargs):
         """Return the given decimal number formatted for the locale in the
         current request.
 
-        number:
-            the number to format
-        format:
-            the format to use
+        :param number: the number to format
+        :param format: the format to use as
+            `documented by Babel <http://babel.pocoo.org/docs/numbers/#pattern-syntax>`_.
+        :param locale: Overwrite the global locale.
 
-        return (unicode):
-            the formatted number
         """
         locale = utils.normalize_locale(locale) or self.get_locale()
-        return numbers.format_decimal(number, format=format, locale=locale)
+        return numbers.format_decimal(number, format=format, locale=locale, **kwargs)
 
-    def format_currency(self, number, currency, format=None, locale=None):
+    def format_currency(self, number, currency, format=None, locale=None, **kwargs):
         """Return the given number formatted for the locale in the
         current request.
 
-        number:
-            the number to format
-        currency:
-            the currency code
-        format:
-            the format to use
+        :param number: the number to format
+        :param currency: the currency code
+        :param format: the format to use as
+            `documented by Babel <http://babel.pocoo.org/docs/numbers/#pattern-syntax>`_.
+        :param locale: Overwrite the global locale.
 
-        return (unicode):
-            the formatted number
         """
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_currency(
-            number, currency, format=format, locale=locale)
+            number, currency, format=format, locale=locale, **kwargs)
 
-    def format_percent(self, number, format=None, locale=None):
+    def format_percent(self, number, format=None, locale=None, **kwargs):
         """Return a percent value formatted for the locale in the
         current request.
 
-        number:
-            the number to format
-        format:
-            the format to use
+        :param number: the number to format
+        :param format: the format to use as
+            `documented by Babel <http://babel.pocoo.org/docs/numbers/#pattern-syntax>`_.
+        :param locale: Overwrite the global locale.
 
-        return (unicode):
-            the formatted percent number
         """
         locale = utils.normalize_locale(locale) or self.get_locale()
-        return numbers.format_percent(number, format=format, locale=locale)
+        return numbers.format_percent(number, format=format, locale=locale, **kwargs)
 
-    def format_scientific(self, number, format=None, locale=None):
+    def format_scientific(self, number, format=None, locale=None, **kwargs):
         """Return value formatted in scientific notation for the locale in
         the current request.
 
-        number:
-            the number to format
-        format:
-            the format to use
+        :param number: the number to format
+        :param format: the format to use as
+            `documented by Babel <http://babel.pocoo.org/docs/numbers/#pattern-syntax>`_.
+        :param locale: Overwrite the global locale.
 
-        return (unicode):
-            the formatted percent number
         """
         locale = utils.normalize_locale(locale) or self.get_locale()
-        return numbers.format_scientific(number, format=format, locale=locale)
+        return numbers.format_scientific(number, format=format, locale=locale, **kwargs)

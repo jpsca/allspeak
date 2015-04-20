@@ -16,7 +16,7 @@ def test_reader_repr():
 
 def test_default_loaders():
     reader = Reader()
-    assert reader.trans_folders
+    assert reader.folderpath
     assert reader.loaders
     assert 'yml' in reader.loaders_ext
 

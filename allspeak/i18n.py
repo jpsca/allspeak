@@ -9,31 +9,27 @@ from .utils import locale_to_str
 
 
 class I18n(RequestManager):
-    """Internationalization functions
+    """Internationalization functions.
+
+    Uses the :class:`Reader` class to load and parse the translations files.
+
+    :param folderpath: path that will be searched for the translations.
+
+    :param markup: overwrite the function used by `translate` to flags HTML
+        code as 'safe'. `markupsafe.Markup` is used by default.
+
+    :param get_request: a callable that returns the current request.
+
+    :param default_locale: default locale (as a string or as a
+        Babel.Locale instance).
+
+    :param default_timezone: default timezone (as a string or as a
+        `datetime.tzinfo` instance).
+
+    :param date_formats: update the defaults date formats.
     """
 
     def __init__(self, folderpath=utils.LOCALES_FOLDER, markup=Markup, **kwargs):
-        """
-        folderpath:
-            path or list of paths that will be searched for the translations
-
-        markup:
-            overwrite the function used by `translate` to flags HTML code
-            as 'safe'. `markupsafe.Markup` is used by default.
-
-        get_request:
-            a callable that returns the current request.
-
-        default_locale:
-            default locale (as a string or as a `~Babel.Locale` instance).
-
-        default_timezone:
-            default timezone.
-
-        date_formats:
-            update the defaults date formats.
-
-        """
         self.reader = Reader(folderpath)
         self.markup = markup
         super(I18n, self).__init__(**kwargs)
@@ -50,7 +46,7 @@ class I18n(RequestManager):
         """Return the available translations for a locale: the
         country-specific (is defined) and the one for the language in general.
 
-        :param locale: must be a `~Babel.Locale` instance
+        :param locale: must be a :class:`babel.core.Locale` instance
         """
         if not self.translations:
             self.load_translations(locale)
@@ -75,7 +71,7 @@ class I18n(RequestManager):
         translations (if the locale it's that specific) and then with those
         of the general language (eg. `en`).
 
-        :param locale: must be a `~Babel.Locale` instance
+        :param locale: must be a :class:`babel.core.Locale` instance
         :param key: a string, the ID of the looked up translation
         """
         translations = self.get_translations_from_locale(locale)

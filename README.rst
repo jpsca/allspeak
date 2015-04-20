@@ -14,7 +14,7 @@ How can the translator of your multi-language web application update a text? Com
 
 And the files used by Allspeak are compatible with those of Rails, so you can use any third-party service already compatible with them (for example, `Transifex <https://www.transifex.com/>`_).
 
-Powered by Babel and pytz libraries .
+Powered by Babel and pytz libraries.
 
 Read the documentation here: http://allspeak.lucuma.co
 

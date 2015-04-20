@@ -33,5 +33,6 @@ pip-log.txt
 ## Unit test / coverage reports
 .coverage
 .tox
-
+htmlcov
+htmlcov/*
 realworld

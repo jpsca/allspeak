@@ -164,6 +164,7 @@ def get_request_timezone(request, default=None):
     `datetime.tzinfo` instance.
 
     Tries the following in order:
+
     - an attribute called `'tzinfo'`
     - a GET argument called `'tzinfo'`
     - the provided default timezone
@@ -183,6 +184,7 @@ def get_request_locale(request, default=None):
     `babel.Locale` instance.
 
     Tries the following in order:
+
     - an request attribute called `'locale'`
     - a GET argument called `'locale'`
     - the default locale
@@ -202,26 +204,26 @@ def pluralize(dic, count):
     is tried instead.  If that doesn't exits either, an empty string is
     returned.  Examples:
 
-        >>> dic = {
-            0: u'No apples',
-            1: u'One apple',
-            3: u'Few apples',
-            'n': u'%(count)s apples',
-            }
-        >>> pluralize(dic, 0)
-        'No apples'
-        >>> pluralize(dic, 1)
-        'One apple'
-        >>> pluralize(dic, 3)
-        'Few apples'
-        >>> pluralize(dic, 10)
-        '%(count)s apples'
-        >>> pluralize({0: 'off', 'n': 'on'}, 3)
-        'on'
-        >>> pluralize({0: 'off', 'n': 'on'}, 0)
-        'off'
-        >>> pluralize({}, 3)
-        ''
+    >>> dic = {
+        0: u'No apples',
+        1: u'One apple',
+        3: u'Few apples',
+        'n': u'%(count)s apples',
+        }
+    >>> pluralize(dic, 0)
+    'No apples'
+    >>> pluralize(dic, 1)
+    'One apple'
+    >>> pluralize(dic, 3)
+    'Few apples'
+    >>> pluralize(dic, 10)
+    '%(count)s apples'
+    >>> pluralize({0: 'off', 'n': 'on'}, 3)
+    'on'
+    >>> pluralize({0: 'off', 'n': 'on'}, 0)
+    'off'
+    >>> pluralize({}, 3)
+    ''
 
     """
     if count is None:

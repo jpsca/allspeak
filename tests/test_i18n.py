@@ -29,11 +29,11 @@ def test_init_i18n_default_locale():
 
 def test_init_i18n_locales():
     i18n = I18n(LOCALES_TEST)
-    assert i18n.reader.trans_folders == [LOCALES_TEST]
+    assert i18n.reader.folderpath == LOCALES_TEST
 
-    folderpaths = [LOCALES_TEST, LOCALES_TEST]
-    i18n = I18n(folderpaths)
-    assert i18n.reader.trans_folders == folderpaths
+    folderpath = join(LOCALES_TEST, u'sub')
+    i18n = I18n(folderpath)
+    assert i18n.reader.folderpath == folderpath
 
 
 def test_load_translations():
