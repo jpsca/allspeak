@@ -99,7 +99,6 @@ def test_locale_to_str():
     assert utils.locale_to_str(Locale('en', 'US')) == 'en_US'
     assert utils.locale_to_str(Locale('es')) == 'es'
     assert utils.locale_to_str('en_US') == 'en_US'
-    assert utils.locale_to_str(Locale('en', 'us')) == 'en_US'
 
 
 def test_get_werkzeug_preferred_locales():

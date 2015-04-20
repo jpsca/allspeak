@@ -164,7 +164,7 @@ html_context = {
     'author': author,
     'author_url': u'http://jpscaletti.com',
     'github': u'https://github.com/lucuma/Allspeak',
-    'analytics_code': 'UA-1495972-20',
+    'analytics_code': 'UA-1495972-21',
     'url': html_use_opensearch,
     'seo_description': description,
     'license': license,
