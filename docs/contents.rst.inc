@@ -5,6 +5,7 @@ User’s Guide
    :maxdepth: 2
 
    introduction
+   tips_and_tricks
 
 
 API Reference

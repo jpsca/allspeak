@@ -54,7 +54,7 @@ release = '0.6'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = 'en '
+language = 'en'
 locale_dirs = ['_themes/_locale']
 
 # There are two options for replacing |today|: either, you set today to some

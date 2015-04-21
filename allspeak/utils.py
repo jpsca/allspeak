@@ -6,14 +6,6 @@ from babel.dates import get_timezone, UTC
 from ._compat import string_types
 
 
-__all__ = [
-    'LOCALES_FOLDER', 'DEFAULT_LOCALE', 'DEFAULT_TIMEZONE',
-    'DEFAULT_DATE_FORMATS', 'normalize_locale', 'normalize_timezone',
-    'get_werkzeug_preferred_locales', 'get_webob_preferred_locales',
-    'get_django_preferred_locales', 'get_preferred_locales', 'negotiate_locale',
-    'get_request_timezone', 'get_request_locale', 'pluralize',
-]
-
 LOCALES_FOLDER = 'locales'
 
 DEFAULT_LOCALE = 'en'
@@ -28,7 +20,8 @@ DEFAULT_DATE_FORMATS = {
 
 def split_locale(locale):
     """Returns a tuple (language, TERRITORY) or just (language, )
-    from a a `~Babel.Locale` instance or a string like `en-US` or `en_US`.
+    from a a :class:`babel.core.Locale` instance or a string like `en-US` or
+    `en_US`.
     """
     if isinstance(locale, Locale):
         tloc = [locale.language.lower()]
@@ -77,12 +70,7 @@ def normalize_timezone(tzinfo):
 
 
 def locale_to_str(locale):
-    if not isinstance(locale, Locale):
-        return locale
-    strlocale = locale.language.lower()
-    if locale.territory:
-        strlocale += '_' + locale.territory.upper()
-    return strlocale
+    return '_'.join(split_locale(locale))
 
 
 def get_werkzeug_preferred_locales(request):

@@ -8,6 +8,36 @@ from .request_manager import RequestManager
 from .utils import locale_to_str
 
 
+def flatten(dic):
+    """
+    Flatten a dictionary, separating keys by dots.
+
+    >>>> dic = {
+        'a': 1,
+        'c': {
+            'a': 2,
+            'b': {
+                'x': 5,
+                'y' : 10,
+            }
+        },
+        'd': [1, 2, 3],
+    }
+    >>>> flatten(dic)
+    {'a': 1, 'c.a': 2, 'c.b.x': 5, 'c.b.y': 10, 'd': [1, 2, 3]}
+
+    """
+    def items():
+        for key, value in dic.items():
+            if isinstance(value, dict):
+                for subkey, subvalue in flatten(value).items():
+                    yield str(key) + '.' + str(subkey), subvalue
+            else:
+                yield key, value
+
+    return dict(items())
+
+
 class I18n(RequestManager):
     """Internationalization functions.
 
@@ -39,20 +69,21 @@ class I18n(RequestManager):
             cname=self.__class__.__name__,
         )
 
-    def load_translations(self, locale=None):
-        self.translations = self.reader.load_translations(locale=locale)
+    def load_translations(self, *locales):
+        self.translations = self.reader.load_translations(locales=locales)
 
     def get_translations_from_locale(self, locale):
         """Return the available translations for a locale: the
         country-specific (is defined) and the one for the language in general.
 
-        :param locale: must be a :class:`babel.core.Locale` instance
+        :param locale: must be a :class:`babel.core.Locale` instance or a
+            string.
         """
         if not self.translations:
             self.load_translations(locale)
 
-        objs = []
         strlocale = locale_to_str(locale)
+        objs = []
         trans = self.translations.get(strlocale)
         if trans:
             objs.append(trans)
@@ -71,7 +102,8 @@ class I18n(RequestManager):
         translations (if the locale it's that specific) and then with those
         of the general language (eg. `en`).
 
-        :param locale: must be a :class:`babel.core.Locale` instance
+        :param locale: must be a :class:`babel.core.Locale` instance or a
+            string.
         :param key: a string, the ID of the looked up translation
         """
         translations = self.get_translations_from_locale(locale)
@@ -93,8 +125,8 @@ class I18n(RequestManager):
         """Get the translation for the given key using the current locale.
 
         If the value is a dictionary, and `count` is defined, uses the value
-        whose key is that number.  If that key doesn't exist, a `'n'` key
-        is tried instead.  If that doesn't exits either, an empty string is
+        whose key is that number. If that key doesn't exist, a `'n'` key
+        is tried instead. If that doesn't exits either, an empty string is
         returned.
 
         The final value is formatted using `kwargs` (and also `count` if
@@ -111,6 +143,15 @@ class I18n(RequestManager):
             'hello world'
             >>> translate('a_list', what='world')
             ['a', 'b', 'c']
+
+        :param key: a string, the ID of the looked up translation
+        :param count: If the value is a dictionary, and `count` is defined,
+            uses the value whose key is that number. If that key doesn't exist,
+            a `'n'` key is tried instead. If that doesn't exits either, an
+            empty string is returned.
+        :param locale: must be a :class:`babel.core.Locale` instance or a
+            string.
+        :param **kwargs: for string interpolation of the value.
 
         """
         key = str(key)
@@ -141,3 +182,36 @@ class I18n(RequestManager):
                 return self.translate(*self_.args, **self_.kwargs)
 
         return LazyWrapper
+
+    def test_for_incomplete_locales(self, *locales):
+        """Check a list of locales for keys that are defined in one but not in
+        the other.
+
+        :param locales: two or more locales as strings. If not provided, all
+            of the available locales are tested.
+
+        :return: a dictionary with strlocales as keys and sets of missing
+            keys for those locales as values.
+
+        """
+        if not self.translations:
+            self.load_translations(*locales)
+        if not locales:
+            locales = self.translations.keys()
+        locales = [locale_to_str(locale) for locale in locales]
+
+        all_keys = []
+        keys = {}
+        for strlocale in locales:
+            trans_keys = flatten(self.translations.get(strlocale)).keys()
+            keys[strlocale] = set(trans_keys)
+            all_keys.extend(trans_keys)
+
+        all_keys = set(all_keys)
+        missing_keys = {}
+        for key, value in keys.items():
+            missing = all_keys - value
+            if missing:
+                missing_keys[key] = missing
+
+        return missing_keys

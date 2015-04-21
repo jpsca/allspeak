@@ -134,3 +134,44 @@ def test_lazy_translate():
     lazy = i18n.lazy_translate('greeting', locale=locale)
     assert lazy != '<missing:greeting>'
     assert repr(lazy) == '<missing:greeting>'
+
+
+def test_for_incomplete_locales():
+    i18n = I18n(LOCALES_TEST)
+    assert i18n.test_for_incomplete_locales()
+
+    i18n.translations = {
+        'es': {
+            'a': 1,
+            'b': {0: 'nope', 1: 'one'},
+            'c': 1,
+        },
+        'en': {
+            'b': {0: 'nope'},
+            'c': 1,
+        },
+        'fr': {
+            'a': 1,
+            'b': {0: 'nope'},
+            'c': 1,
+        },
+        'pt': {
+            'a': 1,
+            'b': {0: 'nope', 1: 'one'},
+            'c': 1,
+        },
+    }
+
+    expected = {
+        'en': set('a b.1'.split()),
+        'fr': set('b.1'.split()),
+    }
+    assert i18n.test_for_incomplete_locales() == expected
+
+    expected = {
+        'en': set(['a']),
+    }
+    assert i18n.test_for_incomplete_locales('en', 'fr') == expected
+
+    expected = {}
+    assert i18n.test_for_incomplete_locales('es', 'pt') == expected

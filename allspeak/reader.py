@@ -90,7 +90,7 @@ class Reader(object):
             print(trans)
             translations[locale].update(trans)
 
-    def load_translations(self, folderpath=None, locale=None):
+    def load_translations(self, folderpath=None, locales=None):
         """Search for locale files on `folderpath`,
         load and parse them to build a big dictionary with all the
         translations data.
@@ -99,8 +99,9 @@ class Reader(object):
         because only them have a registered loader.
 
         :param folderpath: overwrite the stored locales folder
-        :param locale: does nothing, but might be useful to implement
-                       load-on-demand in your own subclass.
+        :param locales: does nothing, but might be useful to implement
+            load-on-demand in your own subclass.
+
         """
         if folderpath:
             folderpath = self.process_folderpath(folderpath)

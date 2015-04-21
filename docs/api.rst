@@ -45,9 +45,13 @@ RequestManager
 Utilities
 ----------------------------------------------
 
+.. autofunction:: split_locale
+
 .. autofunction:: normalize_locale
 
 .. autofunction:: normalize_timezone
+
+.. autofunction:: locale_to_str
 
 .. autofunction:: get_werkzeug_preferred_locales
 
