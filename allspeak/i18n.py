@@ -9,8 +9,7 @@ from .utils import locale_to_str
 
 
 def flatten(dic):
-    """
-    Flatten a dictionary, separating keys by dots.
+    """Flatten a dictionary, separating keys by dots.
 
     >>>> dic = {
         'a': 1,

@@ -13,6 +13,10 @@ class RequestManager(object):
 
     :param get_request: a callable that returns the current request.
 
+    :param get_locale: overwrites the ``get_locale`` method.
+
+    :param get_timezone: overwrites the ``get_timezone`` method.
+
     :param default_locale: default locale (as a string or as a
         Babel.Locale instance).
 
@@ -23,9 +27,15 @@ class RequestManager(object):
 
     """
 
-    def __init__(self, get_request=None, default_locale=DEFAULT_LOCALE,
-                 default_timezone=DEFAULT_TIMEZONE, date_formats=None):
-        self.get_request = get_request
+    def __init__(self,
+                 get_request=None, get_locale=None, get_timezone=None,
+                 default_locale=DEFAULT_LOCALE,
+                 default_timezone=DEFAULT_TIMEZONE,
+                 date_formats=None):
+        self._get_request = get_request
+        self._get_locale = get_locale
+        self._get_timezone = get_timezone
+
         self.set_defaults(default_locale, default_timezone)
         self.date_formats = DEFAULT_DATE_FORMATS.copy()
         if date_formats:
@@ -55,23 +65,33 @@ class RequestManager(object):
         )
 
     def get_locale(self):
+        if self._get_locale:
+            return self._get_locale()
+        return self.__get_locale()
+
+    def get_timezone(self):
+        if self._get_timezone:
+            return self._get_timezone()
+        return self.__get_timezone()
+
+    def __get_locale(self):
         """Returns the locale that should be used for this request as
         an instance of :class:`babel.core.Locale`.
         This returns the default locale if used outside of a request.
 
         """
-        request = self.get_request and self.get_request()
+        request = self._get_request and self._get_request()
         if not request:
             return self.default_locale
         return utils.get_request_locale(request, self.default_locale)
 
-    def get_timezone(self):
+    def __get_timezone(self):
         """Returns the timezone that should be used for this request as
         `datetime.tzinfo` instance.  This returns the default timezone if used
         outside of a request or if no timezone was defined.
 
         """
-        request = self.get_request and self.get_request()
+        request = self._get_request and self._get_request()
         if not request:
             return self.default_timezone
         return utils.get_request_timezone(request, self.default_timezone)

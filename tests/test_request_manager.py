@@ -41,6 +41,13 @@ def test_get_locale_from_request_invalid():
     assert rm.get_locale() == default
 
 
+def test_custom_get_locale():
+    locale = Locale('es', 'PE')
+    default = Locale('en')
+    rm = RequestManager(get_locale=lambda: locale, default_locale=default)
+    assert rm.get_locale() == locale
+
+
 def test_get_timezone_default():
     tzinfo = get_timezone('America/Lima')
     rm = RequestManager(default_timezone=tzinfo)
@@ -61,3 +68,9 @@ def test_get_timezone_from_request_invalid():
     get_request = make_get_request(tzinfo=tzinfo)
     rm = RequestManager(get_request=get_request, default_timezone=default)
     assert rm.get_timezone() == default
+
+
+def test_custom_get_timezone():
+    tzinfo = get_timezone('America/Lima')
+    rm = RequestManager(get_timezone=lambda: tzinfo, default_timezone=UTC)
+    assert rm.get_timezone() == tzinfo

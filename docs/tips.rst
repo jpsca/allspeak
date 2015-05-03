@@ -1,5 +1,5 @@
 
-Tips & Tricks
+Tips
 =============================================
 
 .. module:: allspeak
@@ -58,6 +58,18 @@ This becomes:
     </ul>
 
 
+Use multiple YAML files
+---------------------------------------------
+
+If your app has different parts with different i18n needs, consider using multiple files.
+
+Perhaps you have an admin section with only one or two locales, and a public section with a bunch.
+
+Instead of having the translator needlessly translate your admin section to every locale, split it into a `locales/en.yml` and a `locales/admin.en.yml`.
+
+Remember that the file names has no mean to Allspeak about what language it contains, it's just for humans to known without having to open the file. You still have to put the language or languages as first-level keys.
+
+
 Group translations under common keys
 ---------------------------------------------
 
@@ -89,18 +101,6 @@ so you can do:
 
 
 This way, the translator sees no code or markup.
-
-
-Use multiple YAML files
----------------------------------------------
-
-If your app has different parts with different i18n needs, consider using multiple files.
-
-Perhaps you have an admin section with only one or two locales, and a public section with a bunch.
-
-Instead of having the translator needlessly translate your admin section to every locale, split it into a `locales/en.yml` and a `locales/admin.en.yml`.
-
-Remember that the file names has no mean to Allspeak about what language it contains, it's just for humans to known without having to open the file. You still have to put the language or languages as first-level keys.
 
 
 Test your locale files

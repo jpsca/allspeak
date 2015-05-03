@@ -24,4 +24,5 @@ In *Allspeak* these two concerns are actually separated, so you could for exampl
 Setup Allspeak
 ---------------------------------------------
 
+The first thing to do is to create an `Allspeak` instance.
 
