@@ -22,7 +22,7 @@ Read the documentation here: http://allspeak.lucuma.co
 
 
 What's in a name?
-----------------------------------------------
+==============================================
 
     "When Thor speaks with the All-Speak anyone who hears him will hear him speak their native language in their hearts" ——(from Thor's wiki page)
 
