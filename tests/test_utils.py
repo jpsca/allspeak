@@ -192,12 +192,12 @@ def test_pluralize():
         0: u'No apples',
         1: u'One apple',
         3: u'Few apples',
-        'n': u'%(count)s apples',
+        'n': u'{count} apples',
     }
     assert utils.pluralize(d, 0) == u'No apples'
     assert utils.pluralize(d, 1) == u'One apple'
     assert utils.pluralize(d, 3) == u'Few apples'
-    assert utils.pluralize(d, 10) == u'%(count)s apples'
+    assert utils.pluralize(d, 10) == u'{count} apples'
 
     d = {
         0: u'off',

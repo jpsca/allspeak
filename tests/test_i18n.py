@@ -86,7 +86,7 @@ def test_key_lookup():
         0: 'No apples',
         1: 'One apple',
         3: 'Few apples',
-        'n': '%(count)s apples',
+        'n': '{count} apples',
     }
     assert i18n.key_lookup(locale, 'apple') == expected
 
@@ -105,14 +105,18 @@ def test_translate():
     locale = Locale('es')
     assert i18n.translate('greeting', locale=locale) == u'Hola mundo'
 
+    assert i18n.translate('bla', locale=locale) == '<missing:bla/>'
+
     locale = Locale('en')
+    assert i18n.translate('with_html', locale=locale) == Markup(u'<b>Hello</b>')
+
+
+def test_translate_pluralize():
+    i18n = I18n(LOCALES_TEST, default_locale='es-PE')
+    locale = Locale('en')
+
     assert i18n.translate('apple', 3, locale=locale) == u'Few apples'
     assert i18n.translate('apple', 10, locale=locale) == u'10 apples'
-
-    assert i18n.translate('bla', locale=locale) == '<missing:bla>'
-    # assert i18n.translate('olé', locale=locale) == '<missing:olé>'
-
-    assert i18n.translate('with_html', locale=locale) == Markup(u'<b>Hello</b>')
 
 
 def test_lazy_translate():
@@ -123,7 +127,7 @@ def test_lazy_translate():
     assert repr(lazy) == u'Habla'
 
     lazy = i18n.lazy_translate('bla')
-    assert repr(lazy) == '<missing:bla>'
+    assert repr(lazy) == '<missing:bla/>'
 
     locale = Locale('en')
     lazy = i18n.lazy_translate('greeting', locale=locale)
@@ -132,8 +136,8 @@ def test_lazy_translate():
 
     locale = Locale('fr')
     lazy = i18n.lazy_translate('greeting', locale=locale)
-    assert lazy != '<missing:greeting>'
-    assert repr(lazy) == '<missing:greeting>'
+    assert lazy != '<missing:greeting/>'
+    assert repr(lazy) == '<missing:greeting/>'
 
 
 def test_for_incomplete_locales():

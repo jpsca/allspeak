@@ -196,7 +196,7 @@ def pluralize(dic, count):
         0: u'No apples',
         1: u'One apple',
         3: u'Few apples',
-        'n': u'%(count)s apples',
+        'n': u'{count} apples',
         }
     >>> pluralize(dic, 0)
     'No apples'
@@ -205,12 +205,15 @@ def pluralize(dic, count):
     >>> pluralize(dic, 3)
     'Few apples'
     >>> pluralize(dic, 10)
-    '%(count)s apples'
+    '{count} apples'
     >>> pluralize({0: 'off', 'n': 'on'}, 3)
     'on'
     >>> pluralize({0: 'off', 'n': 'on'}, 0)
     'off'
     >>> pluralize({}, 3)
+
+    Note that this function **does not** interpolate the string, just returns
+    the right one for the value of ``count``.
     ''
 
     """

@@ -41,4 +41,4 @@ from .reader import Reader  # noqa
 from .request_manager import RequestManager  # noqa
 from .utils import *  # noqa
 
-__version__ = '0.6'
+__version__ = '0.7'

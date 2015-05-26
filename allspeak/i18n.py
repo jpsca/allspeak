@@ -1,4 +1,6 @@
 # coding=utf-8
+import re
+
 from markupsafe import Markup
 
 from . import utils
@@ -36,6 +38,8 @@ def flatten(dic):
 
     return dict(items())
 
+
+re.compile(r'%()s')
 
 class I18n(RequestManager):
     """Internationalization functions.
@@ -137,7 +141,7 @@ class I18n(RequestManager):
         Examples:
 
             >>> translate('hello_world')
-            'hello %(what)s'
+            'hello {what}'
             >>> translate('hello_world', what='world')
             'hello world'
             >>> translate('a_list', what='world')
@@ -157,14 +161,14 @@ class I18n(RequestManager):
         locale = utils.normalize_locale(locale) or self.get_locale()
         value = self.key_lookup(locale, key)
         if value is None:
-            return self.markup('<missing:%s>' % (key, ))
+            return self.markup('<missing:{0}/>'.format(key))
 
         if isinstance(value, dict):
             value = utils.pluralize(value, count)
 
         if isinstance(value, string_types):
             kwargs.setdefault('count', count)
-            value = value % kwargs
+            value = value.format(**kwargs)
             if key.endswith('_html'):
                 return self.markup(value)
 

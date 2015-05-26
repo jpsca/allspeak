@@ -4,5 +4,5 @@ en:
     0: No apples
     1: One apple
     3: Few apples
-    n: "%(count)s apples"
+    n: "{count} apples"
   with_html: <b>Hello</b>
