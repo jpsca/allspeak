@@ -29,4 +29,4 @@ clean:
 	rm -rf _build
 
 publishdocs: clean html
-	scp -r _build/html/* jps@lucuma3:/var/www/lucumalabs/sqlawrapper/
+	scp -r _build/html/* jps@lucuma3:/var/www/lucumalabs/allspeak/

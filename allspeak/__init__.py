@@ -1,10 +1,10 @@
 # coding=utf-8
 """
 ========================
-AllSpeak
+Allspeak
 ========================
 
-AllSpeak is a pythonic (yet ironically inspired by Rails) i18n/l10n solution
+Allspeak is a pythonic (yet ironically inspired by Rails) i18n/l10n solution
 for humans. It's flexible, easy to use and —unlike gettext— independent of
 any external compilation tool.
 

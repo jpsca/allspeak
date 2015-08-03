@@ -1,12 +1,12 @@
 ===========================
-AllSpeak
+Allspeak
 ===========================
 
 .. image:: https://travis-ci.org/lucuma/allspeak.svg?branch=master
    :target: https://travis-ci.org/lucuma/Allspeak
    :alt: Build Status
 
-AllSpeak is a pythonic (yet ironically inspired by Rails) i18n/l10n solution for python web applications.
+Allspeak is a pythonic (yet ironically inspired by Rails) i18n/l10n solution for python web applications.
 
 It's flexible, easy to use and, unlike gettext, independent of any external compilation tool.
 

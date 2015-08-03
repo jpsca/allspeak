@@ -15,8 +15,9 @@ This library **does not** use gettext [#]_, but instead it works with translatio
 
 It is powered by the `Babel <http://babel.pocoo.org/>`_ and `pytz <http://pythonhosted.org/pytz/>`_ libraries and tested with Python 2.7, 3.3+ and pypy.
 
+----
 
-...
+Allspeak
 ==============================================
 
 .. include:: contents.rst.inc

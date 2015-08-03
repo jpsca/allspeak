@@ -33,7 +33,7 @@ def get_requirements(filename='requirements.txt'):
 
 
 setup(
-    name='AllSpeak',
+    name='Allspeak',
     version=get_version('allspeak'),
     author='Juan-Pablo Scaletti',
     author_email='juanpablo@lucumalabs.com',
