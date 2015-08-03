@@ -40,7 +40,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    url='http://github.com/lucuma/allspeak',
+    url='http://allspeak.lucuma.co',
     license='Three clause BSD License (see LICENSE)',
     description='A pythonic internationalization and localization solution',
     long_description=get_description('allspeak'),
