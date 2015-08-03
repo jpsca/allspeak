@@ -26,7 +26,7 @@ What's in a name?
     speak their native language in their hearts" ——(from Thor's wiki page)
 
 :copyright: `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
-:license: MIT, see LICENSE for more details.
+:license: Three clause BSD License, see LICENSE for more details.
 
 """
 # import os

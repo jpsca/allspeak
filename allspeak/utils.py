@@ -214,7 +214,6 @@ def pluralize(dic, count):
 
     Note that this function **does not** interpolate the string, just returns
     the right one for the value of ``count``.
-    ''
 
     """
     if count is None:

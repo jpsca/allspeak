@@ -1,0 +1,22 @@
+
+
+
+The process of “internationalization” (i18n) usually means to abstract all strings and other locale specific bits (such as date or currency formats) out of your application. The process of “localization” means to provide translations and localized formats for these bits.
+
+So, for the process of *internationalizing* your Python application you have to:
+
+* Make your application detect what language to use when showing a page.
+* Extract and translate your texts to separated files, by language.
+
+And for *localizing* it you have to:
+
+* Make your application detect what language to use when showing a page.
+* Replace the formatting of dates and such with their locale-aware version.
+
+In *Allspeak* these two concerns are actually separated, so you could for example, use the “localization” part with a single-language application.
+
+
+Setup Allspeak
+---------------------------------------------
+
+The first thing to do is to create an `Allspeak` instance.

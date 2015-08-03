@@ -41,6 +41,7 @@ def flatten(dic):
 
 re.compile(r'%()s')
 
+
 class I18n(RequestManager):
     """Internationalization functions.
 

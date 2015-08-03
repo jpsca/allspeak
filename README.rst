@@ -67,4 +67,4 @@ Our test suite `runs continuously on Travis CI <https://travis-ci.org/lucuma/All
 -----
 
 :copyright: 2012-2015 by `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
-:license: MIT, see LICENSE for more details.
+:license: Three clause BSD License, see LICENSE for more details.

@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
-{% if pagename == 'index' %}{% set title = project %}{% endif %}
-
 {% block content %}
 <div id="main">
   <div class="wrapper">
+  {% if pagename != 'index' %}
     {% include "toc.html" %}
+  {% endif %}
   {{ body }}
   </div>
 </div>

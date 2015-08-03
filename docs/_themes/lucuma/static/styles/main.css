@@ -1,6 +1,4 @@
-*,
-*:before,
-*:after {
+*, *:before, *:after {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -23,11 +21,6 @@ body {
 
 .wrapper .section p {
     overflow-x: hidden;
-}
-
-.wrapper .section iframe {
-    width: 100%;
-    min-height: 380px;
 }
 
 a img {
@@ -135,7 +128,6 @@ img {
 header {
     padding: 20px 0 10px;
     /*border-bottom: 1px solid #ddd;*/
-
     margin-bottom: 10px;
 }
 
@@ -143,7 +135,6 @@ header h1 {
     float: left;
     /*background: url(../images/authocode-logo.png) no-repeat;*/
     /*text-indent: -9999em;*/
-
     height: 100%;
     margin: 0;
     padding: 0;
@@ -154,32 +145,17 @@ header h1 {
 header h1 a,
 header h1 a:hover,
 header h1 a:visited {
-    background-color: #444;
-    color: white;
+    color: #aaa;
     display: block;
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 18px;
     line-height: 40px;
-    padding: 0 20px;
+    padding: 10px 0;
     text-align: left;
     text-decoration: none;
+    font-family: ProximaNovaLight;
 }
-
-header h1.logo a,
-header h1.logo a:hover,
-header h1.logo a:visited {
-    padding-left: 0;
-    /*text-indent: -9999px;*/
-
-    background-color: transparent;
-    color: #333;
-    font-size: 14px;
-}
-
-header h1 a img {
-    border: none;
-    height: 24px;
-    vertical-align: middle;
+header h1 a:hover {
+    color: #222;
 }
 
 header h1 a small {
@@ -218,7 +194,8 @@ header .nav .search-form {
 
 header .nav .search-form input {
     color: #444;
-    border-radius: 6px;
+    border-radius: 4px;
+    border: 1px solid #aaa;
     width: 220px;
     padding: 2px 40px 2px 2px;
     -moz-transition: width 0.5s;
@@ -240,6 +217,29 @@ header .nav .search-form button {
     background-color: transparent;
     border: none;
     margin-left: -44px;
+}
+
+header h1.logo a,
+header h1.logo a:hover,
+header h1.logo a:visited {
+    background-color: transparent;
+    color: #444;
+    font-family: Arial, sans-serif;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 40px;
+    padding-left: 0;
+    text-align: left;
+    text-decoration: none;
+}
+header h1.logo a:hover {
+    color: #111;
+}
+header h1.logo a img {
+    max-height: 32px;
+    vertical-align: middle;
+}
 }
 
 #main {
@@ -291,7 +291,7 @@ header .nav .search-form button {
 }
 
 #toc ul li a {
-    padding: 5px 0 0px 0;
+    padding: 7px 0 4px 0;
     display: inline-block;
     text-decoration: none;
 }
@@ -317,9 +317,6 @@ header .nav .search-form button {
 @media (min-width: 768px) {
     #toc {
         display: block !important;
-    }
-    .index #toc {
-        display: none !important;
     }
 }
 
@@ -399,8 +396,8 @@ body.search #searchbox {
 }
 
 #searchbox-body input {
-    padding: 4px 2px;
-    border-radius: 6px;
+    padding: 8px 4px;
+    border-radius: 4px;
     font-size: 15px;
     width: 80%;
 }
