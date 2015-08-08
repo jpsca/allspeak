@@ -31,4 +31,4 @@ What's in a name?
     — *(from Thor's wiki page)*
 
 
-.. [#] We think gettext is a cumbersome and totally inadequate solution for internationalization of web apps.
+.. [#] We think gettext is a cumbersome solution for internationalization of web apps.

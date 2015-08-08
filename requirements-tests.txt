@@ -9,3 +9,4 @@ jinja2
 django
 webob
 werkzeug
+tox

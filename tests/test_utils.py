@@ -187,7 +187,7 @@ def test_get_request_locale():
     )
 
 
-def test_pluralize():
+def test_pluralize_numbers():
     d = {
         0: u'No apples',
         1: u'One apple',
@@ -199,16 +199,55 @@ def test_pluralize():
     assert utils.pluralize(d, 3) == u'Few apples'
     assert utils.pluralize(d, 10) == u'{count} apples'
 
+
+def test_pluralize_literal():
     d = {
-        0: u'off',
-        'n': u'on'
+        'zero': u'No apples',
+        'one': u'One apple',
+        'few': u'Few apples',
+        'many': u'{count} apples',
+    }
+    assert utils.pluralize(d, 0) == u'No apples'
+    assert utils.pluralize(d, 1) == u'One apple'
+    assert utils.pluralize(d, 2) == u'Few apples'
+    assert utils.pluralize(d, 3) == u'Few apples'
+    assert utils.pluralize(d, 10) == u'{count} apples'
+
+
+def test_pluralize_mixed():
+    d = {
+        2: u'Two apples',
+        'few': u'Few apples',
+        'n': u'{count} apples',
+    }
+    assert utils.pluralize(d, 2) == u'Two apples'
+    assert utils.pluralize(d, 3) == u'Few apples'
+    assert utils.pluralize(d, 10) == u'{count} apples'
+
+
+def test_pluralize_zero_or_many():
+    d = {
+        'zero': u'off',
+        'many': u'on'
     }
     assert utils.pluralize(d, 3) == u'on'
 
     d = {
-        0: u'off',
-        'n': u'on'
+        'zero': u'off',
+        'many': u'on'
     }
     assert utils.pluralize(d, 0) == u'off'
     assert utils.pluralize(d, None) == u'off'
     assert utils.pluralize({}, 3) == u''
+
+
+def test_pluralize_no_many():
+    d = {
+        'zero': u'No apples',
+        'one': u'One apple',
+    }
+    assert utils.pluralize(d, 0) == u'No apples'
+    assert utils.pluralize(d, 1) == u'One apple'
+    assert utils.pluralize(d, 2) == u''
+    assert utils.pluralize(d, 3) == u''
+    assert utils.pluralize(d, 10) == u''

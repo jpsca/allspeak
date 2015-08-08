@@ -1,8 +1,8 @@
 en:
   greeting: Hello World!
   apple:
-    0: No apples
-    1: One apple
-    3: Few apples
-    n: "{count} apples"
+    zero: No apples
+    one: One apple
+    few: Few apples
+    many: "{count} apples"
   with_html: <b>Hello</b>

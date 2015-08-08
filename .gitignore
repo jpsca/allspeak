@@ -37,3 +37,4 @@ pip-log.txt
 htmlcov
 htmlcov/*
 realworld
+temp/*
