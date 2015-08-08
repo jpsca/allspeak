@@ -6,15 +6,12 @@ Allspeak
    :target: https://travis-ci.org/lucuma/Allspeak
    :alt: Build Status
 
-Allspeak is a pythonic (yet ironically inspired by Rails) i18n/l10n solution for python web applications.
+
+*Allspeak* is a pythonic (yet ironically inspired by Rails) internationalization and localization solution for Python web applications.
 
 It's flexible, easy to use and, unlike gettext, independent of any external compilation tool.
 
------
-
-How can the translator of your multi-language web application update a text? Compiling `.po` files for a web app, really? How the Rails community solved that problem? Translations in `yaml` files. With Python *it should* be that simple. **Now it is**.
-
-And the files used by Allspeak are compatible with those of Rails, so you can use any third-party service already compatible with them (for example, `Transifex <https://www.transifex.com/>`_).
+This library **does not** use gettext [#]_, but instead it works with translations in **yaml** files, compatible by those used with the Rails internationalization system, so you can use any third-party service already compatible with them (for example, `Transifex <https://www.transifex.com/>`_).
 
 It is powered by the `Babel <http://babel.pocoo.org/>`_ and `pytz <http://pythonhosted.org/pytz/>`_ libraries and tested with Python 2.7, 3.3+ and pypy.
 
