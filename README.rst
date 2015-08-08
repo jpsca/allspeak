@@ -11,7 +11,7 @@ Allspeak
 
 It's flexible, easy to use and, unlike gettext, independent of any external compilation tool.
 
-This library **does not** use gettext [#]_, but instead it works with translations in **yaml** files, compatible by those used with the Rails internationalization system, so you can use any third-party service already compatible with them (for example, `Transifex <https://www.transifex.com/>`_).
+This library **does not** use gettext —we find it cumbersome, to say the least—, but instead it works with translations in **yaml** files, compatible by those used with the Rails internationalization system, so you can use any third-party service already compatible with them (for example, `Transifex <https://www.transifex.com/>`_).
 
 It is powered by the `Babel <http://babel.pocoo.org/>`_ and `pytz <http://pythonhosted.org/pytz/>`_ libraries and tested with Python 2.7, 3.3+ and pypy.
 
