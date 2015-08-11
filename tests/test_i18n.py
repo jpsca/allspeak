@@ -29,13 +29,13 @@ def test_init_i18n_default_locale():
 
 def test_get_available_locales():
     i18n = I18n(LOCALES_TEST)
-    assert i18n.available_locales == ['en', 'es_PE', 'es']
+    assert sorted(i18n.available_locales) == sorted(['en', 'es_PE', 'es'])
 
 
 def test_overwrite_available_locales():
     available_locales = ['fr', 'es']
     i18n = I18n(LOCALES_TEST, available_locales=available_locales)
-    assert i18n.available_locales == available_locales
+    assert sorted(i18n.available_locales) == sorted(available_locales)
 
 
 def test_init_i18n_locales():

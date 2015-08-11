@@ -70,12 +70,15 @@ class RequestManager(object):
         _available = []
         for locale in available_locales or [self.default_locale]:
             lparts = utils.split_locale(locale)
+
             lp = '_'.join(lparts)
             if lp not in _available:
                 _available.append(lp)
+
             if len(lparts) > 1:
                 if lparts[0] not in _available:
                     _available.append(lparts[0])
+
         self.available_locales = _available
 
     def set_date_formats(self, date_formats):
