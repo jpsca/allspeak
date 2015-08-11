@@ -17,26 +17,44 @@ DEFAULT_DATE_FORMATS = {
     'datetime': 'medium',
 }
 
+NUMBER_LITERAL_EQUIV = {
+    0: 'zero',
+    '0': 'zero',
+    1: 'one',
+    '1': 'one',
+    2: 'few',
+    '2': 'few',
+    3: 'few',
+    '3': 'few',
+}
 
-def split_locale(locale):
-    """Returns a tuple (language, TERRITORY) or just (language, )
-    from a a :class:`babel.core.Locale` instance or a string like `en-US` or
-    `en_US`.
+
+def get_request_locale(request, available_locales, default=None):
+    """Returns the locale that should be used for this request as a
+    `babel.Locale` instance.
+
+    Tries the following in order:
+
+    - an request attribute called `'locale'`
+    - a GET argument called `'locale'`
+    - the prefered
+    - the default locale
+
     """
-    if isinstance(locale, Locale):
-        tloc = [locale.language.lower()]
-        if locale.territory:
-            tloc.append(locale.territory.upper())
-        return tuple(tloc)
+    if not available_locales:
+        return None
+    locale = (
+        getattr(request, 'locale', None) or
+        getattr(request, 'args', getattr(request, 'GET', {})).get('locale')
+    )
+    if locale:
+        preferred = [locale]
+    else:
+        preferred = get_preferred_locales(request)
 
-    if isinstance(locale, string_types):
-        locale = locale.replace('-', '_').lower()
-        tloc = locale.split('_')
-        if len(tloc) > 1:
-            tloc[-1] = tloc[-1].upper()
-        return tuple(tloc)
-
-    return locale
+    locale = negotiate_locale(preferred, available_locales)
+    request.locale = normalize_locale(locale) or default
+    return request.locale
 
 
 def normalize_locale(locale):
@@ -58,19 +76,15 @@ def normalize_locale(locale):
     return None
 
 
-def normalize_timezone(tzinfo):
-    if not tzinfo:
-        return
-    if isinstance(tzinfo, datetime.tzinfo):
-        return tzinfo
-    try:
-        return get_timezone(tzinfo)
-    except LookupError:
-        return
-
-
-def locale_to_str(locale):
-    return '_'.join(split_locale(locale))
+def get_preferred_locales(request):
+    """Extract from the request a list of preferred strlocales.
+    """
+    return (
+        get_werkzeug_preferred_locales(request) or
+        get_webob_preferred_locales(request) or
+        get_django_preferred_locales(request) or
+        []
+    )
 
 
 def get_werkzeug_preferred_locales(request):
@@ -80,10 +94,7 @@ def get_werkzeug_preferred_locales(request):
     """
     languages = getattr(request, 'accept_languages', None)
     if languages:
-        return [
-            '_'.join(split_locale(l))
-            for l in languages.values()
-        ]
+        return [locale_to_str(l) for l in languages.values()]
 
 
 def get_webob_preferred_locales(request):
@@ -92,10 +103,7 @@ def get_webob_preferred_locales(request):
     """
     languages = getattr(request, 'accept_language', None)
     if languages:
-        return [
-            '_'.join(split_locale(l))
-            for l in languages
-        ]
+        return [locale_to_str(l) for l in languages]
 
 
 def get_django_preferred_locales(request):
@@ -110,41 +118,17 @@ def get_django_preferred_locales(request):
     if header:
         languages = [l.strip().split(';')[::-1] for l in header.split(',')]
         languages = sorted(languages)[::-1]
-        return [
-            '_'.join(split_locale(l[1].strip()))
-            for l in languages
-        ]
+        return [locale_to_str(l[1]) for l in languages]
 
 
-def get_preferred_locales(request):
-    """Extract from the request a list of preferred strlocales.
-    """
-    return (
-        get_werkzeug_preferred_locales(request) or
-        get_webob_preferred_locales(request) or
-        get_django_preferred_locales(request) or
-        []
-    )
-
-
-def negotiate_locale(request, available_locales):
+def negotiate_locale(preferred, available):
     """From the available locales, negotiate the most adequate for the
     client, based on the "accept language" header.
     """
-    if not available_locales:
-        return None
-    preferred = get_preferred_locales(request)
-    if preferred:
-        preferred = map(
-            lambda l: l.replace('-', '_').lower(),
-            preferred
-        )
-        available_locales = map(
-            lambda l: l.replace('-', '_').lower(),
-            available_locales
-        )
-        # To ensure a consistent matching, Babel algorithm is used.
-        return Locale.negotiate(preferred, available_locales, sep='_')
+    preferred = map(locale_to_str, preferred)
+    available = map(locale_to_str, available)
+    # To ensure a consistent matching, Babel algorithm is used.
+    return Locale.negotiate(preferred, available, sep='_')
 
 
 def get_request_timezone(request, default=None):
@@ -167,39 +151,44 @@ def get_request_timezone(request, default=None):
     return request.tzinfo
 
 
-def get_request_locale(request, default=None):
-    """Returns the locale that should be used for this request as a
-    `babel.Locale` instance.
+def normalize_timezone(tzinfo):
+    if not tzinfo:
+        return
+    if isinstance(tzinfo, datetime.tzinfo):
+        return tzinfo
+    try:
+        return get_timezone(tzinfo)
+    except LookupError:
+        return
 
-    Tries the following in order:
 
-    - an request attribute called `'locale'`
-    - a GET argument called `'locale'`
-    - the default locale
-
+def split_locale(locale):
+    """Returns a tuple (language, TERRITORY) or just (language, )
+    from a a :class:`babel.core.Locale` instance or a string like `en-US` or
+    `en_US`.
     """
-    locale = (
-        getattr(request, 'locale', None) or
-        getattr(request, 'args', getattr(request, 'GET', {})).get('locale')
-    )
-    request.locale = normalize_locale(locale) or default
-    return request.locale
+    if isinstance(locale, Locale):
+        tloc = [locale.language.lower()]
+        if locale.territory:
+            tloc.append(locale.territory.upper())
+        return tuple(tloc)
+
+    if isinstance(locale, string_types):
+        locale = locale.replace('-', '_').lower().strip()
+        tloc = locale.split('_')
+        if len(tloc) > 1:
+            tloc[-1] = tloc[-1].upper()
+        return tuple(tloc)
+
+    return locale
 
 
-number_literal_equiv = {
-    0: 'zero',
-    '0': 'zero',
-    1: 'one',
-    '1': 'one',
-    2: 'few',
-    '2': 'few',
-    3: 'few',
-    '3': 'few',
-}
+def locale_to_str(locale):
+    return '_'.join(split_locale(locale))
 
 
 def number_to_literal(number):
-    return number_literal_equiv.get(number, 'many')
+    return NUMBER_LITERAL_EQUIV.get(number, 'many')
 
 
 def pluralize(dic, count):
@@ -263,3 +252,32 @@ def pluralize(dic, count):
     scount = str(count)
     literal = number_to_literal(scount)
     return dic.get(count, dic.get(scount, dic.get(literal, dic.get('many', dic.get('n', u'')))))
+
+
+def flatten(dic):
+    """Flatten a dictionary, separating keys by dots.
+
+    >>>> dic = {
+        'a': 1,
+        'c': {
+            'a': 2,
+            'b': {
+                'x': 5,
+                'y' : 10,
+            }
+        },
+        'd': [1, 2, 3],
+    }
+    >>>> flatten(dic)
+    {'a': 1, 'c.a': 2, 'c.b.x': 5, 'c.b.y': 10, 'd': [1, 2, 3]}
+
+    """
+    def items():
+        for key, value in dic.items():
+            if isinstance(value, dict):
+                for subkey, subvalue in flatten(value).items():
+                    yield str(key) + '.' + str(subkey), subvalue
+            else:
+                yield key, value
+
+    return dict(items())

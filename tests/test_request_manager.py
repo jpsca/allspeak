@@ -13,10 +13,24 @@ def test_init():
     assert rm.default_timezone == UTC
 
 
-def test_init_defaults():
+def test_set_defaults():
     rm = RequestManager(default_locale='es', default_timezone='America/Lima')
     assert rm.default_locale == Locale('es')
     assert rm.default_timezone == get_timezone('America/Lima')
+
+
+def test_set_available():
+    rm = RequestManager(default_locale='es')
+    assert rm.available_locales == ['es']
+
+    rm = RequestManager(default_locale='es_pe')
+    assert rm.available_locales == ['es_PE', 'es']
+
+    rm = RequestManager(default_locale='es_PE', available_locales=[])
+    assert rm.available_locales == ['es_PE', 'es']
+
+    rm = RequestManager(default_locale='es_PE', available_locales=['en-US'])
+    assert rm.available_locales == ['en_US', 'en']
 
 
 def test_get_locale_default():
@@ -29,7 +43,10 @@ def test_get_locale_from_request():
     locale = Locale('es', 'PE')
     default = Locale('en')
     get_request = make_get_request(locale=locale)
-    rm = RequestManager(get_request=get_request, default_locale=default)
+    available_locales = ['en', 'es_PE']
+    rm = RequestManager(
+        get_request=get_request, default_locale=default,
+        available_locales=available_locales)
     assert rm.get_locale() == locale
 
 
@@ -37,14 +54,31 @@ def test_get_locale_from_request_invalid():
     locale = None
     default = Locale('en')
     get_request = make_get_request(locale=locale)
-    rm = RequestManager(get_request=get_request, default_locale=default)
+    available_locales = ['en', 'es_PE']
+    rm = RequestManager(
+        get_request=get_request, default_locale=default,
+        available_locales=available_locales)
+    assert rm.get_locale() == default
+
+
+def test_get_locale_from_request_unavailable():
+    locale = None
+    default = Locale('en')
+    get_request = make_get_request(locale=locale)
+    available_locales = []
+    rm = RequestManager(
+        get_request=get_request, default_locale=default,
+        available_locales=available_locales)
     assert rm.get_locale() == default
 
 
 def test_custom_get_locale():
     locale = Locale('es', 'PE')
     default = Locale('en')
-    rm = RequestManager(get_locale=lambda: locale, default_locale=default)
+    available_locales = ['en', 'es_PE']
+    rm = RequestManager(
+        get_locale=lambda: locale, default_locale=default,
+        available_locales=available_locales)
     assert rm.get_locale() == locale
 
 

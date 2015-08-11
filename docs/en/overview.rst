@@ -1,12 +1,11 @@
+.. module:: allspeak
 
 Overview
 =============================================
 
-.. module:: allspeak
-
 Allspeak does three things for you:
 
-1. Get the user's preferred languages from the request.
+1. Get the user's preferred languages and timezone from the request.
 
 2. Translate your previously extracted texts (more on this later) to the best available language or to the default language.
 
@@ -50,14 +49,15 @@ and localization
 
 .. sourcecode:: python
 
-    speak.format_datetime
-    speak.format_date
-    speak.format_time
-    speak.format_timedelta
-    format_number
-    format_decimal
-    format_currency
-    format_percent
-    format_scientific
+    speak.format_datetime(...)
+    speak.format_date(...)
+    speak.format_time(...)
+    speak.format_timedelta(...)
+    speak.format_number(...)(...)
+    speak.format_decimal(...)
+    speak.format_currency(...)
+    speak.format_percent(...)
+    speak.format_scientific(...)
 
 The ``folderpath`` is an optional path of the folder containing all your yaml files with translations. If you are not planning to use translations, you can safely ignore that argument.
+

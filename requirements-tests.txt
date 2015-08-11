@@ -2,11 +2,12 @@
 # to test this project.
 
 -r requirements.txt
+django
+flake
+ipdb
+jinja2
 pytest
 pytest-cov
-flake
-jinja2
-django
+tox
 webob
 werkzeug
-tox

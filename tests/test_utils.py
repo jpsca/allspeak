@@ -14,27 +14,23 @@ from .conftest import (
 def test_content_negotiation(make_req):
     available_locales = ['en', 'es', 'es-PE']
 
-    headers = [('Accept-Language', 'fr; q=1.0, es; q=0.5, pt; q=0.5')]
-    req = get_test_request(make_req, headers=headers)
-    assert utils.negotiate_locale(req, available_locales) == Locale('es')
+    preferred = ['fr', 'es', 'pt']
+    assert utils.negotiate_locale(preferred, available_locales) == Locale('es')
 
-    headers = [('Accept-Language', 'fr; q=1.0, en-US; q=0.5, pt; q=0.5')]
-    req = get_test_request(make_req, headers=headers)
-    assert utils.negotiate_locale(req, available_locales) == Locale('en')
+    preferred = ['fr', 'en-US', 'pt']
+    assert utils.negotiate_locale(preferred, available_locales) == Locale('en')
 
-    headers = [('Accept-Language', 'fr; q=1.0, es-PE; q=0.5, pt; q=0.5')]
-    req = get_test_request(make_req, headers=headers)
-    assert utils.negotiate_locale(req, available_locales) == Locale('es', 'PE')
+    preferred = ['fr', 'es-PE', 'pt']
+    assert utils.negotiate_locale(preferred, available_locales) == Locale('es', 'PE')
 
-    headers = [('Accept-Language', 'fr; q=1.0, es-PE; q=0.5, pt; q=0.5')]
-    req = get_test_request(make_req, headers=headers)
-    assert utils.negotiate_locale(req, ['ru']) is None
+    preferred = ['fr', 'es-PE', 'pt']
+    assert utils.negotiate_locale(preferred, ['ru']) is None
 
-    headers = [('Accept-Language', 'martian; q=1.0, venus; q=0.5, pt; q=0.5')]
-    req = get_test_request(make_req, headers=headers)
-    assert utils.negotiate_locale(req, ['klingon']) is None
+    preferred = ['martian', 'venus', 'pt']
+    assert utils.negotiate_locale(preferred, ['klingon']) is None
 
-    assert utils.negotiate_locale(req, []) is None
+    preferred = ['fr', 'es-PE', 'pt']
+    assert utils.negotiate_locale(preferred, []) is None
 
 
 def test_get_preferred_locales(make_req):
@@ -154,35 +150,38 @@ def test_get_request_locale():
     request = FakeRequest()
 
     request.locale = 'es'
-    assert utils.get_request_locale(request) == Locale('es')
+    assert utils.get_request_locale(request, ['es']) == Locale('es')
 
     request.locale = 'en-US'
-    assert utils.get_request_locale(request) == Locale('en', 'US')
+    assert utils.get_request_locale(request, ['en-US']) == Locale('en', 'US')
 
     request.locale = 'en_US'
-    assert utils.get_request_locale(request) == Locale('en', 'US')
+    assert utils.get_request_locale(request, ['en_US']) == Locale('en', 'US')
 
     request.locale = Locale('en', 'US')
-    assert utils.get_request_locale(request) == Locale('en', 'US')
+    assert utils.get_request_locale(request, ['en-US']) == Locale('en', 'US')
 
     request.locale = ('es', )
-    assert utils.get_request_locale(request) == Locale('es')
+    assert utils.get_request_locale(request, ['es']) == Locale('es')
+
+    request.locale = ('es', )
+    assert utils.get_request_locale(request, []) == None
 
     request.locale = ('en', 'US')
-    assert utils.get_request_locale(request) == Locale('en', 'US')
+    assert utils.get_request_locale(request, ['en-US']) == Locale('en', 'US')
 
     request.locale = 'En-Us'
-    assert utils.get_request_locale(request) == Locale('en', 'US')
+    assert utils.get_request_locale(request, ['En-Us']) == Locale('en', 'US')
 
     request.locale = None
-    assert utils.get_request_locale(request) == None
+    assert utils.get_request_locale(request, ['es']) == None
 
     request.locale = 'klingon'
-    assert utils.get_request_locale(request) == None
+    assert utils.get_request_locale(request, ['es']) == None
 
     request.locale = 'klingon'
     assert (
-        utils.get_request_locale(request, default=utils.DEFAULT_LOCALE) ==
+        utils.get_request_locale(request, [utils.DEFAULT_LOCALE], default=utils.DEFAULT_LOCALE) ==
         utils.DEFAULT_LOCALE
     )
 

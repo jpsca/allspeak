@@ -14,6 +14,8 @@ class L10n(RequestManager):
 
     :param get_request: a callable that returns the current request.
 
+    :param available_locales: list of available locales (as strings).
+
     :param default_locale: default locale (as a string or as a
         Babel.Locale instance).
 

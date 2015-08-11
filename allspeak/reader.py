@@ -87,7 +87,6 @@ class Reader(object):
         data = self.load_file(filepath)
         for locale, trans in data:
             translations.setdefault(locale, {})
-            print(trans)
             translations[locale].update(trans)
 
     def load_translations(self, folderpath=None, locales=None):
@@ -113,6 +112,8 @@ class Reader(object):
             for ext in self.loaders_ext:
                 pattern = u'*.{}'.format(ext)
                 for filename in fnmatch.filter(filenames, pattern):
+                    if filename.startswith('.'):
+                        continue
                     filepath = join(root, filename)
                     self.update_translations(translations, filepath)
 

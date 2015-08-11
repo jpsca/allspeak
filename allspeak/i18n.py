@@ -1,45 +1,11 @@
 # coding=utf-8
-import re
-
 from markupsafe import Markup
 
 from . import utils
 from ._compat import string_types
 from .reader import Reader
 from .request_manager import RequestManager
-from .utils import locale_to_str
-
-
-def flatten(dic):
-    """Flatten a dictionary, separating keys by dots.
-
-    >>>> dic = {
-        'a': 1,
-        'c': {
-            'a': 2,
-            'b': {
-                'x': 5,
-                'y' : 10,
-            }
-        },
-        'd': [1, 2, 3],
-    }
-    >>>> flatten(dic)
-    {'a': 1, 'c.a': 2, 'c.b.x': 5, 'c.b.y': 10, 'd': [1, 2, 3]}
-
-    """
-    def items():
-        for key, value in dic.items():
-            if isinstance(value, dict):
-                for subkey, subvalue in flatten(value).items():
-                    yield str(key) + '.' + str(subkey), subvalue
-            else:
-                yield key, value
-
-    return dict(items())
-
-
-re.compile(r'%()s')
+from .utils import locale_to_str, flatten
 
 
 class I18n(RequestManager):
@@ -54,6 +20,8 @@ class I18n(RequestManager):
 
     :param get_request: a callable that returns the current request.
 
+    :param available_locales: list of available locales (as strings).
+
     :param default_locale: default locale (as a string or as a
         Babel.Locale instance).
 
@@ -66,6 +34,8 @@ class I18n(RequestManager):
     def __init__(self, folderpath=utils.LOCALES_FOLDER, markup=Markup, **kwargs):
         self.reader = Reader(folderpath)
         self.markup = markup
+        self.load_translations()
+        kwargs['available_locales'] = kwargs.get('available_locales') or self.translations.keys()
         super(I18n, self).__init__(**kwargs)
 
     def __repr__(self):
@@ -83,10 +53,10 @@ class I18n(RequestManager):
         :param locale: must be a :class:`babel.core.Locale` instance or a
             string.
         """
-        if not self.translations:
+        strlocale = locale_to_str(locale)
+        if not self.translations or strlocale not in self.translations:
             self.load_translations(locale)
 
-        strlocale = locale_to_str(locale)
         objs = []
         trans = self.translations.get(strlocale)
         if trans:

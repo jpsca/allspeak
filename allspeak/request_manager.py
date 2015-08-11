@@ -17,6 +17,8 @@ class RequestManager(object):
 
     :param get_timezone: overwrites the ``get_timezone`` method.
 
+    :param available_locales: list of available locales (as strings).
+
     :param default_locale: default locale (as a string or as a
         Babel.Locale instance).
 
@@ -29,6 +31,7 @@ class RequestManager(object):
 
     def __init__(self,
                  get_request=None, get_locale=None, get_timezone=None,
+                 available_locales=None,
                  default_locale=DEFAULT_LOCALE,
                  default_timezone=DEFAULT_TIMEZONE,
                  date_formats=None):
@@ -37,9 +40,8 @@ class RequestManager(object):
         self._get_timezone = get_timezone
 
         self.set_defaults(default_locale, default_timezone)
-        self.date_formats = DEFAULT_DATE_FORMATS.copy()
-        if date_formats:
-            self.date_formats.update(date_formats)
+        self.set_available(available_locales)
+        self.set_date_formats(date_formats)
         self.translations = {}
 
     def __repr__(self):
@@ -64,6 +66,23 @@ class RequestManager(object):
             get_timezone(DEFAULT_TIMEZONE)
         )
 
+    def set_available(self, available_locales):
+        _available = []
+        for locale in available_locales or [self.default_locale]:
+            lparts = utils.split_locale(locale)
+            lp = '_'.join(lparts)
+            if lp not in _available:
+                _available.append(lp)
+            if len(lparts) > 1:
+                if lparts[0] not in _available:
+                    _available.append(lparts[0])
+        self.available_locales = _available
+
+    def set_date_formats(self, date_formats):
+        self.date_formats = DEFAULT_DATE_FORMATS.copy()
+        if date_formats:
+            self.date_formats.update(date_formats)
+
     def get_locale(self):
         if self._get_locale:
             return self._get_locale()
@@ -83,7 +102,7 @@ class RequestManager(object):
         request = self._get_request and self._get_request()
         if not request:
             return self.default_locale
-        return utils.get_request_locale(request, self.default_locale)
+        return utils.get_request_locale(request, self.available_locales, self.default_locale)
 
     def __get_timezone(self):
         """Returns the timezone that should be used for this request as
