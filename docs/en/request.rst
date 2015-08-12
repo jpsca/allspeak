@@ -6,7 +6,7 @@ Choosing what locale / time zone to use
 Language
 ---------------------------------------------
 
-On each request, Allspeak tries to guess the user's prefered locale (an ISO 639-1 language code like es, en-US, etc.) that is also available in the list of available locales defined by your application.
+On each request, Allspeak tries to guess the user's prefered locale (an ISO 639-1 language code like 'es', 'en-US', etc.) that is also available in the list of available locales defined by your application.
 
 It tries the following sources, in order, until it found one suitable option:
 

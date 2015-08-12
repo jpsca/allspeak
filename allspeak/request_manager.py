@@ -17,13 +17,14 @@ class RequestManager(object):
 
     :param get_timezone: overwrites the ``get_timezone`` method.
 
-    :param available_locales: list of available locales (as strings).
-
     :param default_locale: default locale (as a string or as a
         Babel.Locale instance).
 
     :param default_timezone: default timezone (as a string or as a
         `datetime.tzinfo` instance).
+
+    :param available_locales: list of available locales
+        (as ISO 639-1 language codes).
 
     :param date_formats: update the defaults date formats.
 
@@ -31,9 +32,9 @@ class RequestManager(object):
 
     def __init__(self,
                  get_request=None, get_locale=None, get_timezone=None,
-                 available_locales=None,
                  default_locale=DEFAULT_LOCALE,
                  default_timezone=DEFAULT_TIMEZONE,
+                 available_locales=None,
                  date_formats=None):
         self._get_request = get_request
         self._get_locale = get_locale

@@ -5,6 +5,9 @@ User’s Guide
    :maxdepth: 2
 
    overview
+   requests
+   i18n
+   l10n
 
    tips
 

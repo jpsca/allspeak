@@ -14,13 +14,15 @@ class L10n(RequestManager):
 
     :param get_request: a callable that returns the current request.
 
-    :param available_locales: list of available locales (as strings).
-
     :param default_locale: default locale (as a string or as a
         Babel.Locale instance).
 
     :param default_timezone: default timezone (as a string or as a
         `datetime.tzinfo` instance).
+
+    :param available_locales: list of available locales (as ISO 639-1
+        language codes). You don't *have* to provide a list, by
+        default this will be the default_locale.
 
     :param date_formats: update the defaults date formats.
 

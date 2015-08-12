@@ -30,10 +30,13 @@ The first thing to do is to create an `Allspeak` instance.
     speak = Allspeak(
         # path that will be searched for the translations files
         folderpath,
+
         # a callable that returns the current request
         get_request,
+
         # default locale (as a string or as a Babel.Locale instance)
         default_locale,
+
         # default (as a string or as a datetime.tzinfo instance)
         default_timezone
     )

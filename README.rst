@@ -1,11 +1,11 @@
+
+.. image:: https://travis-ci.org/lucuma/allspeak.svg?branch=master
+   :target: https://travis-ci.org/lucuma/allspeak
+   :alt: Build Status
+
 ===========================
 Allspeak
 ===========================
-
-.. image:: https://travis-ci.org/lucuma/allspeak.svg?branch=master
-   :target: https://travis-ci.org/lucuma/Allspeak
-   :alt: Build Status
-
 
 *Allspeak* is a pythonic (yet ironically inspired by Rails) internationalization and localization solution for Python web applications.
 
@@ -65,3 +65,4 @@ Our test suite `runs continuously on Travis CI <https://travis-ci.org/lucuma/All
 
 :copyright: 2012-2015 by `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
 :license: Three clause BSD License, see LICENSE for more details.
+:code: https://github.com/lucuma/allspeak
