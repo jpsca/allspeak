@@ -7,8 +7,10 @@ The process of “internationalization” (i18n) usually means to abstract all s
 
 The default en.yml locale in this directory contains a sample pair of translation strings:
 
-en:
-  hello: "Hello world"
+.. sourcecode:: yaml
+
+    en:
+      hello: "Hello world"
 
 This means, that in the :en locale, the key hello will map to the Hello world string. Every string inside Rails is internationalized in this way, see for instance Active Model validation messages in the activemodel/lib/active_model/locale/en.yml file or time and date formats in the activesupport/lib/active_support/locale/en.yml file. You can use YAML or standard Ruby Hashes to store translations in the default (Simple) backend.
 
@@ -16,22 +18,26 @@ This means, that in the :en locale, the key hello will map to the Hello world st
 Plurals
 ---------------------------------------------
 
+...
+
 Plurals in English or Spanish are fairly simple, with just two plural forms: a singular one for 1 and a plural one for everything else.
 
 Turns out some other languages aren’t so easy.
 
 Russian has 3 plural forms: a singular form for values ending in 1 like 1, 21, 31, 41... except those that finish in 11; a special plural form for values ending in 2, 3 or 4 but skipping 12, 13, 14; and a common plural form for everything else (5-20, 25-30...).
 
-
+To deal with those cases....
 
 ..  cldr_rules: http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html
 
 You can also insert rules for specific numbers, to add a touch of variation to your translations.
 
-number_of_apples:
-    zero: "No apples"
-    one: "One apple"
-    2: "Few apples"
-    3: "Few apples"
-    42: "Too many apples"
-    many: "{count} apples"
+.. sourcecode:: yaml
+
+    number_of_apples:
+        zero: "No apples"
+        one: "One apple"
+        2: "Few apples"
+        3: "Few apples"
+        42: "Too many apples"
+        many: "{count} apples"
