@@ -96,7 +96,6 @@ def test_key_lookup():
     expected = {
         'zero': 'No apples',
         'one': 'One apple',
-        'few': 'Few apples',
         'many': '{count} apples',
     }
     assert i18n.key_lookup(locale, 'apple') == expected
@@ -126,8 +125,8 @@ def test_translate_pluralize():
     i18n = I18n(LOCALES_TEST, default_locale='es-PE')
     locale = Locale('en')
 
-    assert i18n.translate('apple', 2, locale=locale) == u'Few apples'
-    assert i18n.translate('apple', 3, locale=locale) == u'Few apples'
+    assert i18n.translate('apple', 0, locale=locale) == u'No apples'
+    assert i18n.translate('apple', 1, locale=locale) == u'One apple'
     assert i18n.translate('apple', 10, locale=locale) == u'10 apples'
 
 

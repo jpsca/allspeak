@@ -3,6 +3,5 @@ en:
   apple:
     zero: No apples
     one: One apple
-    few: Few apples
     many: "{count} apples"
   with_html: <b>Hello</b>

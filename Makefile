@@ -20,7 +20,7 @@ test:
 testcov:
 	py.test --cov-config .coveragerc --cov allspeak tests/
 
-test-report:
+coverage:
 	py.test --cov-config .coveragerc --cov-report html --cov allspeak tests/
 
 publish: clean

@@ -17,17 +17,6 @@ DEFAULT_DATE_FORMATS = {
     'datetime': 'medium',
 }
 
-NUMBER_LITERAL_EQUIV = {
-    0: 'zero',
-    '0': 'zero',
-    1: 'one',
-    '1': 'one',
-    2: 'few',
-    '2': 'few',
-    3: 'few',
-    '3': 'few',
-}
-
 
 def get_request_locale(request, available_locales, default=None):
     """Returns the locale that should be used for this request as a
@@ -185,73 +174,6 @@ def split_locale(locale):
 
 def locale_to_str(locale):
     return '_'.join(split_locale(locale))
-
-
-def number_to_literal(number):
-    return NUMBER_LITERAL_EQUIV.get(number, 'many')
-
-
-def pluralize(dic, count):
-    """Takes a dictionary and a number and return the value whose key in
-    the dictionary is either
-
-        a. that number, or
-        b. the textual representation of that number:
-            - "zero" = 0
-            - "one" = 1
-            - "few" = 2 or 3
-            - "many" = 4 or more
-
-    If that key doesn't exist, the `'many'` and `'n'` keys are tried instead.
-    If none exits either, an empty string is returned.
-
-    Examples:
-
-    >>> dic = {
-            0: u'No apples',
-            1: u'One apple',
-            3: u'Few apples',
-            'n': u'{count} apples',
-        }
-    >>> pluralize(dic, 0)
-    'No apples'
-    >>> pluralize(dic, 1)
-    'One apple'
-    >>> pluralize(dic, 3)
-    'Few apples'
-    >>> pluralize(dic, 10)
-    '{count} apples'
-
-    >>> dic = {
-            'one': u'One apple',
-            'few': u'Few apples',
-            'many': u'{count} apples',
-        }
-    >>> pluralize(dic, 0)
-    u'{count} apples'
-    >>> pluralize(dic, 1)
-    'One apple'
-    >>> pluralize(dic, 2)
-    'Few apples'
-    >>> pluralize(dic, 3)
-    'Few apples'
-    >>> pluralize(dic, 10)
-    '{count} apples'
-
-    >>> pluralize({0: 'off', 'n': 'on'}, 3)
-    'on'
-    >>> pluralize({0: 'off', 'n': 'on'}, 0)
-    'off'
-    >>> pluralize({}, 3)
-
-    Note that this function **does not** interpolate the string, just returns
-    the right one for the value of ``count``.
-    """
-    if count is None:
-        count = 0
-    scount = str(count)
-    literal = number_to_literal(scount)
-    return dic.get(count, dic.get(scount, dic.get(literal, dic.get('many', dic.get('n', u'')))))
 
 
 def flatten(dic):

@@ -39,6 +39,7 @@ from .i18n import I18n  # noqa
 from .l10n import L10n  # noqa
 from .reader import Reader  # noqa
 from .request_manager import RequestManager  # noqa
+from .plurals import pluralize  # noqa
 from .utils import *  # noqa
 
-__version__ = '0.7'
+__version__ = '0.8'

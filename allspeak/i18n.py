@@ -6,6 +6,7 @@ from ._compat import string_types
 from .reader import Reader
 from .request_manager import RequestManager
 from .utils import locale_to_str, flatten
+from .plurals import pluralize
 
 
 class I18n(RequestManager):
@@ -138,7 +139,7 @@ class I18n(RequestManager):
             return self.markup('<missing:{0}/>'.format(key))
 
         if isinstance(value, dict):
-            value = utils.pluralize(value, count)
+            value = pluralize(value, count, locale)
 
         if isinstance(value, string_types):
             kwargs.setdefault('count', count)
