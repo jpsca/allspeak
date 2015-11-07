@@ -3,22 +3,61 @@
 Internationalization
 =============================================
 
-The process of “internationalization” (i18n) usually means to abstract all strings and other locale specific bits (such as date or currency formats) out of your application.
+The process of “internationalization” (i18n) usually means to abstract all strings out of your application.
 
-The default en.yml locale in this directory contains a sample pair of translation strings:
+For instance an ``en.yml`` and ``es.yml`` locales in this directory could be like this:
 
 .. sourcecode:: yaml
 
     en:
       hello: "Hello world"
 
-This means, that in the :en locale, the key hello will map to the Hello world string. Every string inside Rails is internationalized in this way, see for instance Active Model validation messages in the activemodel/lib/active_model/locale/en.yml file or time and date formats in the activesupport/lib/active_support/locale/en.yml file. You can use YAML or standard Ruby Hashes to store translations in the default (Simple) backend.
+.. sourcecode:: yaml
+
+    es:
+      hello: "Hola mundo"
+
+This means, that in the ``en`` locale, the ``hello`` key will map to the ``Hello world`` string, while in the ``es`` locale it will map to ``Hola mundo`` .
+
+Be aware that the files **doesn't need to be called like their corresponding locales**. It could be named ``my-translations.yml`` and contain both locales. The first-level keys, however, are the ones used to identify which locale we are working on.
+
+.. sourcecode:: jinja+html
+
+    t('apple', 0)
+
+
+
 
 
 Plurals
 ---------------------------------------------
 
-...
+Some translations are words that need to be plural —or not— depending of a value known at run-time. Besides the translation key, the :meth:`allspeak.I18n.translate` function accepts a number as second argument.
+
+Instead of a single string for a key, You must provide translations for all cases, so use pairs of pairs of ``quantity: transation``, for instance:
+
+.. sourcecode:: yaml
+
+    en:
+        projects:
+            zero: "No projects"
+            many: "{count} projects"
+
+And —supposing English is the current language— this'll be the result
+
+.. sourcecode:: python
+
+    >>> translate('apple', 0)
+    "No projects"
+    >>> translate('apple', 20)
+    "20 projects"
+
+Here the "zero" string is used if the number is zero, and the "many" string otherwise. These aren't the only possible keys you can use, keep reading to find out.
+
+Note how ``{count}`` is replaced for the number (when is not zero). This is the standard Python's string interpolation. You can have other placeholders (eg: ``"My {count} {adjective} projects"``), but only ``{count}`` will be replaced.
+
+More Plurals
++++++++++++++++++++++++++++++++++++++++++++++
 
 Plurals in English or Spanish are fairly simple, with just two plural forms: a singular one for 1 and a plural one for everything else.
 
@@ -26,18 +65,30 @@ Turns out some other languages aren’t so easy.
 
 Russian has 3 plural forms: a singular form for values ending in 1 like 1, 21, 31, 41... except those that finish in 11; a special plural form for values ending in 2, 3 or 4 but skipping 12, 13, 14; and a common plural form for everything else (5-20, 25-30...).
 
-To deal with those cases....
+..  cldr_rules:
 
-..  cldr_rules: http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html
+Luckily, your operating system already has an updated list of those rules [#cldr]_ that Allspeak can use.
+
+
+
+Custom Plurals
++++++++++++++++++++++++++++++++++++++++++++++
 
 You can also insert rules for specific numbers, to add a touch of variation to your translations.
 
 .. sourcecode:: yaml
 
-    number_of_apples:
-        zero: "No apples"
-        one: "One apple"
-        2: "Few apples"
-        3: "Few apples"
-        42: "Too many apples"
-        many: "{count} apples"
+    en:
+        number_of_apples:
+            zero: "No apples"
+            one: "One apple"
+            2: "Few apples"
+            3: "Few apples"
+            42: "The answer to all apples"
+            many: "{count} apples"
+
+The number has priority over the pluralization rule, so ``translate('number_of_apples', 42)`` will always return ``"The answer to all apples"`` even if English had some special plural rule for 42.
+
+.. [#cldr] “The Unicode Consortium”, a non-profit organization, runs the “Common Locale Data Repository Project”, often abbreviated as CLDR, that mantains a collection of translations for language names, currencies, `pluralization rules <http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html>`_ and others.
+
+

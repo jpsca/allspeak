@@ -6,8 +6,6 @@ User’s Guide
 
    overview
    requests
-   i18n
-   l10n
 
    tips
 

@@ -10,8 +10,8 @@ def pluralize(dic, count, locale=DEFAULT_LOCALE):
     the dictionary is either
 
         a. that number, or
-        b. the textual representation of that number according to the CLDR
-           rules_ for that locale, Dependending of the language, this can be:
+        b. the textual representation of that number according to the `CLDR
+           rules <cldr_rules>`_ for that locale, Depending of the language, this can be:
            "zero", "one", "two", "few", "many" or "other".
 
     ..  rules: http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html

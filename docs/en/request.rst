@@ -8,7 +8,7 @@ Language
 
 On each request, Allspeak tries to guess the user's prefered locale (an ISO 639-1 language code like 'es', 'en-US', etc.) that is also available in the list of available locales defined by your application.
 
-It tries the following sources, in order, until it found one suitable option:
+It tries the following sources, in order, until it found a suitable option:
 
 - A `request` attribute named `'locale'`
 - A `'locale'` parameter in the URL. Eg: `http://example.com/
@@ -33,7 +33,7 @@ Forcing a locale and/or timezone
 
 Because the locale and timezone are looked up first as attributes of the `request` object, you can use that to inject, on each request, the preferences or your logged users.
 
-In Flask you do it by decorating a function with `before_request`. Other frameworks might have similar methods for doing it.
+In Flask you do it by decorating a function with `before_request`. Other frameworks have similar methods for doing it.
 
 .. sourcecode:: python
 
@@ -48,12 +48,13 @@ In Flask you do it by decorating a function with `before_request`. Other framewo
             if g.user.tzinfo:
                 request.tzinfo = user.tzinfo
 
-You could also read the locale from the URL:
+You could also read the locale from the URL (the path or a subdomain). For example:
 
 .. sourcecode:: python
 
+    bp = Blueprint('my_blueprint', __name__)
     app.register_blueprint(bp, url_prefix='<locale>')
 
-    @app.before_request
+    @bp.before_request
     def set_locale(request, **kwargs):
         request.locale = kwargs.pop('locale', None)
