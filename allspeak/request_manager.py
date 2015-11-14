@@ -3,19 +3,16 @@ from babel import Locale
 from babel.dates import get_timezone
 
 from . import utils
-from .utils import DEFAULT_LOCALE, DEFAULT_TIMEZONE, DEFAULT_DATE_FORMATS
+from .utils import DEFAULT_LOCALE, DEFAULT_TIMEZONE
 
 
 class RequestManager(object):
     """
-    A base class with methods for getting the locale and timezone
-    from the request object.
+    A base class with methods for getting the locale and timezone.
 
-    :param get_request: a callable that returns the current request.
+    :param get_locale: a callable that returns the current locale
 
-    :param get_locale: overwrites the ``get_locale`` method.
-
-    :param get_timezone: overwrites the ``get_timezone`` method.
+    :param get_timezone: a callable that returns the current timezone
 
     :param default_locale: default locale (as a string or as a
         Babel.Locale instance).
@@ -28,15 +25,21 @@ class RequestManager(object):
 
     :param date_formats: update the defaults date formats.
 
-    """
+    :param get_request: a callable that returns the current request.
+        Do not use this, it exist only for backwards compatibility.
 
-    def __init__(self,
-                 get_request=None, get_locale=None, get_timezone=None,
+    """
+    DEFAULT_DATE_FORMATS = {
+        'time': 'medium',
+        'date': 'medium',
+        'datetime': 'medium',
+    }
+
+    def __init__(self, get_locale=None, get_timezone=None,
                  default_locale=DEFAULT_LOCALE,
                  default_timezone=DEFAULT_TIMEZONE,
-                 available_locales=None,
-                 date_formats=None):
-        self._get_request = get_request
+                 available_locales=None, date_formats=None,
+                 get_request=None):
         self._get_locale = get_locale
         self._get_timezone = get_timezone
 
@@ -44,6 +47,10 @@ class RequestManager(object):
         self.set_available(available_locales)
         self.set_date_formats(date_formats)
         self.translations = {}
+
+        # Backwards compatibility
+        self._get_request = get_request
+
 
     def __repr__(self):
         return '{cname}(default_locale={default_locale}, default_timezone={default_timezone})'.format(
@@ -83,38 +90,39 @@ class RequestManager(object):
         self.available_locales = _available
 
     def set_date_formats(self, date_formats):
-        self.date_formats = DEFAULT_DATE_FORMATS.copy()
+        self.date_formats = self.DEFAULT_DATE_FORMATS.copy()
         if date_formats:
             self.date_formats.update(date_formats)
 
     def get_locale(self):
         if self._get_locale:
             return self._get_locale()
-        return self.__get_locale()
+        if self._get_request:
+            return self._deprecated_get_locale_from_request()
+        return self.default_locale
 
     def get_timezone(self):
         if self._get_timezone:
             return self._get_timezone()
-        return self.__get_timezone()
+        if self._get_request:
+            return self._deprecated_get_timezone_from_request()
+        return self.default_timezone
 
-    def __get_locale(self):
-        """Returns the locale that should be used for this request as
-        an instance of :class:`babel.core.Locale`.
-        This returns the default locale if used outside of a request.
-
-        """
-        request = self._get_request and self._get_request()
+    def _deprecated_get_locale_from_request(self):
+        request = self._get_request()
         if not request:
             return self.default_locale
-        return utils.get_request_locale(request, self.available_locales, self.default_locale)
+        return utils.get_request_locale(
+            request,
+            self.available_locales,
+            self.default_locale
+        )
 
-    def __get_timezone(self):
-        """Returns the timezone that should be used for this request as
-        `datetime.tzinfo` instance.  This returns the default timezone if used
-        outside of a request or if no timezone was defined.
-
-        """
-        request = self._get_request and self._get_request()
+    def _deprecated_get_timezone_from_request(self):
+        request = self._get_request()
         if not request:
             return self.default_timezone
-        return utils.get_request_timezone(request, self.default_timezone)
+        return utils.get_request_timezone(
+            request,
+            self.default_timezone
+        )

@@ -11,11 +11,99 @@ LOCALES_FOLDER = 'locales'
 DEFAULT_LOCALE = 'en'
 DEFAULT_TIMEZONE = UTC
 
-DEFAULT_DATE_FORMATS = {
-    'time': 'medium',
-    'date': 'medium',
-    'datetime': 'medium',
-}
+
+def normalize_locale(locale):
+    if not locale:
+        return
+    if isinstance(locale, Locale):
+        return locale
+
+    locale = split_locale(locale)
+
+    if isinstance(locale, (tuple, list)):
+        try:
+            if len(locale) == 1:
+                return Locale(locale[0].lower())
+            else:
+                return Locale(locale[0].lower(), locale[1].upper())
+        except UnknownLocaleError:
+            return None
+    return None
+
+
+def normalize_timezone(tzinfo):
+    if not tzinfo:
+        return
+    if isinstance(tzinfo, datetime.tzinfo):
+        return tzinfo
+    try:
+        return get_timezone(tzinfo)
+    except LookupError:
+        return
+
+
+def split_locale(locale):
+    """Returns a tuple (language, TERRITORY) or just (language, )
+    from a a :class:`babel.core.Locale` instance or a string like `en-US` or
+    `en_US`.
+    """
+    if isinstance(locale, Locale):
+        tloc = [locale.language.lower()]
+        if locale.territory:
+            tloc.append(locale.territory.upper())
+        return tuple(tloc)
+
+    if isinstance(locale, string_types):
+        locale = locale.replace('-', '_').lower().strip()
+        tloc = locale.split('_')
+        if len(tloc) > 1:
+            tloc[-1] = tloc[-1].upper()
+        return tuple(tloc)
+
+    return locale
+
+
+def locale_to_str(locale):
+    return '_'.join(split_locale(locale))
+
+
+def negotiate_locale(preferred, available):
+    """From the available locales, negotiate the most adequate for the
+    client, based on the "accept language" header.
+    """
+    preferred = map(locale_to_str, preferred)
+    available = map(locale_to_str, available)
+    # To ensure a consistent matching, Babel algorithm is used.
+    return Locale.negotiate(preferred, available, sep='_')
+
+
+def flatten(dic):
+    """Flatten a dictionary, separating keys by dots.
+
+    >>>> dic = {
+        'a': 1,
+        'c': {
+            'a': 2,
+            'b': {
+                'x': 5,
+                'y' : 10,
+            }
+        },
+        'd': [1, 2, 3],
+    }
+    >>>> flatten(dic)
+    {'a': 1, 'c.a': 2, 'c.b.x': 5, 'c.b.y': 10, 'd': [1, 2, 3]}
+
+    """
+    def items():
+        for key, value in dic.items():
+            if isinstance(value, dict):
+                for subkey, subvalue in flatten(value).items():
+                    yield str(key) + '.' + str(subkey), subvalue
+            else:
+                yield key, value
+
+    return dict(items())
 
 
 def get_request_locale(request, available_locales, default=None):
@@ -44,25 +132,6 @@ def get_request_locale(request, available_locales, default=None):
     locale = negotiate_locale(preferred, available_locales)
     request.locale = normalize_locale(locale) or default
     return request.locale
-
-
-def normalize_locale(locale):
-    if not locale:
-        return
-    if isinstance(locale, Locale):
-        return locale
-
-    locale = split_locale(locale)
-
-    if isinstance(locale, (tuple, list)):
-        try:
-            if len(locale) == 1:
-                return Locale(locale[0].lower())
-            else:
-                return Locale(locale[0].lower(), locale[1].upper())
-        except UnknownLocaleError:
-            return None
-    return None
 
 
 def get_preferred_locales(request):
@@ -110,16 +179,6 @@ def get_django_preferred_locales(request):
         return [locale_to_str(l[1]) for l in languages]
 
 
-def negotiate_locale(preferred, available):
-    """From the available locales, negotiate the most adequate for the
-    client, based on the "accept language" header.
-    """
-    preferred = map(locale_to_str, preferred)
-    available = map(locale_to_str, available)
-    # To ensure a consistent matching, Babel algorithm is used.
-    return Locale.negotiate(preferred, available, sep='_')
-
-
 def get_request_timezone(request, default=None):
     """Returns the timezone that should be used for this request as a
     `datetime.tzinfo` instance.
@@ -138,68 +197,3 @@ def get_request_timezone(request, default=None):
     )
     request.tzinfo = normalize_timezone(tzinfo) or default
     return request.tzinfo
-
-
-def normalize_timezone(tzinfo):
-    if not tzinfo:
-        return
-    if isinstance(tzinfo, datetime.tzinfo):
-        return tzinfo
-    try:
-        return get_timezone(tzinfo)
-    except LookupError:
-        return
-
-
-def split_locale(locale):
-    """Returns a tuple (language, TERRITORY) or just (language, )
-    from a a :class:`babel.core.Locale` instance or a string like `en-US` or
-    `en_US`.
-    """
-    if isinstance(locale, Locale):
-        tloc = [locale.language.lower()]
-        if locale.territory:
-            tloc.append(locale.territory.upper())
-        return tuple(tloc)
-
-    if isinstance(locale, string_types):
-        locale = locale.replace('-', '_').lower().strip()
-        tloc = locale.split('_')
-        if len(tloc) > 1:
-            tloc[-1] = tloc[-1].upper()
-        return tuple(tloc)
-
-    return locale
-
-
-def locale_to_str(locale):
-    return '_'.join(split_locale(locale))
-
-
-def flatten(dic):
-    """Flatten a dictionary, separating keys by dots.
-
-    >>>> dic = {
-        'a': 1,
-        'c': {
-            'a': 2,
-            'b': {
-                'x': 5,
-                'y' : 10,
-            }
-        },
-        'd': [1, 2, 3],
-    }
-    >>>> flatten(dic)
-    {'a': 1, 'c.a': 2, 'c.b.x': 5, 'c.b.y': 10, 'd': [1, 2, 3]}
-
-    """
-    def items():
-        for key, value in dic.items():
-            if isinstance(value, dict):
-                for subkey, subvalue in flatten(value).items():
-                    yield str(key) + '.' + str(subkey), subvalue
-            else:
-                yield key, value
-
-    return dict(items())

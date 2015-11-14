@@ -39,6 +39,22 @@ def test_get_locale_default():
     assert rm.get_locale() == locale
 
 
+def test_custom_get_locale():
+    locale = Locale('es', 'PE')
+    default = Locale('en')
+    available_locales = ['en', 'es_PE']
+    rm = RequestManager(
+        get_locale=lambda: locale, default_locale=default,
+        available_locales=available_locales)
+    assert rm.get_locale() == locale
+
+
+def test_get_timezone_default():
+    tzinfo = get_timezone('America/Lima')
+    rm = RequestManager(default_timezone=tzinfo)
+    assert rm.get_timezone() == tzinfo
+
+
 def test_get_locale_from_request():
     locale = Locale('es', 'PE')
     default = Locale('en')
@@ -70,22 +86,6 @@ def test_get_locale_from_request_unavailable():
         get_request=get_request, default_locale=default,
         available_locales=available_locales)
     assert rm.get_locale() == default
-
-
-def test_custom_get_locale():
-    locale = Locale('es', 'PE')
-    default = Locale('en')
-    available_locales = ['en', 'es_PE']
-    rm = RequestManager(
-        get_locale=lambda: locale, default_locale=default,
-        available_locales=available_locales)
-    assert rm.get_locale() == locale
-
-
-def test_get_timezone_default():
-    tzinfo = get_timezone('America/Lima')
-    rm = RequestManager(default_timezone=tzinfo)
-    assert rm.get_timezone() == tzinfo
 
 
 def test_get_timezone_from_request():
