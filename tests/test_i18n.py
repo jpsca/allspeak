@@ -101,10 +101,10 @@ def test_key_lookup():
     assert i18n.key_lookup(locale, 'apple') == expected
 
     # Key not found
-    assert i18n.key_lookup(locale, 'this.is.wrong') == None
+    assert i18n.key_lookup(locale, 'this.is.wrong') is None
 
     # Language not found
-    assert i18n.key_lookup(Locale('fr'), 'greeting') == None
+    assert i18n.key_lookup(Locale('fr'), 'greeting') is None
 
 
 def test_translate():

@@ -88,7 +88,7 @@ def test_normalize_locale():
 def test_normalize_timezone():
     assert utils.normalize_timezone(timezone('America/Lima')) == timezone('America/Lima')
     assert utils.normalize_timezone('America/Lima') == timezone('America/Lima')
-    assert utils.normalize_timezone('Mars') == None
+    assert utils.normalize_timezone('Mars') is None
 
 
 def test_locale_to_str():
@@ -131,10 +131,10 @@ def test_get_request_timezone():
     assert utils.get_request_timezone(request) == timezone('America/Lima')
 
     request.tzinfo = None
-    assert utils.get_request_timezone(request) == None
+    assert utils.get_request_timezone(request) is None
 
     request.tzinfo = 'Mars'
-    assert utils.get_request_timezone(request) == None
+    assert utils.get_request_timezone(request) is None
 
     request.tzinfo = 'Mars'
     assert (
@@ -165,7 +165,7 @@ def test_get_request_locale():
     assert utils.get_request_locale(request, ['es']) == Locale('es')
 
     request.locale = ('es', )
-    assert utils.get_request_locale(request, []) == None
+    assert utils.get_request_locale(request, []) is None
 
     request.locale = ('en', 'US')
     assert utils.get_request_locale(request, ['en-US']) == Locale('en', 'US')
@@ -174,10 +174,10 @@ def test_get_request_locale():
     assert utils.get_request_locale(request, ['En-Us']) == Locale('en', 'US')
 
     request.locale = None
-    assert utils.get_request_locale(request, ['es']) == None
+    assert utils.get_request_locale(request, ['es']) is None
 
     request.locale = 'klingon'
-    assert utils.get_request_locale(request, ['es']) == None
+    assert utils.get_request_locale(request, ['es']) is None
 
     request.locale = 'klingon'
     assert (

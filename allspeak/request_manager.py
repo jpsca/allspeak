@@ -51,7 +51,6 @@ class RequestManager(object):
         # Backwards compatibility
         self._get_request = get_request
 
-
     def __repr__(self):
         return '{cname}(default_locale={default_locale}, default_timezone={default_timezone})'.format(
             cname=self.__class__.__name__,
