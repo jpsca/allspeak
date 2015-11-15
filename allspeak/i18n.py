@@ -24,19 +24,14 @@ class I18n(RequestManager):
     :param markup: overwrite the function used by `translate` to flags HTML
         code as 'safe'. `markupsafe.Markup` is used by default.
 
-    :param available_locales: list of available locales (as ISO 639-1
-        language codes). You don't *have* to provide a list, by
-        default this will be the detected available languages in the files
-        from ``folderpath``.
-
     """
 
     def __init__(self, folderpath=utils.LOCALES_FOLDER, markup=Markup, **kwargs):
         self.reader = Reader(folderpath)
         self.markup = markup
         self.load_translations()
-        kwargs['available_locales'] = kwargs.get('available_locales') or self.translations.keys()
         super(I18n, self).__init__(**kwargs)
+        self._set_available_locales(self.translations.keys())
 
     def __repr__(self):
         return '{cname}()'.format(
@@ -157,6 +152,39 @@ class I18n(RequestManager):
 
         return LazyWrapper
 
+    def _set_available_locales(self, available_locales):
+        _available = []
+        for locale in available_locales or [self.default_locale]:
+            lparts = utils.split_locale(locale)
+
+            lp = '_'.join(lparts)
+            if lp not in _available:
+                _available.append(lp)
+
+            if len(lparts) > 1:
+                if lparts[0] not in _available:
+                    _available.append(lparts[0])
+        self.available_locales = _available
+
+    def negotiate_locale(self, preferred, available=None):
+        """From the available locales, negotiate the most adequate for the
+        client, based on the "accept language" header.
+
+        :param preferred: list of the user's preferred locales
+            (as ISO 639-1 language codes or as Babel.Locale instances).
+
+        :param available: optional list of available locales
+            (as ISO 639-1 language codes or as Babel.Locale instances).
+            If provided, overwrites the list of detected locales from
+            the files in ``folderpath``.
+
+        """
+        available = available or self.available_locales or []
+        preferred = map(utils.locale_to_str, preferred)
+        available = map(utils.locale_to_str, available)
+        # To ensure a consistent matching, Babel algorithm is used.
+        return Locale.negotiate(preferred, available, sep='_')
+
     def test_for_incomplete_locales(self, *locales):
         """Check a list of locales for keys that are defined in one but not in
         the other.
@@ -189,7 +217,6 @@ class I18n(RequestManager):
                 missing_keys[key] = missing
 
         return missing_keys
-
 
 
 def pluralize(dic, count, locale=utils.DEFAULT_LOCALE):

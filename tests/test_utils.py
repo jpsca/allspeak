@@ -8,28 +8,6 @@ from pytz import timezone
 from .conftest import get_test_request
 
 
-def test_content_negotiation(make_req):
-    available_locales = ['en', 'es', 'es-PE']
-
-    preferred = ['fr', 'es', 'pt']
-    assert utils.negotiate_locale(preferred, available_locales) == Locale('es')
-
-    preferred = ['fr', 'en-US', 'pt']
-    assert utils.negotiate_locale(preferred, available_locales) == Locale('en')
-
-    preferred = ['fr', 'es-PE', 'pt']
-    assert utils.negotiate_locale(preferred, available_locales) == Locale('es', 'PE')
-
-    preferred = ['fr', 'es-PE', 'pt']
-    assert utils.negotiate_locale(preferred, ['ru']) is None
-
-    preferred = ['martian', 'venus', 'pt']
-    assert utils.negotiate_locale(preferred, ['klingon']) is None
-
-    preferred = ['fr', 'es-PE', 'pt']
-    assert utils.negotiate_locale(preferred, []) is None
-
-
 def test_split_locale():
     assert utils.split_locale('en-US') == ('en', 'US')
     assert utils.split_locale('En_us') == ('en', 'US')
@@ -76,7 +54,7 @@ def test_flatten():
             'a': 2,
             'b': {
                 'x': 5,
-                'y' : 10,
+                'y': 10,
             }
         },
         'd': [1, 2, 3],

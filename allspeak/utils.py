@@ -10,7 +10,6 @@ __all__ = [
     'LOCALES_FOLDER', 'DEFAULT_LOCALE', 'DEFAULT_TIMEZONE',
     'normalize_locale', 'normalize_timezone',
     'split_locale', 'locale_to_str',
-    'negotiate_locale',
 ]
 
 LOCALES_FOLDER = 'locales'
@@ -72,16 +71,6 @@ def split_locale(locale):
 
 def locale_to_str(locale):
     return '_'.join(split_locale(locale))
-
-
-def negotiate_locale(preferred, available):
-    """From the available locales, negotiate the most adequate for the
-    client, based on the "accept language" header.
-    """
-    preferred = map(locale_to_str, preferred)
-    available = map(locale_to_str, available)
-    # To ensure a consistent matching, Babel algorithm is used.
-    return Locale.negotiate(preferred, available, sep='_')
 
 
 def _flatten(dic):

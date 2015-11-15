@@ -21,11 +21,6 @@ class Allspeak(I18n, L10n):
     :param markup: overwrite the function used by `translate` to flags HTML
         code as 'safe'. `markupsafe.Markup` is used by default.
 
-    :param available_locales: list of available locales (as ISO 639-1
-        language codes). You don't *have* to provide a list, by
-        default this will be the detected available languages in the files
-        from ``folderpath``.
-
     :param date_formats: update the defaults date formats.
 
     """

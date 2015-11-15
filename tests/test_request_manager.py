@@ -19,27 +19,13 @@ def test_set_defaults():
     assert rm.default_timezone == get_timezone('America/Lima')
 
 
-def test_set_available():
-    rm = RequestManager(default_locale='es')
-    assert rm.available_locales == ['es']
-
-    rm = RequestManager(default_locale='es_pe')
-    assert rm.available_locales == ['es_PE', 'es']
-
-    rm = RequestManager(default_locale='es_PE', available_locales=[])
-    assert rm.available_locales == ['es_PE', 'es']
-
-    rm = RequestManager(default_locale='es_PE', available_locales=['en-US'])
-    assert rm.available_locales == ['en_US', 'en']
-
-
 def test_get_locale_default():
     locale = Locale('es')
     rm = RequestManager(default_locale=locale)
     assert rm.get_locale() == locale
 
 
-def test_custom_get_locale():
+def test_get_locale():
     locale = Locale('es', 'PE')
     default = Locale('en')
     available_locales = ['en', 'es_PE']
@@ -177,7 +163,7 @@ def test_get_timezone_from_request_invalid():
     assert rm.get_timezone() == default
 
 
-def test_custom_get_timezone():
+def test_get_timezone():
     tzinfo = get_timezone('America/Lima')
     rm = RequestManager(get_timezone=lambda: tzinfo, default_timezone=UTC)
     assert rm.get_timezone() == tzinfo

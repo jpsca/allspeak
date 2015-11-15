@@ -27,17 +27,6 @@ def test_init_i18n_default_locale():
     assert i18n.get_locale() == locale
 
 
-def test_get_available_locales():
-    i18n = I18n(LOCALES_TEST)
-    assert sorted(i18n.available_locales) == sorted(['en', 'es_PE', 'es'])
-
-
-def test_overwrite_available_locales():
-    available_locales = ['fr', 'es']
-    i18n = I18n(LOCALES_TEST, available_locales=available_locales)
-    assert sorted(i18n.available_locales) == sorted(available_locales)
-
-
 def test_init_i18n_locales():
     i18n = I18n(LOCALES_TEST)
     assert i18n.reader.folderpath == LOCALES_TEST
@@ -190,3 +179,32 @@ def test_for_incomplete_locales():
 
     expected = {}
     assert i18n.test_for_incomplete_locales('es', 'pt') == expected
+
+
+def test_content_negotiation(make_req):
+    i18n = I18n(LOCALES_TEST)
+    available_locales = ['en', 'es', 'es-PE']
+
+    preferred = ['fr', 'es', 'pt']
+    i18n._set_available_locales(available_locales)
+    assert i18n.negotiate_locale(preferred) == Locale('es')
+
+    preferred = ['fr', 'en-US', 'pt']
+    i18n._set_available_locales(available_locales)
+    assert i18n.negotiate_locale(preferred) == Locale('en')
+
+    preferred = ['fr', 'es-PE', 'pt']
+    i18n._set_available_locales(available_locales)
+    assert i18n.negotiate_locale(preferred) == Locale('es', 'PE')
+
+    preferred = ['fr', 'es-PE', 'pt']
+    i18n._set_available_locales(['ru'])
+    assert i18n.negotiate_locale(preferred) is None
+
+    preferred = ['martian', 'venus', 'pt']
+    i18n._set_available_locales(['klingon'])
+    assert i18n.negotiate_locale(preferred) is None
+
+    preferred = ['fr', 'es-PE', 'pt']
+    i18n._set_available_locales([])
+    assert i18n.negotiate_locale(preferred) is None

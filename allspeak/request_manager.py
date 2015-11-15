@@ -26,11 +26,6 @@ class RequestManager(object):
     :param default_timezone: default timezone (as a string or as a
         `datetime.tzinfo` instance).
 
-    :param available_locales: list of available locales (as ISO 639-1
-        language codes). You don't *have* to provide a list, by
-        default this will be the detected available languages in the files
-        from ``folderpath``.
-
     :param date_formats: update the defaults date formats.
 
     :param get_request: a callable that returns the current request.
@@ -46,18 +41,18 @@ class RequestManager(object):
     def __init__(self, get_locale=None, get_timezone=None,
                  default_locale=DEFAULT_LOCALE,
                  default_timezone=DEFAULT_TIMEZONE,
-                 available_locales=None, date_formats=None,
-                 get_request=None):
+                 date_formats=None, get_request=None,
+                 available_locales=None):
         self._get_locale = get_locale
         self._get_timezone = get_timezone
 
         self.set_defaults(default_locale, default_timezone)
-        self.set_available(available_locales)
         self.set_date_formats(date_formats)
         self.translations = {}
 
-        # Backwards compatibility
+        # Deprecated
         self._get_request = get_request
+        self.available_locales = available_locales
 
     def __repr__(self):
         return '{cname}(default_locale={default_locale}, default_timezone={default_timezone})'.format(
@@ -80,21 +75,6 @@ class RequestManager(object):
             utils.normalize_timezone(default_timezone) or
             get_timezone(DEFAULT_TIMEZONE)
         )
-
-    def set_available(self, available_locales):
-        _available = []
-        for locale in available_locales or [self.default_locale]:
-            lparts = utils.split_locale(locale)
-
-            lp = '_'.join(lparts)
-            if lp not in _available:
-                _available.append(lp)
-
-            if len(lparts) > 1:
-                if lparts[0] not in _available:
-                    _available.append(lparts[0])
-
-        self.available_locales = _available
 
     def set_date_formats(self, date_formats):
         self.date_formats = self.DEFAULT_DATE_FORMATS.copy()
@@ -135,7 +115,7 @@ class RequestManager(object):
         if not request:
             return self.default_locale
         if not self.available_locales:
-            return None
+            return self.default_locale
         locale = (
             getattr(request, 'locale', None) or
             getattr(request, 'args', getattr(request, 'GET', {})).get('locale')
@@ -150,8 +130,11 @@ class RequestManager(object):
                 []
             )
 
-        locale = utils.negotiate_locale(preferred, self.available_locales)
-        request.locale = utils.normalize_locale(locale) or self.default_locale
+        preferred = map(utils.locale_to_str, preferred)
+        available = map(utils.locale_to_str, self.available_locales)
+        # To ensure a consistent matching, Babel algorithm is used.
+        locale = Locale.negotiate(preferred, available, sep='_')
+        request.locale = locale or self.default_locale
         return request.locale
 
     def _deprecated_get_timezone_from_request(self):
