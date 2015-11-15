@@ -12,17 +12,16 @@ from .request_manager import RequestManager
 class L10n(RequestManager):
     """Localization functions.
 
-    :param get_request: a callable that returns the current request.
+    :param get_locale: a callable that returns the current locale
+
+    :param get_timezone: a callable that returns the current timezone
 
     :param default_locale: default locale (as a string or as a
-        Babel.Locale instance).
+        Babel.Locale instance). This value will be accepted
+        without checking if it's available.
 
     :param default_timezone: default timezone (as a string or as a
         `datetime.tzinfo` instance).
-
-    :param available_locales: list of available locales (as ISO 639-1
-        language codes). You don't *have* to provide a list, by
-        default this will be the default_locale.
 
     :param date_formats: update the defaults date formats.
 

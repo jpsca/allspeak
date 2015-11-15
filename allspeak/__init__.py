@@ -31,15 +31,15 @@ What's in a name?
 """
 # import os
 # Workaround for a possible (?) OSX and/or Windows bug.
-# if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
+# if os.environ.get('LC_CTYPE', '').lower() in ('utf-8', 'c'):
 #     os.environ['LC_CTYPE'] = 'en_US.utf-8'
 
 from .allspeak import Allspeak  # noqa
-from .i18n import I18n  # noqa
+from .i18n import I18n, pluralize  # noqa
 from .l10n import L10n  # noqa
 from .reader import Reader  # noqa
 from .request_manager import RequestManager  # noqa
-from .plurals import pluralize  # noqa
 from .utils import *  # noqa
+from .integrations import *  # noqa
 
-__version__ = '0.8'
+__version__ = '0.9.0'

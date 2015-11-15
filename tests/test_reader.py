@@ -31,13 +31,13 @@ def test_extract_locales():
         ('es_PE', {'foo-es': u'bar'}),
         ('en', {'foo-en': u'bar'}),
     ])
-    assert expected == sorted(reader.extract_locales(data))
+    assert expected == sorted(reader._extract_locales(data))
 
 
 def test_load_file():
     reader = Reader()
     filepath = join(LOCALES_TEST, 'en.yml')
-    locales = reader.load_file(filepath)
+    locales = reader._load_file(filepath)
     locale, data = locales[0]
     assert locale == 'en'
     assert data['greeting'] == u'Hello World!'
@@ -46,7 +46,7 @@ def test_load_file():
 def test_load_file_multilang():
     reader = Reader()
     filepath = join(LOCALES_TEST, 'multilang.yml')
-    locales = reader.load_file(filepath)
+    locales = reader._load_file(filepath)
     locales = sorted(locales)
 
     locale, data = locales[0]

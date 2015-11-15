@@ -56,14 +56,87 @@ def test_get_timezone_default():
 
 
 def test_get_locale_from_request():
-    locale = Locale('es', 'PE')
-    default = Locale('en')
-    get_request = make_get_request(locale=locale)
-    available_locales = ['en', 'es_PE']
+    default = Locale('ru')
+
+    get_request = make_get_request(locale='es')
     rm = RequestManager(
-        get_request=get_request, default_locale=default,
-        available_locales=available_locales)
-    assert rm.get_locale() == locale
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['es']
+    )
+    assert rm.get_locale() == Locale('es')
+
+    get_request = make_get_request(locale='en-US')
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['en-US']
+    )
+    assert rm.get_locale() == Locale('en', 'US')
+
+    get_request = make_get_request(locale='en_US')
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['en_US']
+    )
+    assert rm.get_locale() == Locale('en', 'US')
+
+    get_request = make_get_request(locale=Locale('en', 'US'))
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['en-US']
+    )
+    assert rm.get_locale() == Locale('en', 'US')
+
+    get_request = make_get_request(locale=('es', ))
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['es']
+    )
+    assert rm.get_locale() == Locale('es')
+
+    get_request = make_get_request(locale=('es', ))
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=[]
+    )
+    assert rm.get_locale() == default
+
+    get_request = make_get_request(locale=('en', 'US'))
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['en-US']
+    )
+    assert rm.get_locale() == Locale('en', 'US')
+
+    get_request = make_get_request(locale='En-Us')
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['En-Us']
+    )
+    assert rm.get_locale() == Locale('en', 'US')
+
+    get_request = make_get_request(locale=None)
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['es']
+    )
+    assert rm.get_locale() == default
+
+    get_request = make_get_request(locale='klingon')
+    rm = RequestManager(
+        get_request=get_request,
+        default_locale=default,
+        available_locales=['es']
+    )
+    assert rm.get_locale() == default
 
 
 def test_get_locale_from_request_invalid():

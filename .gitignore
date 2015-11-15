@@ -12,6 +12,7 @@
 *.py[co]
 *.sublime-*
 .idea
+.cache*
 
 ## Packages
 env

@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import print_function
 
-from allspeak.plurals import pluralize
+from allspeak import pluralize
 from babel import Locale
 
 

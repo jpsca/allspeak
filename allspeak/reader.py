@@ -23,7 +23,7 @@ class Reader(object):
 
     """
     def __init__(self, folderpath=LOCALES_FOLDER):
-        self.folderpath = self.process_folderpath(folderpath)
+        self.folderpath = self._process_folderpath(folderpath)
         self._set_loaders()
 
     def __repr__(self):
@@ -36,7 +36,7 @@ class Reader(object):
         self.loaders_ext = []
         self.register_loader('yml', get_yaml_data)
 
-    def process_folderpath(self, folderpath):
+    def _process_folderpath(self, folderpath):
         folderpath = normpath(abspath(realpath(folderpath)))
         if not isdir(folderpath):
             folderpath = dirname(folderpath)
@@ -60,7 +60,7 @@ class Reader(object):
         assert loader, "Don't known how to read `*.{ext}` files".format(ext=ext)
         return loader
 
-    def extract_locales(self, data):
+    def _extract_locales(self, data):
         """Parse the translation data and return tuples with the first-level
         keys with the locale and it's children (the translations).
         """
@@ -72,19 +72,19 @@ class Reader(object):
             for locale, trans in data.items()
         ]
 
-    def load_file(self, filepath):
+    def _load_file(self, filepath):
         """Load and parse the locale file from filepath.
         `filepath` should be an absolute path.
         """
         loader = self.get_loader(filepath)
         data = loader(filepath)
-        return self.extract_locales(data)
+        return self._extract_locales(data)
 
-    def update_translations(self, translations, filepath):
+    def _update_translations(self, translations, filepath):
         """Update the `translations` dictionary with the translation data
         extracted from the file in `filepath`.
         """
-        data = self.load_file(filepath)
+        data = self._load_file(filepath)
         for locale, trans in data:
             translations.setdefault(locale, {})
             translations[locale].update(trans)
@@ -98,12 +98,13 @@ class Reader(object):
         because only them have a registered loader.
 
         :param folderpath: overwrite the stored locales folder
+
         :param locales: does nothing, but might be useful to implement
             load-on-demand in your own subclass.
 
         """
         if folderpath:
-            folderpath = self.process_folderpath(folderpath)
+            folderpath = self._process_folderpath(folderpath)
         else:
             folderpath = self.folderpath
 
@@ -115,6 +116,6 @@ class Reader(object):
                     if filename.startswith('.'):
                         continue
                     filepath = join(root, filename)
-                    self.update_translations(translations, filepath)
+                    self._update_translations(translations, filepath)
 
         return translations

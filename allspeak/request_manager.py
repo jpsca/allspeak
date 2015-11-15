@@ -4,6 +4,11 @@ from babel.dates import get_timezone
 
 from . import utils
 from .utils import DEFAULT_LOCALE, DEFAULT_TIMEZONE
+from .integrations import (
+    get_werkzeug_preferred_locales,
+    get_webob_preferred_locales,
+    get_django_preferred_locales,
+)
 
 
 class RequestManager(object):
@@ -15,13 +20,16 @@ class RequestManager(object):
     :param get_timezone: a callable that returns the current timezone
 
     :param default_locale: default locale (as a string or as a
-        Babel.Locale instance).
+        Babel.Locale instance). This value will be accepted
+        without checking if it's available.
 
     :param default_timezone: default timezone (as a string or as a
         `datetime.tzinfo` instance).
 
-    :param available_locales: list of available locales
-        (as ISO 639-1 language codes).
+    :param available_locales: list of available locales (as ISO 639-1
+        language codes). You don't *have* to provide a list, by
+        default this will be the detected available languages in the files
+        from ``folderpath``.
 
     :param date_formats: update the defaults date formats.
 
@@ -96,32 +104,73 @@ class RequestManager(object):
     def get_locale(self):
         if self._get_locale:
             return self._get_locale()
+        # deprecated
         if self._get_request:
             return self._deprecated_get_locale_from_request()
+        #
         return self.default_locale
 
     def get_timezone(self):
         if self._get_timezone:
             return self._get_timezone()
+        # deprecated
         if self._get_request:
             return self._deprecated_get_timezone_from_request()
+        #
         return self.default_timezone
 
     def _deprecated_get_locale_from_request(self):
+        """Set the locale that should be used for this request as a
+        `babel.Locale` instance.
+
+        Tries the following in order:
+
+        - an request attribute called `'locale'`
+        - a GET argument called `'locale'`
+        - the prefered
+        - the default locale
+
+        """
         request = self._get_request()
         if not request:
             return self.default_locale
-        return utils.get_request_locale(
-            request,
-            self.available_locales,
-            self.default_locale
+        if not self.available_locales:
+            return None
+        locale = (
+            getattr(request, 'locale', None) or
+            getattr(request, 'args', getattr(request, 'GET', {})).get('locale')
         )
+        if locale:
+            preferred = [locale]
+        else:
+            preferred = (
+                get_werkzeug_preferred_locales(request) or
+                get_webob_preferred_locales(request) or
+                get_django_preferred_locales(request) or
+                []
+            )
+
+        locale = utils.negotiate_locale(preferred, self.available_locales)
+        request.locale = utils.normalize_locale(locale) or self.default_locale
+        return request.locale
 
     def _deprecated_get_timezone_from_request(self):
+        """Set the timezone that should be used for this request as a
+        `datetime.tzinfo` instance.
+
+        Tries the following in order:
+
+        - an attribute called `'tzinfo'`
+        - a GET argument called `'tzinfo'`
+        - the provided default timezone
+        """
         request = self._get_request()
         if not request:
             return self.default_timezone
-        return utils.get_request_timezone(
-            request,
-            self.default_timezone
+        tzinfo = (
+            getattr(request, 'tzinfo', None) or
+            getattr(request, 'args', getattr(
+                    request, 'GET', {})).get('tzinfo')
         )
+        request.tzinfo = utils.normalize_timezone(tzinfo) or self.default_timezone
+        return request.tzinfo

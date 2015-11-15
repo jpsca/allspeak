@@ -1,12 +1,11 @@
 # coding=utf-8
+from babel import Locale
 from markupsafe import Markup
 
 from . import utils
 from ._compat import string_types
 from .reader import Reader
 from .request_manager import RequestManager
-from .utils import locale_to_str, flatten
-from .plurals import pluralize
 
 
 class I18n(RequestManager):
@@ -16,23 +15,20 @@ class I18n(RequestManager):
 
     :param folderpath: path that will be searched for the translations.
 
-    :param markup: overwrite the function used by `translate` to flags HTML
-        code as 'safe'. `markupsafe.Markup` is used by default.
-
-    :param get_request: a callable that returns the current request.
+    :param get_locale: a callable that returns the current locale
 
     :param default_locale: default locale (as a string or as a
-        Babel.Locale instance).
+        Babel.Locale instance). This value will be accepted
+        without checking if it's available.
 
-    :param default_timezone: default timezone (as a string or as a
-        `datetime.tzinfo` instance).
+    :param markup: overwrite the function used by `translate` to flags HTML
+        code as 'safe'. `markupsafe.Markup` is used by default.
 
     :param available_locales: list of available locales (as ISO 639-1
         language codes). You don't *have* to provide a list, by
         default this will be the detected available languages in the files
         from ``folderpath``.
 
-    :param date_formats: update the defaults date formats.
     """
 
     def __init__(self, folderpath=utils.LOCALES_FOLDER, markup=Markup, **kwargs):
@@ -57,7 +53,7 @@ class I18n(RequestManager):
         :param locale: must be a :class:`babel.core.Locale` instance or a
             string.
         """
-        strlocale = locale_to_str(locale)
+        strlocale = utils.locale_to_str(locale)
         if not self.translations or strlocale not in self.translations:
             self.load_translations(locale)
 
@@ -176,12 +172,12 @@ class I18n(RequestManager):
             self.load_translations(*locales)
         if not locales:
             locales = self.translations.keys()
-        locales = [locale_to_str(locale) for locale in locales]
+        locales = [utils.locale_to_str(locale) for locale in locales]
 
         all_keys = []
         keys = {}
         for strlocale in locales:
-            trans_keys = flatten(self.translations.get(strlocale)).keys()
+            trans_keys = utils._flatten(self.translations.get(strlocale)).keys()
             keys[strlocale] = set(trans_keys)
             all_keys.extend(trans_keys)
 
@@ -193,3 +189,83 @@ class I18n(RequestManager):
                 missing_keys[key] = missing
 
         return missing_keys
+
+
+
+def pluralize(dic, count, locale=utils.DEFAULT_LOCALE):
+    """Takes a dictionary and a number and return the value whose key in
+    the dictionary is either
+
+        a. that number, or
+        b. the textual representation of that number according to the `CLDR
+           rules <cldr_rules>`_ for that locale, Depending of the language, this can be:
+           "zero", "one", "two", "few", "many" or "other".
+
+    ..  rules: http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html
+
+    As a deviation of the standard:
+
+    - If ``count`` is 0, a `'zero'` is tried
+    - If the textual representation is `'other'` but that key doesn't exists, a
+      `'many'` key is tried instead.
+
+    Finally, if none of these exits, an empty string is returned.
+
+    Examples:
+
+    >>> dic = {
+            0: u'No apples',
+            1: u'One apple',
+            3: u'Few apples',
+            'many': u'{count} apples',
+        }
+    >>> pluralize(dic, 0)
+    'No apples'
+    >>> pluralize(dic, 1)
+    'One apple'
+    >>> pluralize(dic, 3)
+    'Few apples'
+    >>> pluralize(dic, 10)
+    '{count} apples'
+
+    >>> dic = {
+            'zero': u'No apples whatsoever',
+            'one': u'One apple',
+            'other': u'{count} apples',
+        }
+    >>> pluralize(dic, 0)
+    u'No apples whatsoever'
+    >>> pluralize(dic, 1)
+    'One apple'
+    >>> pluralize(dic, 2)
+    '{count} apples'
+    >>> pluralize(dic, 10)
+    '{count} apples'
+
+    >>> pluralize({0: 'off', 'many': 'on'}, 3)
+    'on'
+    >>> pluralize({0: 'off', 'other': 'on'}, 0)
+    'off'
+    >>> pluralize({0: 'off', 'other': 'on'}, 456)
+    'on'
+    >>> pluralize({}, 3)
+
+
+    Note that this function **does not** interpolate the string, just returns
+    the right one for the value of ``count``.
+    """
+    count = int(count or 0)
+    scount = str(count).strip()
+    plural = dic.get(count, dic.get(scount))
+    if plural is not None:
+        return plural
+
+    if count == 0:
+        plural = dic.get('zero')
+        if plural is not None:
+            return plural
+
+    if isinstance(locale, string_types):
+        locale = Locale(locale)
+    literal = locale.plural_form(count)
+    return dic.get(literal, dic.get('many', u''))
