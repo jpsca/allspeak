@@ -7,6 +7,7 @@ from allspeak import Reader
 
 
 LOCALES_TEST = abspath(join(dirname(__file__), u'locales'))
+LOCALES_TEST2 = LOCALES_TEST + u'2'
 
 
 def test_reader_repr():
@@ -76,3 +77,11 @@ def test_load_translations_from_other_folder():
     assert data['es']['foo'] == u'bares'
 
     assert data['es']['accented'] == u'Olé niños y niñas'
+
+
+def test_load_translations_from_multiple_sources():
+    reader = Reader([LOCALES_TEST, LOCALES_TEST2])
+    data = reader.load_translations()
+    assert sorted(data.keys()) == ['en', 'es', 'es_PE']
+    assert data['es']['greeting'] == u'¡Bienvenidos!'
+    assert data['es']['foo'] == u'lorem ipsum'

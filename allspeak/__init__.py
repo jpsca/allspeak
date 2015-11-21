@@ -31,6 +31,7 @@ What's in a name?
 """
 # import os
 # Workaround for a possible (?) OSX and/or Windows bug.
+# Can't reproduce
 # if os.environ.get('LC_CTYPE', '').lower() in ('utf-8', 'c'):
 #     os.environ['LC_CTYPE'] = 'en_US.utf-8'
 
@@ -42,4 +43,4 @@ from .request_manager import RequestManager  # noqa
 from .utils import *  # noqa
 from .integrations import *  # noqa
 
-__version__ = '0.9.0'
+__version__ = '0.10.0'

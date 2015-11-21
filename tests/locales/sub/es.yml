@@ -1,6 +1,6 @@
 es:
-  greeting: Hola mundo
-  foo: bares
-  so:
-    much:
-      such: wow
+    greeting: Hola mundo
+    foo: bares
+    so:
+        much:
+            such: wow

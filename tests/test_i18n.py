@@ -11,6 +11,7 @@ from allspeak import I18n
 
 
 LOCALES_TEST = abspath(join(dirname(__file__), u'locales'))
+LOCALES_TEST2 = LOCALES_TEST + u'2'
 
 
 def test_init_i18n():
@@ -29,11 +30,11 @@ def test_init_i18n_default_locale():
 
 def test_init_i18n_locales():
     i18n = I18n(LOCALES_TEST)
-    assert i18n.reader.folderpath == LOCALES_TEST
+    assert i18n.reader.folderpath == [LOCALES_TEST]
 
     folderpath = join(LOCALES_TEST, u'sub')
     i18n = I18n(folderpath)
-    assert i18n.reader.folderpath == folderpath
+    assert i18n.reader.folderpath == [folderpath]
 
 
 def test_load_translations():
@@ -117,6 +118,13 @@ def test_translate_pluralize():
     assert i18n.translate('apple', 0, locale=locale) == u'No apples'
     assert i18n.translate('apple', 1, locale=locale) == u'One apple'
     assert i18n.translate('apple', 10, locale=locale) == u'10 apples'
+
+
+def test_multiple_sources():
+    i18n = I18n([LOCALES_TEST, LOCALES_TEST2], default_locale='es')
+
+    assert i18n.translate('greeting') == u'¡Bienvenidos!'
+    assert i18n.translate('foo') == u'lorem ipsum'
 
 
 def test_lazy_translate():

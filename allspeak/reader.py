@@ -6,7 +6,7 @@ from os.path import join, dirname, realpath, abspath, normpath, isdir, splitext
 
 import yaml
 
-from .utils import LOCALES_FOLDER, split_locale
+from .utils import LOCALES_FOLDER, split_locale, _is_sequence
 
 
 def get_yaml_data(filepath):
@@ -19,7 +19,8 @@ def get_yaml_data(filepath):
 class Reader(object):
     """Functions related to loading and parsing translation files.
 
-    :param folderpath: path that will be searched for the translations.
+    :param folderpath: path or a list of paths (relative or absolute) that will
+    be searched for the translations.
 
     """
     def __init__(self, folderpath=LOCALES_FOLDER):
@@ -37,10 +38,15 @@ class Reader(object):
         self.register_loader('yml', get_yaml_data)
 
     def _process_folderpath(self, folderpath):
-        folderpath = normpath(abspath(realpath(folderpath)))
-        if not isdir(folderpath):
-            folderpath = dirname(folderpath)
-        return folderpath
+        if not _is_sequence(folderpath):
+            folderpath = [folderpath]
+        paths = []
+        for path in folderpath:
+            path = normpath(abspath(realpath(path)))
+            if not isdir(path):
+                path = dirname(path)
+            paths.append(path)
+        return paths
 
     def register_loader(self, ext, func):
         """Register a loader for a file extension.
@@ -97,7 +103,7 @@ class Reader(object):
         Only the files with an extension listed in ``loaders_ext`` are loaded
         because only them have a registered loader.
 
-        :param folderpath: overwrite the stored locales folder
+        :param folderpath: overwrite the stored locales folder or list of folders.
 
         :param locales: does nothing, but might be useful to implement
             load-on-demand in your own subclass.
@@ -109,13 +115,14 @@ class Reader(object):
             folderpath = self.folderpath
 
         translations = {}
-        for root, dirnames, filenames in os.walk(folderpath):
-            for ext in self.loaders_ext:
-                pattern = u'*.{}'.format(ext)
-                for filename in fnmatch.filter(filenames, pattern):
-                    if filename.startswith('.'):
-                        continue
-                    filepath = join(root, filename)
-                    self._update_translations(translations, filepath)
+        for path in folderpath:
+            for root, dirnames, filenames in os.walk(path):
+                for ext in self.loaders_ext:
+                    pattern = u'*.{}'.format(ext)
+                    for filename in fnmatch.filter(filenames, pattern):
+                        if filename.startswith('.'):
+                            continue
+                        filepath = join(root, filename)
+                        self._update_translations(translations, filepath)
 
         return translations
