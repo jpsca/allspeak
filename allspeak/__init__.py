@@ -25,8 +25,10 @@ What's in a name?
     "When Thor speaks with the All-Speak anyone who hears him will hear him
     speak their native language in their hearts" ——(from Thor's wiki page)
 
-:copyright: `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
+
+:copyright: 2012-2015 by `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
 :license: Three clause BSD License, see LICENSE for more details.
+:code: https://github.com/lucuma/allspeak
 
 """
 # import os
