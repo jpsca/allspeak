@@ -1,6 +1,6 @@
-{% import 'locale-'+language+'_t' as t -%}
+{% for lang, t in _.translations.items() -%}
 Documentation.addTranslations({
-    "locale": "es",
+    "locale": "{{ lang }}",
     "plural_expr": "(n != 1)",
     "messages": {
         "permalink_header": "{{ t.permalink_header }}",
@@ -15,3 +15,4 @@ Documentation.addTranslations({
         "": ""
     }
 });
+{%- endfor %}

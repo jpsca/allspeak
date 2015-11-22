@@ -5,8 +5,6 @@ User’s Guide
    :maxdepth: 2
 
    overview
-   requests
-
    tips
 
 

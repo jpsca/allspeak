@@ -116,12 +116,12 @@ var Search = {
   performSearch : function(query) {
     // create the required interface elements
     this.out = $('#search-results');
-    this.title = $('<h2>' + _('searching') + '</h2>').appendTo(this.out);
+    this.title = $('<h2>' + '{{ _('theme.searching') }}' + '</h2>').appendTo(this.out);
     this.dots = $('<span></span>').appendTo(this.title);
     this.status = $('<p style="display: none"></p>').appendTo(this.out);
     this.output = $('<ul class="search"/>').appendTo(this.out);
 
-    $('#search-progress').text(_('preparing_search'));
+    $('#search-progress').text('{{ _('theme.preparing_search') }}');
     this.startPulse();
 
     // index already loaded, the browser was quick!
@@ -278,11 +278,11 @@ var Search = {
       // search finished, update title and status message
       else {
         Search.stopPulse();
-        Search.title.text(_('search_results'));
+        Search.title.text('{{ _('theme.search_results') }}');
         if (!resultCount)
-          Search.status.text(_('search_results_no_results'));
+          Search.status.text('{{ _('theme.search_results_no_results') }}');
         else
-            Search.status.text(_('search_results found %s').replace('%s', resultCount));
+            Search.status.text('{{ _('theme.search_results_x_found') }}'.replace('%s', resultCount));
         Search.status.fadeIn(500);
       }
     }
@@ -334,7 +334,7 @@ var Search = {
               continue;
             }
           }
-          var descr = objname + ', ' + _('search_result_in') + ' ' + title;
+          var descr = objname + ', ' + '{{ _('theme.search_result_in') }}' + ' ' + title;
 
           var anchor = match[3];
           if (anchor === '')

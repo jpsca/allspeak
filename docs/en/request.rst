@@ -11,8 +11,7 @@ On each request, Allspeak tries to guess the user's prefered locale (an ISO 639-
 It tries the following sources, in order, until it found a suitable option:
 
 - A `request` attribute named `'locale'`
-- A `'locale'` parameter in the URL. Eg: `http://example.com/
-foo/?locale=es`.
+- A `'locale'` parameter in the URL. Eg: `http://example.com/foo/?locale=es`.
 - The browser languages, defined in the "accept language" header
 - The default locale
 
@@ -23,8 +22,8 @@ Timezone
 In a similar way, the user's timezone —used to localize dates— is looked up in:
 
 - A `request` attribute named `'tzinfo'`
-- A `'tzinfo'` parameter in the URL. Eg: `http://example.com/
-foo/?tzinfo=America/Lima`.
+- A `'tzinfo'` parameter in the URL.
+	Eg: `http://example.com/foo/?tzinfo=America/Lima`.
 - The default timezone
 
 

@@ -1,4 +1,3 @@
-{% import 'locale-'+language+'_t' as t -%}
 <!DOCTYPE html>
 <html lang="{{ language }}">
 <head>
@@ -8,7 +7,7 @@
   <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
   {%- endblock %}
   <link rel="search" type="application/opensearchdescription+xml"
-    title="{{ _('opensearch_search_in') }}"
+    title="{{ _('theme.opensearch_search_in') }}"
     href="{{ pathto('_static/opensearch.xml', 1) }}"/>
   <link rel="shortcut icon" type="image/x-icon" href="{{ pathto('_static/favicon.ico', 1) }}">
 
@@ -23,7 +22,7 @@
   <link href="{{ pathto('_static/styles/print.css', 1) }}" rel="stylesheet" media="print">
 
   {% if hasdoc('genindex') -%}
-    <link rel="index" title="{{ t.nav_index }}" href="{{ pathto('genindex') }}">
+    <link rel="index" title="{{ _('theme.nav_index') }}" href="{{ pathto('genindex') }}">
   {%- endif %}
   {% if parents -%}
     <link rel="up" title="{{ parents[-1].title|striptags|e }}" href="{{ parents[-1].link|e }}">

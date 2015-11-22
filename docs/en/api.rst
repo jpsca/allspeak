@@ -20,6 +20,8 @@ I18n
 .. autoclass:: I18n
    :members:
 
+.. autofunction:: pluralize
+
 
 L10n
 ----------------------------------------------
@@ -42,16 +44,8 @@ RequestManager
    :members:
 
 
-Utilities
+Integrations
 ----------------------------------------------
-
-.. autofunction:: split_locale
-
-.. autofunction:: normalize_locale
-
-.. autofunction:: normalize_timezone
-
-.. autofunction:: locale_to_str
 
 .. autofunction:: get_werkzeug_preferred_locales
 
@@ -59,12 +53,14 @@ Utilities
 
 .. autofunction:: get_django_preferred_locales
 
-.. autofunction:: get_preferred_locales
 
-.. autofunction:: negotiate_locale
+Utilities
+----------------------------------------------
 
-.. autofunction:: get_request_timezone
+.. autofunction:: normalize_locale
 
-.. autofunction:: get_request_locale
+.. autofunction:: normalize_timezone
 
-.. autofunction:: pluralize
+.. autofunction:: split_locale
+
+.. autofunction:: locale_to_str

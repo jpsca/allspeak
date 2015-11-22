@@ -10,7 +10,8 @@ from .utils import LOCALES_FOLDER, split_locale, _is_sequence
 
 
 def get_yaml_data(filepath):
-    """Parse a yaml locale file"""
+    """Parse a yaml locale file.
+    """
     with io.open(filepath, mode='r', encoding='utf8') as f:
         data = yaml.safe_load(f)
     return data
@@ -20,7 +21,7 @@ class Reader(object):
     """Functions related to loading and parsing translation files.
 
     :param folderpath: path or a list of paths (relative or absolute) that will
-    be searched for the translations.
+        be searched for the translations.
 
     """
     def __init__(self, folderpath=LOCALES_FOLDER):

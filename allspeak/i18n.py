@@ -38,6 +38,13 @@ class I18n(RequestManager):
             cname=self.__class__.__name__,
         )
 
+    def __call__(self, *args, **kwargs):
+        """Calling this instance is a shortcut to calling ``self.translate``.
+        Useful when translating Sphinx documentation, that pickle the environment
+        (a method of an instance isn't pickable, but an instance of a class is).
+        """
+        return self.translate(*args, **kwargs)
+
     def load_translations(self, *locales):
         self.translations = self.reader.load_translations(locales=locales)
 
