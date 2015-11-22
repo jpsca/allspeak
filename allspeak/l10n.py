@@ -26,6 +26,26 @@ class L10n(RequestManager):
     :param date_formats: update the defaults date formats.
 
     """
+    def __init__(self, date_formats=None, **kwargs):
+        self.set_date_formats(date_formats)
+        super(L10n, self).__init__(**kwargs)
+
+    def set_date_formats(self, date_formats):
+        """Update the default date and time formats used by `self.format*`
+        **for all locales** when called without a `format` argument.
+
+        These are the defaults::
+
+            {
+              'time': 'medium',
+              'date': 'medium',
+              'datetime': 'medium',
+            }
+
+        """
+        self.date_formats = self.DEFAULT_DATE_FORMATS.copy()
+        if date_formats:
+            self.date_formats.update(date_formats)
 
     def to_user_timezone(self, datetime, tzinfo=None):
         """Convert a datetime object to the user's timezone.  This

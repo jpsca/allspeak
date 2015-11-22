@@ -26,8 +26,6 @@ class RequestManager(object):
     :param default_timezone: default timezone (as a string or as a
         `datetime.tzinfo` instance).
 
-    :param date_formats: update the defaults date formats.
-
     :param get_request: a callable that returns the current request.
         Do not use this, it exist only for backwards compatibility.
 
@@ -41,13 +39,11 @@ class RequestManager(object):
     def __init__(self, get_locale=None, get_timezone=None,
                  default_locale=DEFAULT_LOCALE,
                  default_timezone=DEFAULT_TIMEZONE,
-                 date_formats=None, get_request=None,
-                 available_locales=None):
+                 get_request=None, available_locales=None):
         self._get_locale = get_locale
         self._get_timezone = get_timezone
 
         self.set_defaults(default_locale, default_timezone)
-        self.set_date_formats(date_formats)
         self.translations = {}
 
         # Deprecated
@@ -75,11 +71,6 @@ class RequestManager(object):
             utils.normalize_timezone(default_timezone) or
             get_timezone(DEFAULT_TIMEZONE)
         )
-
-    def set_date_formats(self, date_formats):
-        self.date_formats = self.DEFAULT_DATE_FORMATS.copy()
-        if date_formats:
-            self.date_formats.update(date_formats)
 
     def get_locale(self):
         if self._get_locale:

@@ -94,13 +94,15 @@ def test_format_date_by_name():
     assert l10n.format_date(d, locale='en') == u'Apr 1, 2007'
 
 
-def test_format_date_by_special_name():
-    date_formats = {'date.medium': '===Y==='}
+def test_set_date_formats():
+    date_formats = {'date': 'short'}
     l10n = L10n(date_formats=date_formats)
 
     d = date(2007, 4, 1)
-    assert l10n.format_date(d, 'short', locale='en') == u'4/1/07'
-    assert l10n.format_date(d, 'medium', locale='en') == u'===2007==='
+    assert l10n.format_date(d, locale='en') == u'4/1/07'
+
+    l10n.set_date_formats({'date': 'full'})
+    assert l10n.format_date(d, locale='en') == u'Sunday, April 1, 2007'
 
 
 def test_format_datetime():
