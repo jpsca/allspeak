@@ -52,7 +52,7 @@ copyright = _('theme.copyright')
 author = u'Juan-Pablo Scaletti'
 description = _('theme.description')
 author_url = 'http://jpscaletti.com'
-github = 'https://github.com/lucuma/allspeak'
+github = 'https://github.com/jpscaletti/allspeak'
 project_url = 'http://allspeak.lucuma.co/'
 analytics_code = 'UA-1495972-21'
 

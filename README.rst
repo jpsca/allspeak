@@ -1,6 +1,6 @@
 
-.. image:: https://travis-ci.org/lucuma/allspeak.svg?branch=master
-   :target: https://travis-ci.org/lucuma/allspeak
+.. image:: https://travis-ci.org/jpscaletti/allspeak.svg?branch=master
+   :target: https://travis-ci.org/jpscaletti/allspeak
    :alt: Build Status
 
 ===========================
@@ -27,9 +27,9 @@ What's in a name?
 Contributing
 ==============================================
 
-#. Check for `open issues <https://github.com/lucuma/Allspeak/issues>`_ or open
+#. Check for `open issues <https://github.com/jpscaletti/Allspeak/issues>`_ or open
    a fresh issue to start a discussion around a feature idea or a bug.
-#. Fork the `Allspeak repository on Github <https://github.com/lucuma/Allspeak>`_
+#. Fork the `Allspeak repository on Github <https://github.com/jpscaletti/Allspeak>`_
    to start making your changes.
 #. Write a test which shows that the bug was fixed or that the feature works
    as expected.
@@ -58,11 +58,11 @@ are touch by the tests::
 
     $  make coverage
 
-Our test suite `runs continuously on Travis CI <https://travis-ci.org/lucuma/Allspeak>`_ with every update.
+Our test suite `runs continuously on Travis CI <https://travis-ci.org/jpscaletti/Allspeak>`_ with every update.
 
 
 -----
 
 :copyright: 2012-2015 by `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
 :license: Three clause BSD License, see LICENSE for more details.
-:code: https://github.com/lucuma/allspeak
+:code: https://github.com/jpscaletti/allspeak

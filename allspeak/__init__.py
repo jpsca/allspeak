@@ -28,7 +28,7 @@ What's in a name?
 
 :copyright: 2012-2015 by `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
 :license: Three clause BSD License, see LICENSE for more details.
-:code: https://github.com/lucuma/allspeak
+:code: https://github.com/jpscaletti/allspeak
 
 """
 # import os
