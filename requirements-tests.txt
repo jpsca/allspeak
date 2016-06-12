@@ -3,7 +3,7 @@
 
 -r requirements.txt
 django
-flake
+flake8
 ipdb
 jinja2
 pytest
