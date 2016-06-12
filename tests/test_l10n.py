@@ -114,6 +114,14 @@ def test_format_datetime():
     assert l10n.format_datetime(dt, dformat, locale='en') == expected
 
 
+def test_format_now():
+    l10n = L10n()
+    now = datetime.utcnow()
+    dformat = "yyyy"
+    expected = str(now.year)
+    assert l10n.format_datetime('now', dformat) == expected
+
+
 def test_format_datetime_tzinfo():
     l10n = L10n()
     dt = datetime(2007, 4, 1, 15, 30, tzinfo=UTC)

@@ -10,6 +10,7 @@ from .request_manager import RequestManager
 
 
 class L10n(RequestManager):
+
     """Localization functions.
 
     :param get_locale: a callable that returns the current locale
@@ -26,6 +27,7 @@ class L10n(RequestManager):
     :param date_formats: update the defaults date formats.
 
     """
+
     def __init__(self, date_formats=None, **kwargs):
         self.set_date_formats(date_formats)
         super(L10n, self).__init__(**kwargs)
@@ -85,6 +87,8 @@ class L10n(RequestManager):
 
     def _date_format(self, formatter, obj, format, rebase,
                      locale=None, tzinfo=None, **extra):
+        if obj == 'now':
+            obj = dt.datetime.utcnow()
         locale = utils.normalize_locale(locale) or self.get_locale()
         extra = {}
         if formatter is not dates.format_date and rebase:

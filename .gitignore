@@ -6,6 +6,7 @@
 *~
 
 ## OS specific files
+__pycache__
 .DS_Store
 *.log
 *.pot
