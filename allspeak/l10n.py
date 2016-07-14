@@ -277,6 +277,7 @@ class L10n(RequestManager):
             `documented by Babel <http://babel.pocoo.org/docs/numbers/#pattern-syntax>`_.
         :param locale: Overwrite the global locale.
 
+        Also see: https://codeascraft.com/2016/04/19/how-etsy-formats-currency/
         """
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_currency(
