@@ -182,7 +182,9 @@ def test_format_currency():
 
     assert (l10n.format_currency(1099.98, 'USD', locale='en_US') ==
             u'$1,099.98')
-    assert (l10n.format_currency(1099.98, 'USD', locale='es_CO') ==
+    assert (l10n.format_currency(1099.98, 'CAD', locale='en_US') ==
+            u'CA$1,099.98')
+    assert (l10n.format_currency(1099.98, 'USD', locale='es_PE') ==
             u'1.099,98\xa0US$')
     assert (l10n.format_currency(1099.98, 'EUR', locale='de_DE') ==
             u'1.099,98\xa0\u20ac')
