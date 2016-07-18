@@ -242,4 +242,4 @@ def test_format():
 
     assert l10n.format(1.2345, locale='en_US') == u'1.234'
 
-    assert l10n.format(None, locale='en_US') is None
+    assert l10n.format(None, locale='en_US') == ''
