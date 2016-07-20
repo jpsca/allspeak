@@ -155,10 +155,27 @@ def test_format_timedelta():
     expected = u'1 month'
     assert l10n.format_timedelta(delta, granularity='month', locale='en_US') == expected
 
-    # dates or datetimes are converted to timedelta from now
-    dt = datetime.utcnow() + timedelta(days=7)
-    expected = u'1 week'
-    assert l10n.format_timedelta(dt, locale='en_US') == expected
+
+def test_format_timedelta_direction_forward():
+    l10n = L10n()
+    delta = datetime.utcnow() + timedelta(days=6)
+
+    expected = u'dentro de una semana'
+    assert l10n.format_timedelta(delta, locale='es_PE', add_direction=True) == expected
+
+    expected = u'dentro de un mes'
+    assert l10n.format_timedelta(delta, granularity='month', locale='es_PE', add_direction=True) == expected
+
+
+def test_format_timedelta_direction_backward():
+    l10n = L10n()
+    delta = datetime.utcnow() - timedelta(days=6)
+
+    expected = u'hace de una semana'
+    assert l10n.format_timedelta(delta, locale='es_PE', add_direction=True) == expected
+
+    expected = u'hace de un mes'
+    assert l10n.format_timedelta(delta, granularity='month', locale='es_PE', add_direction=True) == expected
 
 
 def test_format_number():
