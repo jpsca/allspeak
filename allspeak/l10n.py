@@ -27,6 +27,11 @@ class L10n(RequestManager):
     :param date_formats: update the defaults date formats.
 
     """
+    DEFAULT_DATE_FORMATS = {
+        'time': 'medium',
+        'date': 'medium',
+        'datetime': 'medium',
+    }
 
     def __init__(self, date_formats=None, **kwargs):
         self.set_date_formats(date_formats)

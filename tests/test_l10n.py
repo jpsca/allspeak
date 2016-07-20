@@ -6,8 +6,6 @@ from babel.dates import UTC, get_timezone
 
 from allspeak import L10n
 
-from .conftest import make_get_request
-
 
 def test_init_l10n():
     l10n = L10n()
@@ -26,14 +24,6 @@ def test_to_user_timezone():
     l10n = L10n(default_timezone='America/Lima')
     now = datetime.utcnow().replace(hour=12)
     assert l10n.to_user_timezone(now).hour == now.hour - 5
-
-
-def test_to_user_timezone_from_request():
-    get_request = make_get_request(tzinfo='America/Lima')
-    l10n = L10n(get_request=get_request)
-    now = datetime.utcnow().replace(hour=12)
-    result = l10n.to_user_timezone(now, )
-    assert result.hour == now.hour - 5
 
 
 def test_to_some_timezone():

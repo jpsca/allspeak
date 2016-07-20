@@ -36,21 +36,6 @@ def get_test_request(make_req, path='/', **kwargs):
     return make_req(env, path)
 
 
-def make_get_request(locale='es_PE', tzinfo='America/Lima'):
-    """Returns a fake request generator for testing
-    """
-    _locale = locale
-    _tzinfo = tzinfo
-
-    def get_request():
-        req = get_test_request(make_werkzeug_request)
-        req.locale = _locale
-        req.tzinfo = _tzinfo
-        return req
-
-    return get_request
-
-
 @pytest.fixture(params=['werkzeug', 'webob', 'django'])
 def make_req(request):
     return globals()['make_{0}_request'.format(request.param)]
