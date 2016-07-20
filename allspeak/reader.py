@@ -18,12 +18,14 @@ def get_yaml_data(filepath):
 
 
 class Reader(object):
+
     """Functions related to loading and parsing translation files.
 
     :param folderpath: path or a list of paths (relative or absolute) that will
         be searched for the translations.
 
     """
+
     def __init__(self, folderpath=LOCALES_FOLDER):
         self.folderpath = self._process_folderpath(folderpath)
         self._set_loaders()

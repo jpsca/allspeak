@@ -187,32 +187,3 @@ def test_for_incomplete_locales():
 
     expected = {}
     assert i18n.test_for_incomplete_locales('es', 'pt') == expected
-
-
-def test_content_negotiation(make_req):
-    i18n = I18n(LOCALES_TEST)
-    available_locales = ['en', 'es', 'es-PE']
-
-    preferred = ['fr', 'es', 'pt']
-    i18n._set_available_locales(available_locales)
-    assert i18n.negotiate_locale(preferred) == Locale('es')
-
-    preferred = ['fr', 'en-US', 'pt']
-    i18n._set_available_locales(available_locales)
-    assert i18n.negotiate_locale(preferred) == Locale('en')
-
-    preferred = ['fr', 'es-PE', 'pt']
-    i18n._set_available_locales(available_locales)
-    assert i18n.negotiate_locale(preferred) == Locale('es', 'PE')
-
-    preferred = ['fr', 'es-PE', 'pt']
-    i18n._set_available_locales(['ru'])
-    assert i18n.negotiate_locale(preferred) is None
-
-    preferred = ['martian', 'venus', 'pt']
-    i18n._set_available_locales(['klingon'])
-    assert i18n.negotiate_locale(preferred) is None
-
-    preferred = ['fr', 'es-PE', 'pt']
-    i18n._set_available_locales([])
-    assert i18n.negotiate_locale(preferred) is None

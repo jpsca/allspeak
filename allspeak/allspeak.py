@@ -4,6 +4,7 @@ from .l10n import L10n
 
 
 class Allspeak(I18n, L10n):
+
     """
     :param folderpath: path that will be searched for the translations.
 

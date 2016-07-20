@@ -9,6 +9,7 @@ from .request_manager import RequestManager
 
 
 class I18n(RequestManager):
+
     """Internationalization functions.
 
     Uses the :class:`Reader` class to load and parse the translations files.
@@ -149,7 +150,9 @@ class I18n(RequestManager):
 
     @property
     def lazy_translate(self):
+
         class LazyWrapper(object):
+
             def __init__(self_, *args, **kwargs):
                 self_.args = args
                 self_.kwargs = kwargs
@@ -172,25 +175,6 @@ class I18n(RequestManager):
                 if lparts[0] not in _available:
                     _available.append(lparts[0])
         self.available_locales = _available
-
-    def negotiate_locale(self, preferred, available=None):
-        """From the available locales, negotiate the most adequate for the
-        client, based on the "accept language" header.
-
-        :param preferred: list of the user's preferred locales
-            (as ISO 639-1 language codes or as Babel.Locale instances).
-
-        :param available: optional list of available locales
-            (as ISO 639-1 language codes or as Babel.Locale instances).
-            If provided, overwrites the list of detected locales from
-            the files in ``folderpath``.
-
-        """
-        available = available or self.available_locales or []
-        preferred = map(utils.locale_to_str, preferred)
-        available = map(utils.locale_to_str, available)
-        # To ensure a consistent matching, Babel algorithm is used.
-        return Locale.negotiate(preferred, available, sep='_')
 
     def test_for_incomplete_locales(self, *locales):
         """Check a list of locales for keys that are defined in one but not in
