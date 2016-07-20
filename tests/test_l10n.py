@@ -150,21 +150,21 @@ def test_format_timedelta_direction_forward():
     l10n = L10n()
     delta = datetime.utcnow() + timedelta(days=6)
 
-    expected = u'dentro de una semana'
+    expected = u'dentro de 1 semana'
     assert l10n.format_timedelta(delta, locale='es_PE', add_direction=True) == expected
 
-    expected = u'dentro de un mes'
-    assert l10n.format_timedelta(delta, granularity='month', locale='es_PE', add_direction=True) == expected
+    expected = u'dentro de 1 mes'
+    assert l10n.format_timedelta(delta, granularity='month', locale='es_PE', add_direction=True).lower() == expected
 
 
 def test_format_timedelta_direction_backward():
     l10n = L10n()
     delta = datetime.utcnow() - timedelta(days=6)
 
-    expected = u'hace de una semana'
+    expected = u'hace 1 semana'
     assert l10n.format_timedelta(delta, locale='es_PE', add_direction=True) == expected
 
-    expected = u'hace de un mes'
+    expected = u'hace 1 mes'
     assert l10n.format_timedelta(delta, granularity='month', locale='es_PE', add_direction=True) == expected
 
 

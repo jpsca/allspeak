@@ -245,13 +245,18 @@ class L10n(RequestManager):
             return ''
         locale = utils.normalize_locale(locale) or self.get_locale()
         if isinstance(datetime_or_timedelta, dt.datetime):
-            datetime_or_timedelta = dt.datetime.utcnow() - datetime_or_timedelta
-        return dates.format_timedelta(
+            datetime_or_timedelta = datetime_or_timedelta - dt.datetime.utcnow()
+
+        resp = dates.format_timedelta(
             datetime_or_timedelta,
             granularity=granularity, threshold=threshold,
             add_direction=add_direction, locale=locale,
             **kwargs
         )
+        if add_direction:
+            # Inconsistent among different python versions (titlecased only sometimes)
+            return resp[0].lower() + resp[1:]
+        return resp
 
     def format_number(self, number, locale=None, **kwargs):
         """Return the given number formatted for the locale in the
