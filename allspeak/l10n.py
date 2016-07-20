@@ -111,6 +111,9 @@ class L10n(RequestManager):
         locale = kwargs.pop('locale', None)
         tzinfo = kwargs.pop('tzinfo', None)
 
+        if value in ('', None):
+            return ''
+
         if isinstance(value, dt.date):
             if isinstance(value, dt.datetime):
                 return self.format_datetime(
@@ -238,6 +241,8 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
+        if datetime_or_timedelta in ('', None):
+            return ''
         locale = utils.normalize_locale(locale) or self.get_locale()
         if isinstance(datetime_or_timedelta, dt.datetime):
             datetime_or_timedelta = dt.datetime.utcnow() - datetime_or_timedelta
@@ -256,6 +261,8 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
+        if number in ('', None):
+            return ''
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_number(number, locale=locale, **kwargs)
 
@@ -269,6 +276,8 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
+        if number in ('', None):
+            return ''
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_decimal(number, format=format, locale=locale, **kwargs)
 
@@ -282,7 +291,10 @@ class L10n(RequestManager):
             `documented by Babel <http://babel.pocoo.org/docs/numbers/#pattern-syntax>`_.
         :param locale: Overwrite the global locale.
 
+        Also see: https://codeascraft.com/2016/04/19/how-etsy-formats-currency/
         """
+        if number in ('', None):
+            return ''
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_currency(
             number, currency, format=format, locale=locale, **kwargs)
@@ -297,6 +309,8 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
+        if number in ('', None):
+            return ''
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_percent(number, format=format, locale=locale, **kwargs)
 
@@ -310,5 +324,7 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
+        if number in ('', None):
+            return ''
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_scientific(number, format=format, locale=locale, **kwargs)
