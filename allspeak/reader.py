@@ -4,16 +4,16 @@ import io
 import os
 from os.path import join, dirname, realpath, abspath, normpath, isdir, splitext
 
-import yaml
+import strictyaml
 
 from .utils import LOCALES_FOLDER, split_locale, _is_sequence
 
 
-def get_yaml_data(filepath):
+def get_strict_yaml_data(filepath):
     """Parse a yaml locale file.
     """
     with io.open(filepath, mode='r', encoding='utf8') as f:
-        data = yaml.safe_load(f)
+        data = strictyaml.load(f.read())
     return data
 
 
@@ -38,7 +38,7 @@ class Reader(object):
     def _set_loaders(self):
         self.loaders = {}
         self.loaders_ext = []
-        self.register_loader('yml', get_yaml_data)
+        self.register_loader('yml', get_strict_yaml_data)
 
     def _process_folderpath(self, folderpath):
         if not _is_sequence(folderpath):
