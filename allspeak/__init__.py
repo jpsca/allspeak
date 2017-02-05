@@ -45,4 +45,4 @@ from .request_manager import RequestManager  # noqa
 from .utils import *  # noqa
 from .integrations import *  # noqa
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
