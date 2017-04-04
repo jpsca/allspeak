@@ -72,11 +72,15 @@ class Reader(object):
     def _extract_locales(self, data):
         """Parse the translation data and return tuples with the first-level
         keys with the locale and it's children (the translations).
+
+        The `.data` test is because strictyaml is weird
         """
         return [
             (
-                '_'.join(split_locale(locale)),
-                trans
+                '_'.join(split_locale(
+                    getattr(locale, 'data', locale)
+                )),
+                getattr(trans, 'data', trans)
             )
             for locale, trans in data.items()
         ]
