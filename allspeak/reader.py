@@ -4,7 +4,7 @@ import io
 import os
 from os.path import join, dirname, realpath, abspath, normpath, isdir, splitext
 
-import strictyaml
+import poyo
 
 from .utils import LOCALES_FOLDER, split_locale, _is_sequence
 
@@ -13,7 +13,7 @@ def get_strict_yaml_data(filepath):
     """Parse a yaml locale file.
     """
     with io.open(filepath, mode='r', encoding='utf8') as f:
-        data = strictyaml.load(f.read())
+        data = poyo.parse_string(f.read())
     return data
 
 
@@ -77,10 +77,8 @@ class Reader(object):
         """
         return [
             (
-                '_'.join(split_locale(
-                    getattr(locale, 'data', locale)
-                )),
-                getattr(trans, 'data', trans)
+                '_'.join(split_locale(locale)),
+                trans
             )
             for locale, trans in data.items()
         ]
