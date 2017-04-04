@@ -33,10 +33,8 @@ def get_django_preferred_locales(request):
     languages from the headers.
 
     """
-    meta = getattr(request, 'META', None)
-    if not meta:
-        return None
-    header = request.META.get('HTTP_ACCEPT_LANGUAGE')
+    meta = getattr(request, 'META', None) or {}
+    header = meta.get('HTTP_ACCEPT_LANGUAGE')
     if header:
         languages = [l.strip().split(';')[::-1] for l in header.split(',')]
         languages = sorted(languages)[::-1]

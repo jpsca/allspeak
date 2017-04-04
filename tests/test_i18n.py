@@ -101,6 +101,8 @@ def test_translate():
     i18n = I18n(LOCALES_TEST, default_locale='es-PE')
 
     assert i18n.translate('greeting') == u'Habla'
+    # shortcut, see `I18n.__call__`
+    assert i18n('greeting') == u'Habla'
 
     locale = Locale('es')
     assert i18n.translate('greeting', locale=locale) == u'Hola mundo'

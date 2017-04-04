@@ -3,7 +3,7 @@ from __future__ import print_function
 
 from os.path import join, dirname, abspath
 
-from allspeak import Reader
+from allspeak import Reader, parse_yaml
 
 
 LOCALES_TEST = abspath(join(dirname(__file__), u'locales'))
@@ -85,3 +85,40 @@ def test_load_translations_from_multiple_sources():
     assert sorted(data.keys()) == ['en', 'es', 'es_PE']
     assert data['es']['greeting'] == u'¡Bienvenidos!'
     assert data['es']['foo'] == u'lorem ipsum'
+
+
+def test_yaml_parser():
+    yaml = '''
+foo: This is valid? This is valid! a, b, c
+not_a_boolean: on
+also_not_a_boolean: off
+whatever: !ruby/object:Gem::Version
+meh: @2%
+number: 5
+backtick: `poyo` is cool
+quoted: "it's ok"
+i18n: ¿olé? año
+a_dict:
+    0: zero
+    one: one
+    two: olé
+'''
+    expected = {
+        'foo': 'This is valid? This is valid! a, b, c',
+        'not_a_boolean': 'on',
+        'also_not_a_boolean': 'off',
+        'whatever': '!ruby/object:Gem::Version',
+        'meh': '@2%',
+        'number': 5,
+        'backtick': '`poyo` is cool',
+        'quoted': "it's ok",
+        'i18n': u'¿olé? año',
+        'a_dict': {
+            0: 'zero',
+            'one': 'one',
+            'two': u'olé'
+        }
+    }
+    result = parse_yaml(yaml)
+    print(result)
+    assert result == expected

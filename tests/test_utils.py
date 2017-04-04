@@ -39,6 +39,7 @@ def test_normalize_timezone():
     assert utils.normalize_timezone(timezone('America/Lima')) == timezone('America/Lima')
     assert utils.normalize_timezone('America/Lima') == timezone('America/Lima')
     assert utils.normalize_timezone('Mars') is None
+    assert utils.normalize_timezone(None) is None
 
 
 def test_locale_to_str():

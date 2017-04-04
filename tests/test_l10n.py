@@ -70,6 +70,11 @@ def test_format_date():
     dt = datetime(2007, 4, 1, 15, 30)
     assert l10n.format_date(dt, dformat, locale='en') == expected
 
+    assert (
+        l10n.format_date(None, dformat, locale='en') ==
+        l10n.format_date(datetime.utcnow(), dformat, locale='en')
+    )
+
 
 def test_format_date_by_name():
     l10n = L10n()
@@ -91,8 +96,12 @@ def test_set_date_formats():
     d = date(2007, 4, 1)
     assert l10n.format_date(d, locale='en') == u'4/1/07'
 
-    l10n.set_date_formats({'date': 'full'})
+    l10n.set_date_formats({
+        'date': 'full',
+        'date.short': "'trolololo'"
+    })
     assert l10n.format_date(d, locale='en') == u'Sunday, April 1, 2007'
+    assert l10n.format_date(d, 'short', locale='en') == u'trolololo'
 
 
 def test_format_datetime():
@@ -145,6 +154,8 @@ def test_format_timedelta():
     expected = u'1 month'
     assert l10n.format_timedelta(delta, granularity='month', locale='en_US') == expected
 
+    assert l10n.format_timedelta(None, locale='en_US') == ''
+
 
 def test_format_timedelta_direction_forward():
     l10n = L10n()
@@ -154,7 +165,14 @@ def test_format_timedelta_direction_forward():
     assert l10n.format_timedelta(delta, locale='es_PE', add_direction=True) == expected
 
     expected = u'dentro de 1 mes'
-    assert l10n.format_timedelta(delta, granularity='month', locale='es_PE', add_direction=True).lower() == expected
+    assert l10n.format_timedelta(
+        delta,
+        granularity='month',
+        locale='es_PE',
+        add_direction=True
+    ).lower() == expected
+
+    assert l10n.format_timedelta(None, locale='es_PE') == ''
 
 
 def test_format_timedelta_direction_backward():
@@ -165,7 +183,12 @@ def test_format_timedelta_direction_backward():
     assert l10n.format_timedelta(delta, locale='es_PE', add_direction=True) == expected
 
     expected = u'hace 1 mes'
-    assert l10n.format_timedelta(delta, granularity='month', locale='es_PE', add_direction=True) == expected
+    assert l10n.format_timedelta(
+        delta,
+        granularity='month',
+        locale='es_PE',
+        add_direction=True
+    ).lower() == expected
 
 
 def test_format_number():
@@ -173,6 +196,7 @@ def test_format_number():
 
     assert l10n.format_number(1099, locale='en_US') == u'1,099'
     assert l10n.format_number(1099, locale='de_DE') == u'1.099'
+    assert l10n.format_number(None, locale='en_US') == ''
 
 
 def test_format_decimal():
@@ -182,6 +206,7 @@ def test_format_decimal():
     assert l10n.format_decimal(1.2345, locale='sv_SE') == u'1,234'
     assert l10n.format_decimal(12345, locale='de_DE') == u'12.345'
     assert l10n.format_decimal(-1.2345, format='#,##0.##;-#', locale='en') == u'-1.23'
+    assert l10n.format_decimal(None, locale='en_US') == ''
 
 
 def test_format_currency():
@@ -197,6 +222,7 @@ def test_format_currency():
             u'\u20ac1,099.98')
     assert (l10n.format_currency(1099.98, 'EUR', u'\xa4\xa4 #,##0.00', locale='en_US') ==
             u'EUR 1,099.98')
+    assert l10n.format_currency(None, 'USD', locale='en_US') == ''
 
 
 def test_format_percent():
@@ -206,6 +232,7 @@ def test_format_percent():
     assert l10n.format_percent(25.1234, locale='en_US') == u'2,512%'
     assert l10n.format_percent(25.1234, locale='sv_SE') == u'2\xa0512\xa0%'
     assert l10n.format_percent(25.1234, u'#,##0\u2030', locale='en_US') == u'25,123\u2030'
+    assert l10n.format_percent(None, locale='en_US') == ''
 
 
 def test_format_scientific():
@@ -214,6 +241,7 @@ def test_format_scientific():
     assert l10n.format_scientific(0.1, '#E0', locale='en_US') == '1E-1'
     assert l10n.format_scientific(-12345.6, '00.###E0', locale='en_US') == '-12.346E3'
     assert l10n.format_scientific(123.45, '#.##E0 m/s', locale='en_US') == '1.23E2 m/s'
+    assert l10n.format_scientific(None, '#E0', locale='en_US') == ''
 
 
 def test_format():
@@ -249,4 +277,5 @@ def test_format():
 
     assert l10n.format(1.2345, locale='en_US') == u'1.234'
 
+    assert l10n.format('test', locale='en') == 'test'
     assert l10n.format(None, locale='en_US') == ''

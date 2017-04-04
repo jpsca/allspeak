@@ -13,8 +13,11 @@ def get_strict_yaml_data(filepath):
     """Parse a yaml locale file.
     """
     with io.open(filepath, mode='r', encoding='utf8') as f:
-        data = poyo.parse_string(f.read())
-    return data
+        return parse_yaml(f.read())
+
+
+def parse_yaml(yaml):
+    return poyo.parse_string(yaml)
 
 
 class Reader(object):

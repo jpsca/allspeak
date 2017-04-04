@@ -40,7 +40,7 @@ What's in a name?
 from .allspeak import Allspeak  # noqa
 from .i18n import I18n, pluralize  # noqa
 from .l10n import L10n  # noqa
-from .reader import Reader  # noqa
+from .reader import Reader, parse_yaml  # noqa
 from .request_manager import RequestManager  # noqa
 from .utils import *  # noqa
 from .integrations import *  # noqa
