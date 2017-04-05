@@ -88,7 +88,7 @@ def test_load_translations_from_multiple_sources():
 
 
 def test_yaml_parser():
-    yaml = '''
+    yaml = u'''
 foo: This is valid? This is valid! a, b, c
 not_a_boolean: on
 also_not_a_boolean: off

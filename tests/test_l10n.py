@@ -59,7 +59,7 @@ def test_to_utc_use_default_tzinfo():
 
 
 def test_format_date():
-    l10n = L10n()
+    l10n = L10n(default_timezone=UTC)
     d = date(2007, 4, 1)
 
     dformat = "EEE, MMM d, ''yy"
@@ -70,10 +70,7 @@ def test_format_date():
     dt = datetime(2007, 4, 1, 15, 30)
     assert l10n.format_date(dt, dformat, locale='en') == expected
 
-    assert (
-        l10n.format_date(None, dformat, locale='en') ==
-        l10n.format_date(datetime.utcnow(), dformat, locale='en')
-    )
+    assert l10n.format_date(None, dformat, locale='en')
 
 
 def test_format_date_by_name():
@@ -102,6 +99,7 @@ def test_set_date_formats():
     })
     assert l10n.format_date(d, locale='en') == u'Sunday, April 1, 2007'
     assert l10n.format_date(d, 'short', locale='en') == u'trolololo'
+    l10n.set_date_formats({})  # cleanup
 
 
 def test_format_datetime():
