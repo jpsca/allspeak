@@ -31,12 +31,17 @@ class Reader(object):
 
     def __init__(self, folderpath=LOCALES_FOLDER):
         self.folderpath = self._process_folderpath(folderpath)
+        self._filepaths = {}
         self._set_loaders()
 
     def __repr__(self):
         return '{cname}()'.format(
             cname=self.__class__.__name__,
         )
+
+    @property
+    def filepaths(self):
+        return list(self._filepaths.keys())
 
     def _set_loaders(self):
         self.loaders = {}
@@ -98,6 +103,7 @@ class Reader(object):
         """Update the `translations` dictionary with the translation data
         extracted from the file in `filepath`.
         """
+        self._filepaths[filepath] = 1
         data = self._load_file(filepath)
         for locale, trans in data:
             translations.setdefault(locale, {})

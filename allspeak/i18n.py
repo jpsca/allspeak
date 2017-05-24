@@ -46,6 +46,10 @@ class I18n(RequestManager):
         """
         return self.translate(*args, **kwargs)
 
+    @property
+    def filepaths(self):
+        return self.reader.filepaths
+
     def load_translations(self, *locales):
         self.translations = self.reader.load_translations(locales=locales)
 

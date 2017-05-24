@@ -48,6 +48,23 @@ def test_load_translations():
     assert trans['es_PE']['greeting'] == u'Habla'
 
 
+def test_list_filepaths():
+    i18n = I18n(LOCALES_TEST)
+    i18n.load_translations()
+    result = sorted(i18n.filepaths)
+    print(result)
+    expected = sorted([
+        join(LOCALES_TEST, 'en.yml'),
+        join(LOCALES_TEST, 'es.yml'),
+        join(LOCALES_TEST, 'es_PE.yml'),
+        join(LOCALES_TEST, 'multilang.yml'),
+        join(LOCALES_TEST, 'sub/en.yml'),
+        join(LOCALES_TEST, 'sub/es.yml'),
+    ])
+    print(expected)
+    assert result == expected
+
+
 def test_get_translations_from_locale():
     i18n = I18n(LOCALES_TEST)
 
