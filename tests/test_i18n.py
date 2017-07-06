@@ -84,7 +84,7 @@ def test_get_translations_from_locale():
     assert sorted(trans_es.keys()) == sorted(expected_es)
 
     ltrans_en = i18n.get_translations_from_locale(Locale('en'))
-    expected_en = 'foo cat greeting apple with_html'.split()
+    expected_en = 'foo cat greeting apple with_html sub1'.split()
     trans_en = ltrans_en[0]
     assert sorted(trans_en.keys()) == sorted(expected_en)
 

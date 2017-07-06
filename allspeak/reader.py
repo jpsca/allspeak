@@ -1,4 +1,5 @@
 # coding=utf-8
+import collections
 import fnmatch
 import io
 import os
@@ -18,6 +19,19 @@ def get_strict_yaml_data(filepath):
 
 def parse_yaml(yaml):
     return poyo.parse_string(yaml)
+
+
+def deep_update(source, overrides):
+    """Update a nested dictionary or similar mapping.
+    Modify ``source`` in place.
+    """
+    for key, value in overrides.items():
+        if isinstance(value, collections.Mapping) and value:
+            returned = deep_update(source.get(key, {}), value)
+            source[key] = returned
+        else:
+            source[key] = overrides[key]
+    return source
 
 
 class Reader(object):
@@ -107,7 +121,7 @@ class Reader(object):
         data = self._load_file(filepath)
         for locale, trans in data:
             translations.setdefault(locale, {})
-            translations[locale].update(trans)
+            deep_update(translations[locale], trans)
 
     def load_translations(self, folderpath=None, locales=None):
         """Search for locale files on `folderpath`,

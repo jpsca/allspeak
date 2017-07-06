@@ -68,6 +68,13 @@ def test_load_translations():
     assert data['es']['foo'] == 'bares'
 
 
+def test_deep_update():
+    reader = Reader(LOCALES_TEST)
+    data = reader.load_translations()
+    assert data['en']['sub1']['sub2']['sub3']
+    assert data['en']['sub1']['sub4']
+
+
 def test_load_translations_from_other_folder():
     reader = Reader('.')
     data = reader.load_translations(folderpath=LOCALES_TEST)

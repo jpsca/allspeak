@@ -5,3 +5,6 @@ en:
         one: One apple
         many: "{count} apples"
     with_html: "<b>Hello</b>"
+    sub1:
+      sub2:
+        sub3: Still here
