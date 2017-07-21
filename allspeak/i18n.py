@@ -147,8 +147,7 @@ class I18n(RequestManager):
         if isinstance(value, string_types):
             kwargs.setdefault('count', count)
             value = value.format(**kwargs)
-            if key.endswith('_html'):
-                return self.markup(value)
+            return self.markup(value)
 
         return value
 
