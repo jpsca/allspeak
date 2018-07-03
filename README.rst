@@ -63,6 +63,6 @@ Our test suite `runs continuously on Travis CI <https://travis-ci.org/jpscaletti
 
 -----
 
-:copyright: 2012-2015 by `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
+:copyright: 2012-2018 by `Juan-Pablo Scaletti <http://jpscaletti.com>`_.
 :license: Three clause BSD License, see LICENSE for more details.
 :code: https://github.com/jpscaletti/allspeak
