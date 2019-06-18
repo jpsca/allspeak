@@ -1,4 +1,3 @@
-# coding=utf-8
 import collections
 import fnmatch
 import io
@@ -13,7 +12,7 @@ from .utils import LOCALES_FOLDER, split_locale, _is_sequence
 def get_strict_yaml_data(filepath):
     """Parse a yaml locale file.
     """
-    with io.open(filepath, mode='r', encoding='utf8') as f:
+    with io.open(filepath, mode="r", encoding="utf8") as f:
         return parse_yaml(f.read())
 
 
@@ -49,9 +48,7 @@ class Reader(object):
         self._set_loaders()
 
     def __repr__(self):
-        return '{cname}()'.format(
-            cname=self.__class__.__name__,
-        )
+        return "{cname}()".format(cname=self.__class__.__name__)
 
     @property
     def filepaths(self):
@@ -60,7 +57,7 @@ class Reader(object):
     def _set_loaders(self):
         self.loaders = {}
         self.loaders_ext = []
-        self.register_loader('yml', get_strict_yaml_data)
+        self.register_loader("yml", get_strict_yaml_data)
 
     def _process_folderpath(self, folderpath):
         if not _is_sequence(folderpath):
@@ -86,7 +83,7 @@ class Reader(object):
         """Get the file loader suitable for a specific file.
         """
         _, ext = splitext(filepath)
-        ext = ext.strip('.')
+        ext = ext.strip(".")
         loader = self.loaders.get(ext)
         assert loader, "Don't known how to read `*.{ext}` files".format(ext=ext)
         return loader
@@ -98,11 +95,7 @@ class Reader(object):
         The `.data` test is because strictyaml is weird
         """
         return [
-            (
-                '_'.join(split_locale(locale)),
-                trans
-            )
-            for locale, trans in data.items()
+            ("_".join(split_locale(locale)), trans) for locale, trans in data.items()
         ]
 
     def _load_file(self, filepath):
@@ -146,9 +139,9 @@ class Reader(object):
         for path in folderpath:
             for root, dirnames, filenames in os.walk(path):
                 for ext in self.loaders_ext:
-                    pattern = u'*.{}'.format(ext)
+                    pattern = "*.{}".format(ext)
                     for filename in fnmatch.filter(filenames, pattern):
-                        if filename.startswith('.'):
+                        if filename.startswith("."):
                             continue
                         filepath = join(root, filename)
                         self._update_translations(translations, filepath)

@@ -1,42 +1,37 @@
-## Editor/IDE files
-\#.#
-*/.#*
-\#*
-.#*
-*~
-
-## OS specific files
+# Byte-compiled / optimized / DLL files
 __pycache__
-.DS_Store
-*.log
-*.pot
-*.py[co]
-*.sublime-*
-.idea
-.cache*
+*.py[cod]
+*$py.class
+*.so
 
-## Packages
-env
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
 .installed.cfg
-docs/_build
+*.egg
+MANIFEST
 
-## Installer logs
-pip-log.txt
-
-## Unit test / coverage reports
-.coverage
+# Environments
+.env
+.venv
+covreport
+pip-wheel-metadata
 .tox
-htmlcov
-htmlcov/*
-realworld
-temp/*
+
+# Documentation
+*/_build/*
+*/site/*
+*/.mypy_cache/*
+.cache

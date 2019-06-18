@@ -1,4 +1,3 @@
-# coding=utf-8
 import datetime as dt
 from decimal import Decimal
 
@@ -10,7 +9,6 @@ from .request_manager import RequestManager
 
 
 class L10n(RequestManager):
-
     """Localization functions.
 
     :param get_locale: a callable that returns the current locale
@@ -27,11 +25,8 @@ class L10n(RequestManager):
     :param date_formats: update the defaults date formats.
 
     """
-    DEFAULT_DATE_FORMATS = {
-        'time': 'medium',
-        'date': 'medium',
-        'datetime': 'medium',
-    }
+
+    DEFAULT_DATE_FORMATS = {"time": "medium", "date": "medium", "datetime": "medium"}
 
     def __init__(self, date_formats=None, **kwargs):
         self.set_date_formats(date_formats)
@@ -83,22 +78,23 @@ class L10n(RequestManager):
         """
         if format is None:
             format = self.date_formats.get(key)
-        if format in ('short', 'medium', 'full', 'long'):
-            dkey = '{key}.{format}'.format(key=key, format=format)
+        if format in ("short", "medium", "full", "long"):
+            dkey = "{key}.{format}".format(key=key, format=format)
             rv = self.date_formats.get(dkey)
             if rv is not None:
                 format = rv
         return format
 
-    def _date_format(self, formatter, obj, format, rebase,
-                     locale=None, tzinfo=None, **extra):
-        if obj == 'now':
+    def _date_format(
+        self, formatter, obj, format, rebase, locale=None, tzinfo=None, **extra
+    ):
+        if obj == "now":
             obj = dt.datetime.utcnow()
         locale = utils.normalize_locale(locale) or self.get_locale()
         extra = {}
         if formatter is not dates.format_date and rebase:
             tzinfo = tzinfo or self.get_timezone()
-            extra['tzinfo'] = utils.normalize_timezone(tzinfo)
+            extra["tzinfo"] = utils.normalize_timezone(tzinfo)
         return formatter(obj, format, locale=locale, **extra)
 
     def format(self, value, *args, **kwargs):
@@ -108,35 +104,43 @@ class L10n(RequestManager):
         It doesn't know anything about currency, percent or
         scientific formats, so use the other methods for those cases.
         """
-        locale = kwargs.pop('locale', None)
-        tzinfo = kwargs.pop('tzinfo', None)
+        locale = kwargs.pop("locale", None)
+        tzinfo = kwargs.pop("tzinfo", None)
 
-        if value in ('', None):
-            return ''
+        if value in ("", None):
+            return ""
 
         if isinstance(value, dt.date):
             if isinstance(value, dt.datetime):
                 return self.format_datetime(
-                    value, locale=locale, tzinfo=tzinfo, *args, **kwargs)
+                    value, locale=locale, tzinfo=tzinfo, *args, **kwargs
+                )
             else:
                 return self.format_date(
-                    value, locale=locale, tzinfo=tzinfo, *args, **kwargs)
+                    value, locale=locale, tzinfo=tzinfo, *args, **kwargs
+                )
 
-        if isinstance(value, int):
-            return self.format_number(value, locale=locale, *args, **kwargs)
-        if isinstance(value, (float, Decimal)):
+        if isinstance(value, (int, float, Decimal)):
             return self.format_decimal(value, locale=locale, *args, **kwargs)
 
         if isinstance(value, dt.time):
-            return self.format_time(value, locale=locale, tzinfo=tzinfo,
-                                    *args, **kwargs)
+            return self.format_time(
+                value, locale=locale, tzinfo=tzinfo, *args, **kwargs
+            )
         if isinstance(value, dt.timedelta):
             return self.format_timedelta(value, locale=locale, *args, **kwargs)
 
         return value
 
-    def format_datetime(self, datetime=None, format=None, rebase=True,
-                        locale=None, tzinfo=None, **kwargs):
+    def format_datetime(
+        self,
+        datetime=None,
+        format=None,
+        rebase=True,
+        locale=None,
+        tzinfo=None,
+        **kwargs
+    ):
         """Return a datetime formatted according to the given pattern.
 
         :param datetime: A `datetime.datetime` object.
@@ -155,14 +159,20 @@ class L10n(RequestManager):
         :param tzinfo: Overwrite the global timezone.
 
         """
-        format = self._get_format('datetime', format)
+        format = self._get_format("datetime", format)
         return self._date_format(
-            dates.format_datetime, datetime, format, rebase,
-            locale=locale, tzinfo=tzinfo, **kwargs
+            dates.format_datetime,
+            datetime,
+            format,
+            rebase,
+            locale=locale,
+            tzinfo=tzinfo,
+            **kwargs
         )
 
-    def format_date(self, date=None, format=None, rebase=True,
-                    locale=None, tzinfo=None, **kwargs):
+    def format_date(
+        self, date=None, format=None, rebase=True, locale=None, tzinfo=None, **kwargs
+    ):
         """Return a date formatted according to the given pattern.
 
         :param date: A `datetime.datetime` or `datetime.date` object.
@@ -183,14 +193,20 @@ class L10n(RequestManager):
         """
         if rebase and isinstance(date, dt.datetime):
             date = self.to_user_timezone(date, tzinfo=tzinfo)
-        format = self._get_format('date', format)
+        format = self._get_format("date", format)
         return self._date_format(
-            dates.format_date, date, format, rebase,
-            locale=locale, tzinfo=tzinfo, **kwargs
+            dates.format_date,
+            date,
+            format,
+            rebase,
+            locale=locale,
+            tzinfo=tzinfo,
+            **kwargs
         )
 
-    def format_time(self, time=None, format=None, rebase=True,
-                    locale=None, tzinfo=None, **kwargs):
+    def format_time(
+        self, time=None, format=None, rebase=True, locale=None, tzinfo=None, **kwargs
+    ):
         """Return a time formatted according to the given pattern.
 
         :param time: A `time` or `datetime` object.
@@ -209,15 +225,27 @@ class L10n(RequestManager):
         :param tzinfo: Overwrite the global timezone.
 
         """
-        format = self._get_format('time', format)
+        format = self._get_format("time", format)
         return self._date_format(
-            dates.format_time, time, format, rebase,
-            locale=locale, tzinfo=tzinfo, **kwargs
+            dates.format_time,
+            time,
+            format,
+            rebase,
+            locale=locale,
+            tzinfo=tzinfo,
+            **kwargs
         )
 
-    def format_timedelta(self, datetime_or_timedelta, granularity='second',
-                         threshold=0.85, add_direction=False, format='medium',
-                         locale=None, **kwargs):
+    def format_timedelta(
+        self,
+        datetime_or_timedelta,
+        granularity="second",
+        threshold=0.85,
+        add_direction=False,
+        format="medium",
+        locale=None,
+        **kwargs
+    ):
         """Format the elapsed time from the given date to now or the given
         timedelta as documented in :func:`babel.dates.format_timedelta`.
 
@@ -241,35 +269,29 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
-        if datetime_or_timedelta in ('', None):
-            return ''
+        if datetime_or_timedelta in ("", None):
+            return ""
         locale = utils.normalize_locale(locale) or self.get_locale()
         if isinstance(datetime_or_timedelta, dt.datetime):
             datetime_or_timedelta = datetime_or_timedelta - dt.datetime.utcnow()
 
         resp = dates.format_timedelta(
             datetime_or_timedelta,
-            granularity=granularity, threshold=threshold,
-            add_direction=add_direction, locale=locale,
-            **kwargs
+            granularity=granularity,
+            threshold=threshold,
+            add_direction=add_direction,
+            locale=locale,
+            **kwargs,
         )
         if add_direction:
             # Inconsistent among different python versions (titlecased only sometimes)
             return resp[0].lower() + resp[1:]
         return resp
 
-    def format_number(self, number, locale=None, **kwargs):
-        """Return the given number formatted for the locale in the
-        current request.
-
-        :param number: the number to format
-        :param locale: Overwrite the global locale.
-
+    def format_number(self, *args, **kwargs):
+        """Alias for `format_decimal`.
         """
-        if number in ('', None):
-            return ''
-        locale = utils.normalize_locale(locale) or self.get_locale()
-        return numbers.format_number(number, locale=locale, **kwargs)
+        self.format_decimal(*args, **kwargs)
 
     def format_decimal(self, number, format=None, locale=None, **kwargs):
         """Return the given decimal number formatted for the locale in the
@@ -281,8 +303,8 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
-        if number in ('', None):
-            return ''
+        if number in ("", None):
+            return ""
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_decimal(number, format=format, locale=locale, **kwargs)
 
@@ -298,11 +320,12 @@ class L10n(RequestManager):
 
         Also see: https://codeascraft.com/2016/04/19/how-etsy-formats-currency/
         """
-        if number in ('', None):
-            return ''
+        if number in ("", None):
+            return ""
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_currency(
-            number, currency, format=format, locale=locale, **kwargs)
+            number, currency, format=format, locale=locale, **kwargs
+        )
 
     def format_percent(self, number, format=None, locale=None, **kwargs):
         """Return a percent value formatted for the locale in the
@@ -314,8 +337,8 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
-        if number in ('', None):
-            return ''
+        if number in ("", None):
+            return ""
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_percent(number, format=format, locale=locale, **kwargs)
 
@@ -329,7 +352,7 @@ class L10n(RequestManager):
         :param locale: Overwrite the global locale.
 
         """
-        if number in ('', None):
-            return ''
+        if number in ("", None):
+            return ""
         locale = utils.normalize_locale(locale) or self.get_locale()
         return numbers.format_scientific(number, format=format, locale=locale, **kwargs)

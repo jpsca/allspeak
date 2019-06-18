@@ -1,8 +1,6 @@
-# coding=utf-8
-from __future__ import print_function
-
-from allspeak import pluralize
 from babel import Locale
+
+from ..allspeak import pluralize
 
 
 def test_pluralize_numbers():

@@ -1,28 +1,36 @@
-all: clean clean-pyc test
+all: PHONY
 
-clean: clean-pyc
-	rm -rf build
-	rm -rf dist
-	rm -rf *.egg
+help:
+	@echo "clean - remove build/python artifacts"
+	@echo "test - run tests"
+	@echo "flake - check style with flake8"
+	@echo "coverage - generate an HTML report of the coverage"
+	@echo "install - install for development"
+
+clean: clean-build clean-pyc
+
+clean-build:
+	rm -rf build/
+	rm -rf dist/
 	rm -rf *.egg-info
-	find . -name '.DS_Store' -delete
-	rm -rf tests/__pycache__
+	rm -rf pip-wheel-metadata
+	rm -rf *.egg-info
 
 clean-pyc:
-	find . -name '*.pyc' -delete
-	find . -name '*.pyo' -delete
-	find . -name '*~' -delete
-	find . -name '*,cover' -delete
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -rf {} +
+	find . -name '.pytest_cache' -exec rm -rf {} +
 
 test:
-	py.test -x tests/
+	pytest -x allspeak tests
 
-testcov:
-	py.test --cov-config .coveragerc --cov allspeak tests/
+flake:
+	flake8 --config=setup.cfg allspeak tests
 
 coverage:
-	py.test --cov-config .coveragerc --cov-report html --cov allspeak tests/
+	pytest --cov-report html --cov allspeak allspeak tests
 
-publish: clean
-	python setup.py sdist upload
-
+install:
+	pip install -e .[dev]

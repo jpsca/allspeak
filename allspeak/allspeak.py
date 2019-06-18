@@ -1,4 +1,3 @@
-# coding=utf-8
 from .i18n import I18n
 from .l10n import L10n
 
@@ -30,4 +29,4 @@ class Allspeak(I18n, L10n):
         super(Allspeak, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        return '{}()'.format(self.__class__.__name__)
+        return "{}()".format(self.__class__.__name__)

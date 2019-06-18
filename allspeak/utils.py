@@ -1,20 +1,21 @@
-# coding=utf-8
 import datetime
 from babel import Locale, UnknownLocaleError
 from babel.dates import get_timezone, UTC
 
-from ._compat import string_types
-
 
 __all__ = [
-    'LOCALES_FOLDER', 'DEFAULT_LOCALE', 'DEFAULT_TIMEZONE',
-    'normalize_locale', 'normalize_timezone',
-    'split_locale', 'locale_to_str',
+    "LOCALES_FOLDER",
+    "DEFAULT_LOCALE",
+    "DEFAULT_TIMEZONE",
+    "normalize_locale",
+    "normalize_timezone",
+    "split_locale",
+    "locale_to_str",
 ]
 
-LOCALES_FOLDER = 'locales'
+LOCALES_FOLDER = "locales"
 
-DEFAULT_LOCALE = 'en'
+DEFAULT_LOCALE = "en"
 DEFAULT_TIMEZONE = UTC
 
 
@@ -59,9 +60,9 @@ def split_locale(locale):
             tloc.append(locale.territory.upper())
         return tuple(tloc)
 
-    if isinstance(locale, string_types):
-        locale = locale.replace('-', '_').lower().strip()
-        tloc = locale.split('_')
+    if isinstance(locale, str):
+        locale = locale.replace("-", "_").lower().strip()
+        tloc = locale.split("_")
         if len(tloc) > 1:
             tloc[-1] = tloc[-1].upper()
         return tuple(tloc)
@@ -70,13 +71,13 @@ def split_locale(locale):
 
 
 def locale_to_str(locale):
-    return '_'.join(split_locale(locale))
+    return "_".join(split_locale(locale))
 
 
 def _flatten(dic):
     """Flatten a dictionary, separating keys by dots.
 
-    >>>> dic = {
+    >> dic = {
         'a': 1,
         'c': {
             'a': 2,
@@ -87,15 +88,16 @@ def _flatten(dic):
         },
         'd': [1, 2, 3],
     }
-    >>>> flatten(dic)
+    >> _flatten(dic)
     {'a': 1, 'c.a': 2, 'c.b.x': 5, 'c.b.y': 10, 'd': [1, 2, 3]}
 
     """
+
     def items():
         for key, value in dic.items():
             if isinstance(value, dict):
                 for subkey, subvalue in _flatten(value).items():
-                    yield str(key) + '.' + str(subkey), subvalue
+                    yield str(key) + "." + str(subkey), subvalue
             else:
                 yield key, value
 

@@ -1,9 +1,6 @@
-# coding=utf-8
-from __future__ import print_function
-
 from os.path import join, dirname, abspath
 
-from allspeak import Reader, parse_yaml
+from ..allspeak import Reader, parse_yaml
 
 
 LOCALES_TEST = abspath(join(dirname(__file__), u'locales'))

@@ -1,6 +1,5 @@
-# coding=utf-8
 
-from allspeak import Allspeak, L10n, I18n
+from ..allspeak import Allspeak, L10n, I18n
 
 
 def test_allspeak_repr():

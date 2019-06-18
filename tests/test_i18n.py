@@ -1,13 +1,10 @@
-# coding=utf-8
-from __future__ import print_function
-
 from os.path import join, dirname, abspath
 
 from babel import Locale
 from babel.dates import UTC
 from markupsafe import Markup
 
-from allspeak import I18n
+from ..allspeak import I18n
 
 
 LOCALES_TEST = abspath(join(dirname(__file__), u'locales'))

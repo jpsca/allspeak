@@ -1,11 +1,9 @@
-# coding=utf-8
-from __future__ import print_function
-
-from allspeak import utils
 from babel import Locale
 from pytz import timezone
 
 from .conftest import get_test_request
+
+from ..allspeak import utils
 
 
 def test_split_locale():

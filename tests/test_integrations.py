@@ -1,7 +1,4 @@
-# coding=utf-8
-from __future__ import print_function
-
-from allspeak import integrations
+from ..allspeak import integrations
 
 from .conftest import (
     make_werkzeug_request, make_webob_request, make_django_request,

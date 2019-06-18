@@ -1,8 +1,7 @@
-# coding=utf-8
 from babel import Locale
 from babel.dates import UTC, get_timezone
 
-from allspeak import RequestManager
+from ..allspeak import RequestManager
 
 
 def test_init():

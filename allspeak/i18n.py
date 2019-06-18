@@ -1,9 +1,7 @@
-# coding=utf-8
 from babel import Locale
 from markupsafe import Markup
 
 from . import utils
-from ._compat import string_types
 from .reader import Reader
 from .request_manager import RequestManager
 
@@ -35,9 +33,7 @@ class I18n(RequestManager):
         self._set_available_locales(self.translations.keys())
 
     def __repr__(self):
-        return '{cname}()'.format(
-            cname=self.__class__.__name__,
-        )
+        return "{cname}()".format(cname=self.__class__.__name__)
 
     def __call__(self, *args, **kwargs):
         """Calling this instance is a shortcut to calling ``self.translate``.
@@ -68,10 +64,10 @@ class I18n(RequestManager):
         trans = self.translations.get(strlocale)
         if trans:
             objs.append(trans)
-        if '_' not in strlocale:
+        if "_" not in strlocale:
             return objs
 
-        strlocale = strlocale.split('_')[0]
+        strlocale = strlocale.split("_")[0]
         trans = self.translations.get(strlocale)
         if trans:
             objs.append(trans)
@@ -93,7 +89,7 @@ class I18n(RequestManager):
             return None
 
         for trans in translations:
-            for subkey in key.split('.'):
+            for subkey in key.split("."):
                 value = trans.get(subkey)
                 if value is None:
                     break
@@ -118,11 +114,11 @@ class I18n(RequestManager):
 
         Examples:
 
-            >>> translate('hello_world')
+            >> translate('hello_world')
             'hello {what}'
-            >>> translate('hello_world', what='world')
+            >> translate('hello_world', what='world')
             'hello world'
-            >>> translate('a_list', what='world')
+            >> translate('a_list', what='world')
             ['a', 'b', 'c']
 
         :param key: a string, the ID of the looked up translation
@@ -139,13 +135,13 @@ class I18n(RequestManager):
         locale = utils.normalize_locale(locale) or self.get_locale()
         value = self.key_lookup(locale, key)
         if value is None:
-            return self.markup('<missing:{0}/>'.format(key))
+            return self.markup("<missing:{0}/>".format(key))
 
         if isinstance(value, dict):
             value = pluralize(value, count, locale)
 
-        if isinstance(value, string_types):
-            kwargs.setdefault('count', count)
+        if isinstance(value, str):
+            kwargs.setdefault("count", count)
             value = value.format(**kwargs)
             return self.markup(value)
 
@@ -153,9 +149,7 @@ class I18n(RequestManager):
 
     @property
     def lazy_translate(self):
-
         class LazyWrapper(object):
-
             def __init__(self_, *args, **kwargs):
                 self_.args = args
                 self_.kwargs = kwargs
@@ -170,7 +164,7 @@ class I18n(RequestManager):
         for locale in available_locales or [self.default_locale]:
             lparts = utils.split_locale(locale)
 
-            lp = '_'.join(lparts)
+            lp = "_".join(lparts)
             if lp not in _available:
                 _available.append(lp)
 
@@ -234,43 +228,42 @@ def pluralize(dic, count, locale=utils.DEFAULT_LOCALE):
 
     Examples:
 
-    >>> dic = {
-            0: u'No apples',
-            1: u'One apple',
-            3: u'Few apples',
-            'many': u'{count} apples',
+    >> dic = {
+            0: 'No apples',
+            1: 'One apple',
+            3: 'Few apples',
+            'many': '{count} apples',
         }
-    >>> pluralize(dic, 0)
+    >> pluralize(dic, 0)
     'No apples'
-    >>> pluralize(dic, 1)
+    >> pluralize(dic, 1)
     'One apple'
-    >>> pluralize(dic, 3)
+    >> pluralize(dic, 3)
     'Few apples'
-    >>> pluralize(dic, 10)
+    >> pluralize(dic, 10)
     '{count} apples'
 
-    >>> dic = {
-            'zero': u'No apples whatsoever',
-            'one': u'One apple',
-            'other': u'{count} apples',
+    >> dic = {
+            'zero': 'No apples whatsoever',
+            'one': 'One apple',
+            'other': '{count} apples',
         }
-    >>> pluralize(dic, 0)
-    u'No apples whatsoever'
-    >>> pluralize(dic, 1)
+    >> pluralize(dic, 0)
+    'No apples whatsoever'
+    >> pluralize(dic, 1)
     'One apple'
-    >>> pluralize(dic, 2)
+    >> pluralize(dic, 2)
     '{count} apples'
-    >>> pluralize(dic, 10)
+    >> pluralize(dic, 10)
     '{count} apples'
 
-    >>> pluralize({0: 'off', 'many': 'on'}, 3)
+    >> pluralize({0: 'off', 'many': 'on'}, 3)
     'on'
-    >>> pluralize({0: 'off', 'other': 'on'}, 0)
+    >> pluralize({0: 'off', 'other': 'on'}, 0)
     'off'
-    >>> pluralize({0: 'off', 'other': 'on'}, 456)
+    >> pluralize({0: 'off', 'other': 'on'}, 456)
     'on'
-    >>> pluralize({}, 3)
-
+    >> pluralize({}, 3)
 
     Note that this function **does not** interpolate the string, just returns
     the right one for the value of ``count``.
@@ -282,11 +275,11 @@ def pluralize(dic, count, locale=utils.DEFAULT_LOCALE):
         return plural
 
     if count == 0:
-        plural = dic.get('zero')
+        plural = dic.get("zero")
         if plural is not None:
             return plural
 
-    if isinstance(locale, string_types):
+    if isinstance(locale, str):
         locale = Locale(locale)
     literal = locale.plural_form(count)
-    return dic.get(literal, dic.get('many', u''))
+    return dic.get(literal, dic.get("many", ""))

@@ -1,4 +1,3 @@
-# coding=utf-8
 from babel import Locale
 from babel.dates import get_timezone
 
@@ -24,10 +23,15 @@ class RequestManager(object):
 
     """
 
-    def __init__(self, get_locale=None, get_timezone=None,
-                 default_locale=DEFAULT_LOCALE,
-                 default_timezone=DEFAULT_TIMEZONE,
-                 get_request=None, available_locales=None):
+    def __init__(
+        self,
+        get_locale=None,
+        get_timezone=None,
+        default_locale=DEFAULT_LOCALE,
+        default_timezone=DEFAULT_TIMEZONE,
+        get_request=None,
+        available_locales=None
+    ):
         self._get_locale = get_locale
         self._get_timezone = get_timezone
 
@@ -35,8 +39,9 @@ class RequestManager(object):
         self.translations = {}
 
     def __repr__(self):
-        return '{}(default_locale={}, default_timezone={})'.format(
-            self.__class__.__name__, self.default_locale, self.default_timezone)
+        return "{}(default_locale={}, default_timezone={})".format(
+            self.__class__.__name__, self.default_locale, self.default_timezone
+        )
 
     def set_defaults(self, default_locale, default_timezone):
         """Set the default locale from the configuration as an instance of
@@ -44,14 +49,12 @@ class RequestManager(object):
         `datetime.tzinfo`.
 
         """
-        self.default_locale = (
-            utils.normalize_locale(default_locale) or
-            Locale(DEFAULT_LOCALE)
+        self.default_locale = utils.normalize_locale(default_locale) or Locale(
+            DEFAULT_LOCALE
         )
-        self.default_timezone = (
-            utils.normalize_timezone(default_timezone) or
-            get_timezone(DEFAULT_TIMEZONE)
-        )
+        self.default_timezone = utils.normalize_timezone(
+            default_timezone
+        ) or get_timezone(DEFAULT_TIMEZONE)
 
     def get_locale(self):
         if self._get_locale:
