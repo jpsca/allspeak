@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jpscaletti/allspeak.svg?branch=master)](https://travis-ci.org/jpscaletti/allspeak)
+[![Build Status](https://travis-ci.org/jpsca/allspeak.svg?branch=master)](https://travis-ci.org/jpsca/allspeak)
 
 # Allspeak
 
@@ -38,5 +38,5 @@ of code are touch by the tests:
 
     $  make coverage
 
-Our test suite [runs continuously on Travis
-CI](https://travis-ci.org/jpscaletti/Allspeak) with every update.
+The test suite [runs continuously on Travis
+CI](https://travis-ci.org/jpsca/Allspeak) with every update.
